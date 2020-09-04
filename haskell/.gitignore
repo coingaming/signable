@@ -5,3 +5,4 @@ postgres_data
 dist*
 postgres.log
 result
+test/Proto/
