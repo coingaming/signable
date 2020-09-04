@@ -1,6 +1,6 @@
 # Signable
 
-**TODO: Add description**
+Deterministic protobuf serialization
 
 ## Installation
 
@@ -10,7 +10,7 @@ by adding `signable` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:signable, "~> 0.1.0"}
+    {:signable, github: "coingaming/signable", sparse: "elixir"}
   ]
 end
 ```
