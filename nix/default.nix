@@ -28,12 +28,4 @@ in
     isLibrary = true;
     doHaddock = false;
     prePatch = "hpack --force";
-    preCheck = ''
-      source ./nix/export-test-envs.sh;
-      sh ./nix/reset-test-data.sh;
-      sh ./nix/spawn-test-deps.sh;
-    '';
-    postCheck = ''
-      sh ./nix/shutdown-test-deps.sh
-    '';
   })
