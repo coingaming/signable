@@ -16,15 +16,20 @@ stdenv.mkDerivation {
   buildInputs = [
     /* IDE */
     haskell-ide
-    /* Utils */
-    git
+    /* Protobuf */
+    protobuf
+    haskellPackages.proto-lens-protoc
+    /* Crypto */
     secp256k1
     pkg-config
-    protobuf
-    cacert
     openssh
+    /* Nix */
     cabal2nix
     nix-prefetch-scripts
+    /* Other */
+    git
+    cacert
+    which
   ];
 
   TERM="xterm-256color";
@@ -36,6 +41,7 @@ stdenv.mkDerivation {
     source ./nix/export-test-envs.sh
     sh ./nix/reset-test-data.sh
     sh ./nix/spawn-test-deps.sh
+    sh ./script/gen-proto.sh
 
     export HOOGLEDB=/root/.hoogle
     if [ "$(ls -A $HOOGLEDB)" ]; then
