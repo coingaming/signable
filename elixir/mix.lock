@@ -1,0 +1,5 @@
+%{
+  "exprotobuf": {:git, "git@github.com:coingaming/exprotobuf2.git", "8bde9e1f8bd37fff6629d2f3217f3e8f560a7c14", []},
+  "gpb": {:hex, :gpb, "3.28.1", "6849b2f0004dc4e7644f4f67e7cdd18e893f0ab87eb7ad82b9cb1483ce60eed0", [:make, :rebar], [], "hexpm", "1e645d0cbe23c6c7574bdf8e38483156e02ba898e0eab28fb736d2f71ad78cc9"},
+  "protobuf": {:git, "https://github.com/coingaming/protobuf-elixir.git", "ac717176ed6deb0ba473c4bc30d4d001d4b026e4", [branch: "beta"]},
+}
