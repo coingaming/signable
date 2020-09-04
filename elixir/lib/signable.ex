@@ -13,36 +13,44 @@ defmodule Signable do
 
     props
     |> Enum.sort(fn {index1, _}, {index2, _} -> index1 <= index2 end)
-    |> Enum.reduce(<<>>, fn {index, prop}, acc ->
-      %Protobuf.FieldProps{
-        oneof: oneof_index,
-        name_atom: name_atom
-      } = prop
-
-      prop_val = Map.get(message, name_atom)
-
-      cond do
-        not is_nil(oneof_index) ->
-          oneof_key = Map.fetch!(oneof_map, oneof_index)
-          {key, oneof_val} = Map.fetch!(message, oneof_key)
-
-          if key == name_atom do
-            merge(acc <> serialize_index(index), serialize_one(prop, oneof_val))
-          else
-            acc
-          end
-
-        is_nil(prop_val) or prop_val == [] ->
-          acc
-
-        true ->
-          merge(acc <> serialize_index(index), serialize_one(prop, prop_val))
-      end
-    end)
+    |> Enum.reduce(<<>>, &(&2 <> prop_handler(&1, message, oneof_map)))
   end
 
+  @spec prop_handler(
+          {index :: non_neg_integer(), prop :: Protobuf.FieldProps.t()},
+          message :: struct(),
+          oneof_map :: %{atom() => non_neg_integer()}
+        ) :: binary()
+  defp prop_handler({index, prop}, message, oneof_map) do
+    %Protobuf.FieldProps{
+      oneof: oneof_index,
+      name_atom: name_atom
+    } = prop
+
+    prop_val = Map.get(message, name_atom)
+
+    cond do
+      not is_nil(oneof_index) ->
+        oneof_key = Map.fetch!(oneof_map, oneof_index)
+        {key, oneof_val} = Map.fetch!(message, oneof_key)
+
+        if key == name_atom do
+          serialize_index(index) <> serialize_one(prop, oneof_val)
+        else
+          <<>>
+        end
+
+      is_nil(prop_val) or prop_val == [] ->
+        <<>>
+
+      true ->
+        serialize_index(index) <> serialize_one(prop, prop_val)
+    end
+  end
+
+  @spec serialize_one(prop :: Protobuf.FieldProps.t(), message :: any()) :: binary()
   defp serialize_one(prop, message) when is_list(message) do
-    Enum.reduce(message, <<>>, &merge(&2, serialize_one(prop, &1)))
+    Enum.reduce(message, <<>>, &(&2 <> serialize_one(prop, &1)))
   end
 
   defp serialize_one(prop, message) do
@@ -65,36 +73,31 @@ defmodule Signable do
     end
   end
 
-  defp merge(acc, val) do
-    if is_nil(val) do
-      acc
-    else
-      acc <> val
-    end
-  end
-
-  def serialize_index(index) do
+  @spec serialize_index(index :: non_neg_integer()) :: binary()
+  defp serialize_index(index) do
     serialize_scalar(:uint32, index)
   end
 
-  def serialize_enum(enum, value) do
+  @spec serialize_enum(enum :: atom(), value :: atom()) :: binary()
+  defp serialize_enum(enum, value) do
     index = enum.mapping() |> Map.get(value)
     serialize_scalar(:uint32, index)
   end
 
-  def serialize_scalar(type, value) when type == :uint32 or type == :int32 do
+  @spec serialize_scalar(type :: atom(), value :: integer() | String.t() | boolean()) :: binary()
+  defp serialize_scalar(type, value) when type == :uint32 or type == :int32 do
     <<value::32>>
   end
 
-  def serialize_scalar(type, value) when type == :uint64 or type == :int64 do
+  defp serialize_scalar(type, value) when type == :uint64 or type == :int64 do
     <<value::64>>
   end
 
-  def serialize_scalar(type, value) when type == :string or type == :bytes do
+  defp serialize_scalar(type, value) when type == :string or type == :bytes do
     value
   end
 
-  def serialize_scalar(:bool, value) do
+  defp serialize_scalar(:bool, value) do
     if value do
       <<1::8>>
     else
@@ -102,7 +105,7 @@ defmodule Signable do
     end
   end
 
-  def serialize_scalar(type, value) do
+  defp serialize_scalar(type, value) do
     raise SerializerError, message: "unsupported type #{inspect(type)}", type: type, value: value
   end
 end
