@@ -1,13 +1,13 @@
-name:                encryptable
+name:                signable
 version:             0.1
-github:              "coingaming/encryptable"
+github:              "coingaming/signable"
 license:             BSD3
 author:              "Ilja Tkachuk <tkachuk.labs@gmail.com>"
 maintainer:          "Ilja Tkachuk <tkachuk.labs@gmail.com>"
 copyright:           "2020 Coingaming <hello@coingaming.io>"
-synopsis:            Typed encryption with persistent support
-category:            Cryptography, Database, Yesod
-description:         You can find documentation at <http://hackage.haskell.org/package/encryptable/docs/Data-Encryptable.html hackage>
+synopsis:            Deterministic serialisation and signatures with proto-lens support
+category:            Data, Cryptography
+description:         You can find documentation at <http://hackage.haskell.org/package/signable/docs/Data-Signable.html hackage>
 
 extra-source-files:
 - README.md
@@ -56,7 +56,7 @@ library:
   - hspec >= 2.7.1 && < 2.8
 
 tests:
-  encryptable-test:
+  signable-test:
     main:                Spec.hs
     source-dirs:         test
     default-extensions:
@@ -82,5 +82,5 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - encryptable
+    - signable
     - hspec >= 2.7.1 && < 2.8

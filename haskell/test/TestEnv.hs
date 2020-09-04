@@ -11,7 +11,7 @@ module TestEnv
   )
 where
 
-import Data.Encryptable
+import Data.Signable
 import Database.Esqueleto (PersistField, PersistFieldSql)
 import Test.QuickCheck
 import Test.QuickCheck.Instances ()
@@ -34,7 +34,7 @@ newEnv = do
 
 reCryptBS ::
   forall a e.
-  (Encryptable ByteString e a) =>
+  (Signable ByteString e a) =>
   Env ->
   a ->
   Either e a
@@ -50,7 +50,7 @@ newtype Login
 
 newtype Address
   = Address Text
-  deriving newtype (Eq, Arbitrary, Encryptable ByteString UnicodeException)
+  deriving newtype (Eq, Arbitrary, Signable ByteString UnicodeException)
 
 instance Show Address where
   show = const "SECRET"

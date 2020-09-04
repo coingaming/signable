@@ -12,7 +12,7 @@ in
 with pkgs;
 
 stdenv.mkDerivation {
-  name = "encryptable-shell";
+  name = "signable-shell";
   buildInputs = [
     /* IDE */
     haskell-ide

@@ -3,7 +3,7 @@
 , QuickCheck, quickcheck-instances, stdenv, text, universum
 }:
 mkDerivation {
-  pname = "encryptable";
+  pname = "signable";
   version = "0.1";
   src = ./..;
   libraryHaskellDepends = [
@@ -18,7 +18,7 @@ mkDerivation {
     universum
   ];
   prePatch = "hpack";
-  homepage = "https://github.com/coingaming/encryptable#readme";
-  description = "Typed encryption with persistent support";
+  homepage = "https://github.com/coingaming/signable#readme";
+  description = "Deterministic serialisation and signatures with proto-lens support";
   license = stdenv.lib.licenses.bsd3;
 }

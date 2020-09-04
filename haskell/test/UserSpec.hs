@@ -17,7 +17,7 @@ module UserSpec
 where
 
 import Data.Coerce (coerce)
-import Data.Encryptable
+import Data.Signable
 import Database.Persist.TH
 import Test.Hspec
 import Test.QuickCheck
@@ -42,7 +42,7 @@ share
       UniqueUserStorage login
   |]
 
-instance Encryptable UserStorage UnicodeException User where
+instance Signable UserStorage UnicodeException User where
   encrypt c i x = Encrypted $ UserStorage (login x) $ encrypt c i (address x)
   decrypt c i x0 = do
     let x = coerce x0

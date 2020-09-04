@@ -1,4 +1,4 @@
-module EncryptableSpec
+module SignableSpec
   ( spec,
   )
 where
