@@ -20,6 +20,12 @@ let callPackage = lib.callPackageWith haskellPackages;
     testDeps = [];
 in
   haskell.lib.overrideCabal pkg (drv: {
+    src = ./..;
+    prePatch = ''
+      cp -R ./haskell/* ./
+      HASKELL_TEST_DIR=test ./script/gen-proto.sh
+      hpack --force
+    '';
     setupHaskellDepends =
       if drv ? "setupHaskellDepends"
       then drv.setupHaskellDepends ++ systemDeps
@@ -33,5 +39,4 @@ in
     enableLibraryProfiling = false;
     isLibrary = true;
     doHaddock = false;
-    prePatch = "hpack --force";
   })
