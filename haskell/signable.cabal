@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 85467a5687b185b7e58a6e06c793d37ec0ac00e6826e1dff218e9cd7b9dfb8e0
+-- hash: 49ba5787e3ac61b2282fbbd58b6a12f40623532faa769f7f7beeff7d02a35ffd
 
 name:           signable
 version:        0.1
@@ -68,6 +68,8 @@ test-suite signable-test
   other-modules:
       Proto.GoogleProtobuf
       Proto.GoogleProtobuf_Fields
+      Proto.Schema
+      Proto.Schema_Fields
       SignableSpec
       TestOrphan
       Paths_signable
