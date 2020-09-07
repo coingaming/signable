@@ -17,10 +17,6 @@ dependencies:
 # foundation
 - base                  >= 4.7 && < 5
 - universum             >= 1.5.0 && < 1.6
-# storage
-- esqueleto             >= 3.0.0 && < 3.4
-- persistent            >= 2.9.2 && < 2.10
-- persistent-template   >= 2.6.0 && < 2.7
 # bytes and text
 - memory
 - binary

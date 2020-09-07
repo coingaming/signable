@@ -10,10 +10,22 @@ with pkgs;
 
 let callPackage = lib.callPackageWith haskellPackages;
     pkg = callPackage ./pkg.nix {inherit stdenv;};
-    systemDeps = [ protobuf makeWrapper cacert ];
-    testDeps = [ postgresql ];
+    systemDeps = [
+      protobuf
+      haskellPackages.proto-lens-protoc
+      which
+      makeWrapper
+      cacert
+    ];
+    testDeps = [];
 in
   haskell.lib.overrideCabal pkg (drv: {
+    src = ./..;
+    prePatch = ''
+      cp -R ./haskell/* ./
+      HASKELL_TEST_DIR=test ./script/gen-proto.sh
+      hpack --force
+    '';
     setupHaskellDepends =
       if drv ? "setupHaskellDepends"
       then drv.setupHaskellDepends ++ systemDeps
@@ -27,13 +39,4 @@ in
     enableLibraryProfiling = false;
     isLibrary = true;
     doHaddock = false;
-    prePatch = "hpack --force";
-    preCheck = ''
-      source ./nix/export-test-envs.sh;
-      sh ./nix/reset-test-data.sh;
-      sh ./nix/spawn-test-deps.sh;
-    '';
-    postCheck = ''
-      sh ./nix/shutdown-test-deps.sh
-    '';
   })

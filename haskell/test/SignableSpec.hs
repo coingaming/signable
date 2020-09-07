@@ -4,7 +4,7 @@ module SignableSpec
 where
 
 import Data.ProtoLens.Arbitrary
-import Data.Signable.Class
+import Data.Signable
 import Data.Signable.Import
 import Lens.Micro
 import Proto.GoogleProtobuf

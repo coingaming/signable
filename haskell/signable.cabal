@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f2a49c3dead549df3ecd8e04dc9ae35aa1db24654d328b9689d3f9c3ca1efe94
+-- hash: 85467a5687b185b7e58a6e06c793d37ec0ac00e6826e1dff218e9cd7b9dfb8e0
 
 name:           signable
 version:        0.1
@@ -48,13 +48,10 @@ library
     , casing
     , containers
     , cryptonite >=0.25 && <0.27
-    , esqueleto >=3.0.0 && <3.4
     , generic-arbitrary >=0.1.0 && <0.2
     , hspec >=2.7.1 && <2.8
     , memory
     , microlens
-    , persistent >=2.9.2 && <2.10
-    , persistent-template >=2.6.0 && <2.7
     , proto-lens
     , proto-lens-arbitrary
     , proto-lens-runtime
@@ -72,9 +69,7 @@ test-suite signable-test
       Proto.GoogleProtobuf
       Proto.GoogleProtobuf_Fields
       SignableSpec
-      TestEnv
       TestOrphan
-      UserSpec
       Paths_signable
   hs-source-dirs:
       test
@@ -88,13 +83,10 @@ test-suite signable-test
     , casing
     , containers
     , cryptonite >=0.25 && <0.27
-    , esqueleto >=3.0.0 && <3.4
     , generic-arbitrary >=0.1.0 && <0.2
     , hspec >=2.7.1 && <2.8
     , memory
     , microlens
-    , persistent >=2.9.2 && <2.10
-    , persistent-template >=2.6.0 && <2.7
     , proto-lens
     , proto-lens-arbitrary
     , proto-lens-runtime
