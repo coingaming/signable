@@ -6,6 +6,7 @@ defmodule Signable.MixProject do
       app: :signable,
       version: "0.1.0",
       elixir: "~> 1.10",
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       dialyzer: [
@@ -34,13 +35,17 @@ defmodule Signable.MixProject do
     ]
   end
 
+  defp elixirc_paths(:test), do: ["lib", "test/proto"]
+  defp elixirc_paths(_), do: ["lib"]
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
       {:protobuf, github: "coingaming/protobuf-elixir", branch: "beta"},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.11", only: [:dev, :test], runtime: false},
-      {:credo, "~> 1.3", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.3", only: [:dev, :test], runtime: false},
+      {:propcheck, "~> 1.1", only: [:test, :dev]}
     ]
   end
 end
