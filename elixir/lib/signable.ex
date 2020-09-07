@@ -1,10 +1,10 @@
 defmodule Signable do
   alias Signable.SerializerError
 
-  @spec serialize(message :: struct()) :: binary()
-  def serialize(message) do
+  @spec serialize(message_mod :: atom(), message :: struct()) :: binary()
+  def serialize(message_mod, message) do
     %Protobuf.MessageProps{field_props: props, oneof: oneof_list} =
-      message.__struct__.__message_props__()
+      message_mod.__message_props__()
 
     ## oneof_list is a keyword name_atom -> index, but we need a reverse to lookup
     oneof_map =
@@ -18,10 +18,10 @@ defmodule Signable do
 
   @spec prop_handler(
           {index :: non_neg_integer(), prop :: Protobuf.FieldProps.t()},
-          message :: struct(),
+          message :: struct() | integer() | binary() | bool(),
           oneof_map :: %{atom() => non_neg_integer()}
         ) :: binary()
-  defp prop_handler({index, prop}, message, oneof_map) do
+  defp prop_handler({index, prop}, message, oneof_map) when is_map(message) do
     %Protobuf.FieldProps{
       oneof: oneof_index,
       name_atom: name_atom
@@ -35,7 +35,7 @@ defmodule Signable do
         {key, oneof_val} = Map.fetch!(message, oneof_key)
 
         if key == name_atom do
-          serialize_index(index) <> serialize_one(prop, oneof_val)
+          serialize_index(index) <> serialize_one_property(prop, oneof_val)
         else
           <<>>
         end
@@ -44,16 +44,20 @@ defmodule Signable do
         <<>>
 
       true ->
-        serialize_index(index) <> serialize_one(prop, prop_val)
+        serialize_index(index) <> serialize_one_property(prop, prop_val)
     end
   end
 
-  @spec serialize_one(prop :: Protobuf.FieldProps.t(), message :: any()) :: binary()
-  defp serialize_one(prop, message) when is_list(message) do
-    Enum.reduce(message, <<>>, &(&2 <> serialize_one(prop, &1)))
+  defp prop_handler({index, prop}, message, _oneof_map) do
+    serialize_index(index) <> serialize_one_property(prop, message)
   end
 
-  defp serialize_one(prop, message) do
+  @spec serialize_one_property(prop :: Protobuf.FieldProps.t(), message :: any()) :: binary()
+  defp serialize_one_property(prop, message) when is_list(message) do
+    Enum.reduce(message, <<>>, &(&2 <> serialize_one_property(prop, &1)))
+  end
+
+  defp serialize_one_property(prop, message) do
     %Protobuf.FieldProps{
       type: type,
       embedded?: embedded?,
@@ -66,7 +70,7 @@ defmodule Signable do
         serialize_enum(enum_type, message)
 
       embedded? ->
-        serialize(message)
+        serialize(type, message)
 
       true ->
         serialize_scalar(type, message)
