@@ -41,7 +41,8 @@ gen_all() {
 }
 
 if [ -z "$*" ]; then
-    gen_all
+    # gen_all
+    gen_haskell
 else
     for arg in "$@"
     do
