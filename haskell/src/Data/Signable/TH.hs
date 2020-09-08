@@ -34,9 +34,21 @@ mkSignable (t0, _) = do
         $ sortBy (\(x0, _) (x1, _) -> compare x0 x1)
         $ toList fieldsByTag
     mkChunk :: Name -> (Tag, FieldDescriptor a) -> Q Exp
-    mkChunk x (_, (FieldDescriptor n0 _ _)) = do
+    mkChunk x (tag0, (FieldDescriptor n0 t1 _)) = do
       let n = mkName $ camel n0
-      [e|toBinary (view $(pure $ VarE n) $(pure $ VarE x))|]
+      let mn = mkName $ camel $ "maybe'" <> n0
+      tag <- case safeFromIntegral $ unTag tag0 of
+        Just (v :: Int32) -> [e|toBinary ($(lift v) :: Int32)|]
+        Nothing -> fail "TAG_OVERFLOW"
+      case t1 of
+        ScalarField _ ->
+          [e|$(pure tag) <> toBinary (view $(pure $ VarE n) $(pure $ VarE x))|]
+        MessageField _ ->
+          [e|
+            case view $(pure $ VarE mn) $(pure $ VarE x) of
+              Nothing -> mempty
+              Just v -> $(pure tag) <> toBinary v
+            |]
 
 --
 -- TODO : make this function in generic way?
