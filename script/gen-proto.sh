@@ -27,12 +27,15 @@ gen_haskell() {
 }
 
 gen_elixir() {
-    rm -rf ./elixir/test/proto
-    mkdir -p ./elixir/test/proto
+    export ELIXIR_TEST_DIR_PROTO="${ELIXIR_TEST_DIR_PROTO:-elixir/test/proto}"
+    echo "==> trying to generate $ELIXIR_TEST_DIR_PROTO"
+    rm -rf "$ELIXIR_TEST_DIR_PROTO"
+    mkdir -p "$ELIXIR_TEST_DIR_PROTO"
     (cd ./test-proto/ && protoc \
         ./*.proto \
         --elixir_opt=using_value_wrappers=true \
-        --elixir_out=../elixir/test/proto)
+        --elixir_out=../$ELIXIR_TEST_DIR_PROTO)
+    echo "==> generated $ELIXIR_TEST_DIR_PROTO"
 }
 
 gen_all() {
@@ -41,8 +44,7 @@ gen_all() {
 }
 
 if [ -z "$*" ]; then
-    # gen_all
-    gen_haskell
+    gen_all
 else
     for arg in "$@"
     do

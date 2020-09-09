@@ -16,9 +16,15 @@ stdenv.mkDerivation {
   buildInputs = [
     /* IDE */
     haskell-ide
+    /* BEAM */
+    rebar
+    rebar3
+    erlang
+    elixir
     /* Protobuf */
     protobuf
     haskellPackages.proto-lens-protoc
+    protoc-gen-elixir
     /* Crypto */
     secp256k1
     pkg-config
@@ -38,6 +44,11 @@ stdenv.mkDerivation {
   NIX_PATH="/nix/var/nix/profiles/per-user/root/channels";
 
   shellHook = ''
+    export MIX_HOME=`pwd`/.mix
+    export HEX_HOME=`pwd`/.hex
+    mix local.rebar rebar ${rebar}/bin/rebar --force
+    mix local.rebar rebar3 ${rebar3}/bin/rebar3 --force
+
     source ./nix/export-test-envs.sh
     sh ./nix/reset-test-data.sh
     sh ./nix/spawn-test-deps.sh

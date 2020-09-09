@@ -1,3 +1,12 @@
+let nixpkgs20 = import ./nixpkgs20.nix;
+    pkgs20 = import nixpkgs20 {};
+    hex = pkgs20.callPackage (
+      nixpkgs20 + "/pkgs/development/beam-modules/hex/default.nix"
+    ) {};
+    mix = pkgs20.callPackage (
+      nixpkgs20 + "/pkgs/development/beam-modules/build-mix.nix"
+    ) {inherit hex;};
+in
 {
   vimBackground ? "light",
   vimColorScheme ? "PaperColor"
@@ -13,6 +22,13 @@
         haskell-ide = import (
           fetchTarball "https://github.com/tim2CF/ultimate-haskell-ide/tarball/01f50964156a60957428ce103e238b093861328e"
         ) {inherit vimBackground vimColorScheme;};
+        rebar = pkgs20.rebar;
+        rebar3 = pkgs20.rebar3;
+        erlang = pkgs20.erlang;
+        elixir = pkgs20.elixir;
+        hex = hex;
+        mix = mix;
+        protoc-gen-elixir = import ./overlay/protoc-gen-elixir.nix {};
         haskellPackages = super.haskell.packages.ghc865.extend(
           self': super': {
             universum = dontCheck super'.universum;
