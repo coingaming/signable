@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 41894f02394f01aca202edd6c1a38f7c34d88c59b6205b9e9d9df78e3fb03a48
+-- hash: 73cc350a8bca14052a6963401219db341e8eabdf0073a0df01d0917acea55ec4
 
 name:           signable
 version:        0.1
@@ -33,6 +33,7 @@ library
       Data.Signable.Class
       Data.Signable.Import
       Data.Signable.TH
+      Data.Signable.TH1
       Data.Signable.Util
   other-modules:
       Paths_signable
@@ -55,8 +56,10 @@ library
     , proto-lens
     , proto-lens-arbitrary
     , proto-lens-runtime
+    , proto3-suite
     , quickcheck-instances >=0.3.22 && <0.4
     , secp256k1-haskell
+    , system-filepath
     , template-haskell
     , text >=1.2.3 && <1.3
     , universum >=1.5.0 && <1.6
@@ -68,8 +71,12 @@ test-suite signable-test
   other-modules:
       Proto.Basic
       Proto.Basic_Fields
+      Proto.EmbeddedSchema
+      Proto.EmbeddedSchema_Fields
       Proto.GoogleProtobuf
       Proto.GoogleProtobuf_Fields
+      Proto.Text
+      Proto.Text_Fields
       SignableSpec
       TestOrphan
       Paths_signable
@@ -92,9 +99,11 @@ test-suite signable-test
     , proto-lens
     , proto-lens-arbitrary
     , proto-lens-runtime
+    , proto3-suite
     , quickcheck-instances >=0.3.22 && <0.4
     , secp256k1-haskell
     , signable
+    , system-filepath
     , template-haskell
     , text >=1.2.3 && <1.3
     , universum >=1.5.0 && <1.6

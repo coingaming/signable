@@ -55,7 +55,29 @@ in
               stdenv = self.stdenv;
               fetchgit = self.fetchgit;
             };
-            proto3-suite = dontCheck (doJailbreak super'.proto3-suite);
+            parameterized = dontCheck super'.parameterized;
+            swagger2 = callPackage ./overlay/swagger2.nix {
+              stdenv = self.stdenv;
+            };
+            grpc-haskell-core = callPackage ./overlay/grpc-haskell-core.nix {
+              stdenv = self.stdenv;
+              fetchgit = self.fetchgit;
+              grpc = self.grpc;
+            };
+            grpc-haskell = dontCheck (callPackage ./overlay/grpc-haskell.nix {
+              stdenv = self.stdenv;
+              fetchgit = self.fetchgit;
+            });
+            proto3-suite = dontCheck (doJailbreak
+              (callPackage ./overlay/proto3-suite.nix {
+                stdenv = self.stdenv;
+                fetchgit = self.fetchgit;
+              })
+            );
+            proto3-wire = callPackage ./overlay/proto3-wire.nix {
+              stdenv = self.stdenv;
+              fetchgit = self.fetchgit;
+            };
           }
         );
       })

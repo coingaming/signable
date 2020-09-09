@@ -8,6 +8,7 @@ where
 
 import Data.Signable
 import Data.Signable.Import hiding (show)
+import Filesystem.Path.CurrentOS ()
 import Proto.Basic
 import Proto.Basic_Fields
 import Proto.GoogleProtobuf
@@ -18,6 +19,12 @@ instance Show Sig where
   show = show . exportSig
 
 $(mkSignable $(mkProxy "Proto.GoogleProtobuf" "Int32Value"))
+
+$( mkSignableProtoLensFile
+     (ProtoModuleRoot "Proto")
+     ["test/Support/test-proto/"]
+     "embedded_schema.proto"
+ )
 
 $(mkSignable $(mkProxy "Proto.GoogleProtobuf" "StringValue"))
 

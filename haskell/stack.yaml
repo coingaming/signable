@@ -4,3 +4,8 @@ packages:
   - .
 extra-deps:
   - cryptonite-0.26@sha256:43c722f3770c31f4c5376e7aa42645b104834103312e217aa7fe79316416d6df,17352
+  - parameterized-0.5.0.0@sha256:880717fbb958de1bac015f0a375ab6636f162a72483d987a11e305da6fac6c97,1969
+  - github: coingaming/proto3-suite
+    commit: 45950a3860cbcb3f3177e9725dbdf460d6da9d45
+  - github: coingaming/proto3-wire
+    commit: 5df56fe1ad26a18b1dfbb2a5b8d35b4c1ad63f53

@@ -12,6 +12,7 @@ import Data.Ratio as X ((%), denominator, numerator)
 import Data.Signable.Util as X (safeFromIntegral)
 import Data.Text as X (pack)
 import Data.Word as X (Word64)
+import Filesystem.Path.CurrentOS as X (FilePath)
 import GHC.Generics as X (Generic)
 import Text.Casing as X (camel)
-import Universum as X
+import Universum as X hiding (FilePath)

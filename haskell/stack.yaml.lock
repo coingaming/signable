@@ -11,6 +11,35 @@ packages:
       sha256: cbec4c7bd57508339510f18df64827dbd65eb7ede00db07a463a36aecdda077c
   original:
     hackage: cryptonite-0.26@sha256:43c722f3770c31f4c5376e7aa42645b104834103312e217aa7fe79316416d6df,17352
+- completed:
+    hackage: parameterized-0.5.0.0@sha256:880717fbb958de1bac015f0a375ab6636f162a72483d987a11e305da6fac6c97,1969
+    pantry-tree:
+      size: 1019
+      sha256: 843aed822e03279edf00a2595dfb22038b306f4f0acd6984bd108024c5102f90
+  original:
+    hackage: parameterized-0.5.0.0@sha256:880717fbb958de1bac015f0a375ab6636f162a72483d987a11e305da6fac6c97,1969
+- completed:
+    size: 91575
+    url: https://github.com/coingaming/proto3-suite/archive/45950a3860cbcb3f3177e9725dbdf460d6da9d45.tar.gz
+    name: proto3-suite
+    version: 0.4.0.2
+    sha256: 5e17daa85b6882935a9a500af5021dcc461d76f53c81b7d62838ee829c260f77
+    pantry-tree:
+      size: 7180
+      sha256: 5cfd7cb7c20e9ff29a113b66e35042eb955a507ddb33ef909e9a7e67ab70307b
+  original:
+    url: https://github.com/coingaming/proto3-suite/archive/45950a3860cbcb3f3177e9725dbdf460d6da9d45.tar.gz
+- completed:
+    size: 47444
+    url: https://github.com/coingaming/proto3-wire/archive/5df56fe1ad26a18b1dfbb2a5b8d35b4c1ad63f53.tar.gz
+    name: proto3-wire
+    version: 1.2.0
+    sha256: 54ecc8d2b56e407eaa5d9e953234a0f1f886b28b0ac287c155ed9326df65b118
+    pantry-tree:
+      size: 1759
+      sha256: 2d3e47cf4d109a5184c8a5919f12e692fc43197b3cd011aabe8e11dacb6f9946
+  original:
+    url: https://github.com/coingaming/proto3-wire/archive/5df56fe1ad26a18b1dfbb2a5b8d35b4c1ad63f53.tar.gz
 snapshots:
 - completed:
     size: 524996

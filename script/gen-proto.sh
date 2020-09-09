@@ -15,7 +15,13 @@ gen_haskell() {
     # To spawn nix shell, run `./nix/shell.sh`.
     #
     export HASKELL_TEST_DIR="${HASKELL_TEST_DIR:-haskell/test}"
+    export HASKELL_TEST_DIR_SUPPORT="$HASKELL_TEST_DIR/Support"
     export HASKELL_TEST_DIR_PROTO="$HASKELL_TEST_DIR/Proto"
+    echo "==> trying to create $HASKELL_TEST_DIR_SUPPORT"
+    rm -rf "$HASKELL_TEST_DIR_SUPPORT"
+    mkdir -p "$HASKELL_TEST_DIR_SUPPORT"
+    cp -R ./test-proto $HASKELL_TEST_DIR_SUPPORT/test-proto
+    cp -R ./testcases.json $HASKELL_TEST_DIR_SUPPORT/testcases.json
     echo "==> trying to generate $HASKELL_TEST_DIR_PROTO"
     rm -rf "$HASKELL_TEST_DIR_PROTO"
     mkdir -p "$HASKELL_TEST_DIR_PROTO"
