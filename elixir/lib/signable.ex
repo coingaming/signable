@@ -1,4 +1,5 @@
 defmodule Signable do
+  @moduledoc "Protobuf deterministic serialization module"
   alias Signable.SerializerError
 
   @doc """
@@ -45,8 +46,14 @@ defmodule Signable do
   @doc """
     Deterministically serialize a protobuf message according to a specified set of encoding rules
   """
+  @spec serialize(message :: struct()) :: binary()
+  def serialize(message) when is_struct(message) do
+    message_mod = message.__struct__
+    serialize(message_mod, message)
+  end
+
   @spec serialize(message_mod :: atom(), message :: struct()) :: binary()
-  def serialize(message_mod, message) do
+  defp serialize(message_mod, message) do
     %Protobuf.MessageProps{field_props: props, oneof: oneof_list} =
       message_mod.__message_props__()
 

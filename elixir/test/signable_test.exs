@@ -58,7 +58,6 @@ defmodule Signable.SignableTest do
 
           {actual_result, serialize_success?} =
             test_serialization(
-              proto_mod,
               proto_message,
               tc["signable_serialized_b64"],
               tc["test_description"]
@@ -81,8 +80,8 @@ defmodule Signable.SignableTest do
     end
   end
 
-  defp test_serialization(proto_mod, proto_message, expected_result, test_description) do
-    actual_result = Signable.serialize(proto_mod, proto_message)
+  defp test_serialization(proto_message, expected_result, test_description) do
+    actual_result = Signable.serialize(proto_message)
 
     if actual_result |> Base.encode64() != expected_result do
       IO.puts(
