@@ -11,11 +11,32 @@
       "test_description": "1st test case"
     },
     {
+      "proto_message_type": "Basic.Payload",
+      "proto_serialized_b64": "CMgBEgYIMhICCAEYASABKgFhKgFiMGQ=",
+      "signable_serialized_b64": "AAAAAQAAAAAAAADIAAAAAgAAAAEAAAAAAAAAMgAAAAIAAAABAAAAAQAAAAMAAAABAAAABAEAAAAFYWIAAAAGAAAAAAAAAGQ=",
+      "signable_signature_b64": "MEYCIQCzoauZ26qYAoQVs5U2N7lBOjm0bscvV1UpZnY92lxMQwIhAL0dChPSY3573CvTXMa5xywL9Num9jf+gzve2TpTnHEF",
+      "test_description": "2nd test case"
+    },
+    {
       "proto_message_type": "Text.Payload",
       "proto_serialized_b64": "CiXRgdC10LrRgNC10YLQvdC+0LUg0YHQvtC+0LHRidC10L3QuNC1",
       "signable_serialized_b64": "AAAAAdGB0LXQutGA0LXRgtC90L7QtSDRgdC+0L7QsdGJ0LXQvdC40LU=",
       "signable_signature_b64": "MEUCIQCgQrSmHbRM3363D96XjfW+VVRj0aL65JrsmUbkSYGb6QIgK6XGmsSxggHcBcjki4QOwoU+YCa/gXvZj+cD1kPPht0=",
       "test_description": "cyrillic characters in string test"
+    },
+    {
+      "proto_message_type": "Number.Payload",
+      "proto_serialized_b64": "CA0Q8///////////ARjD/sSs9fhrIL2Bu9OKh5T//wE=",
+      "signable_serialized_b64": "AAAAAQAAAA0AAAAC////8wAAAAMAAa/HVZE/QwAAAAT//lA4qm7AvQ==",
+      "signable_signature_b64": "MEQCIC2gqgQTH3e+NJ6ixPLLp5p6Nf99JWFKKThj4BzMRewfAiAkj7hcgg4zXy0E6nMIupuN9RtnmrtEYUaB/sQRFI7bLg==",
+      "test_description": "various integers"
+    },
+    {
+      "proto_message_type": "Coins.Request",
+      "proto_serialized_b64": "ClIKLgoUCgMBAgMSCAoCCAoSAggBGgMEBQYaFgoDBAQEEg9sbmRhZGZhc2Rhc2Rhc2QSCWkgc2lnbiBpdBoVCgMxMjMSDGxuZGFzZGFzZGFkcxgBEhBsZWRnZXIgc2lnbmVkIGl0",
+      "signable_serialized_b64": "AAAAAQAAAAEAAAABAAAAAQECAwAAAAIAAAABAAAAAQAAAAAAAAAKAAAAAgAAAAAAAAACAAAAAQAAAAEAAAADBAUGAAAAAwAAAAEEBAQAAAACbG5kYWRmYXNkYXNkYXNkAAAAAwAAAAAAAAACaSBzaWduIGl0AAAAAwAAAAExMjMAAAACbG5kYXNkYXNkYWRzAAAAAwAAAAEAAAACbGVkZ2VyIHNpZ25lZCBpdA==",
+      "signable_signature_b64": "MEYCIQDsfXywakGEjr/WzbwkMGZOmHK1gfwmI1Ia6y4NbsepPQIhAJictEecN1h0wlnZuxurhkDTVAR2SD7sEKXwP82L36Bk",
+      "test_description": "complex ledger transfer request"
     }
   ]
 }

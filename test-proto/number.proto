@@ -1,0 +1,9 @@
+syntax = "proto3";
+package Number;
+
+message Payload {
+  uint32 one = 1;
+  int32 two = 2;
+  uint64 three = 3;
+  int64 four = 4;
+}
