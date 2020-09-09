@@ -13,30 +13,30 @@ import Data.Signable.Class
 import Data.Signable.Import hiding (lift, toList)
 import Language.Haskell.TH.Syntax
 
-mkProxy :: String -> Q Exp
-mkProxy t0 = do
-  let t = pure $ ConT $ mkName t0
-  [e|($(lift t0), Proxy :: Proxy $(t))|]
+mkProxy :: String -> String -> Q Exp
+mkProxy m0 t0 = do
+  let t = pure $ ConT $ mkName $ m0 <> "." <> t0
+  [e|($(lift m0), $(lift t0), Proxy :: Proxy $(t))|]
 
-mkSignable :: forall a. Message a => (String, Proxy a) -> Q [Dec]
-mkSignable (t0, _) = do
-  let t = pure $ ConT $ mkName t0
+mkSignable :: forall a. Message a => (String, String, Proxy a) -> Q [Dec]
+mkSignable (m0, t0, _) = do
+  let t = pure $ ConT $ mkName $ m0 <> "." <> t0
   x <- newName "x"
-  xs <- mkChunks x
+  xs <- mkChunks m0 x
   [d|
     instance Signable $(t) where
       toBinary $(pure $ VarP x) = mconcat $(pure $ ListE xs)
     |]
   where
-    mkChunks :: Name -> Q [Exp]
-    mkChunks x =
-      mapM (mkChunk x)
+    mkChunks :: String -> Name -> Q [Exp]
+    mkChunks m x =
+      mapM (mkChunk m x)
         $ sortBy (\(x0, _) (x1, _) -> compare x0 x1)
         $ toList fieldsByTag
-    mkChunk :: Name -> (Tag, FieldDescriptor a) -> Q Exp
-    mkChunk x (tag0, (FieldDescriptor n0 t1 _)) = do
-      let n = mkName $ camel n0
-      let mn = mkName $ camel $ "maybe'" <> n0
+    mkChunk :: String -> Name -> (Tag, FieldDescriptor a) -> Q Exp
+    mkChunk m x (tag0, (FieldDescriptor n0 t1 _)) = do
+      let n = mkName $ m <> "_Fields." <> camel n0
+      let mn = mkName $ m <> "_Fields." <> "maybe'" <> camel n0
       tag <- case safeFromIntegral $ unTag tag0 of
         Just (v :: Int32) -> [e|toBinary ($(lift v) :: Int32)|]
         Nothing -> fail "TAG_OVERFLOW"
@@ -56,9 +56,9 @@ mkSignable (t0, _) = do
 -- just need to be able to shrink enum set
 -- to protobuf-only enums.
 --
-mkSignableEnum :: (String, Proxy a) -> Q [Dec]
-mkSignableEnum (t0, _) = do
-  let t = pure $ ConT $ mkName t0
+mkSignableEnum :: (String, String, Proxy a) -> Q [Dec]
+mkSignableEnum (m0, t0, _) = do
+  let t = pure $ ConT $ mkName $ m0 <> "." <> t0
   x <- newName "x"
   [d|
     instance Signable $(t) where

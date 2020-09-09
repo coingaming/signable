@@ -1,9 +1,0 @@
-syntax = "proto3";
-package Schema;
-
-import "google_protobuf.proto";
-
-message Data0 {
-  int32 foo = 1;
-  Google.Protobuf.Int32Value bar = 2;
-}

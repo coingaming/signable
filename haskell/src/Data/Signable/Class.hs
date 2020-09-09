@@ -32,7 +32,8 @@ import qualified Data.Binary as B
 import qualified Data.ByteArray as BA
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BL
-import Data.Signable.Import
+import Data.Foldable (foldr)
+import Data.Signable.Import hiding (foldr)
 
 newtype PubKey = PubKeySecp256k1 C.PubKey
 
@@ -103,3 +104,12 @@ instance Signable Word32 where
 
 instance Signable Word64 where
   toBinary = B.encode
+
+instance Signable Bool where
+  toBinary = B.encode
+
+instance Signable Text where
+  toBinary = B.encode
+
+instance (Foldable f, Signable a) => Signable (f a) where
+  toBinary = foldr (\x acc -> toBinary x <> acc) mempty
