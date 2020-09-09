@@ -45,7 +45,8 @@ defmodule Signable.MixProject do
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.11", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.3", only: [:dev, :test], runtime: false},
-      {:propcheck, "~> 1.1", only: [:test, :dev]}
+      {:propcheck, "~> 1.1", only: [:test, :dev]},
+      {:poison, "~> 3.1", only: [:dev, :test]}
     ]
   end
 end

@@ -1,0 +1,21 @@
+{
+  "private_key_pem": "-----BEGIN EC PRIVATE KEY-----\nMHQCAQEEIHMoqwfg0ACwwq6qBKcAorNvLfzVgczgkXPGImsTxupvoAcGBSuBBAAK\noUQDQgAEe96ofwc8cS+MEiRzkgIYfHYnCrouJZwuS/0jIwsLJkf61mIl2tMViaZ4\nnWjrLyS7cQPZO2lW47NFHbF4q7bheA==\n-----END EC PRIVATE KEY-----\n",
+  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEe96ofwc8cS+MEiRzkgIYfHYnCrouJZwu\nS/0jIwsLJkf61mIl2tMViaZ4nWjrLyS7cQPZO2lW47NFHbF4q7bheA==\n-----END PUBLIC KEY-----\n",
+  "curve": "secp256k1",
+  "testcases": [
+    {
+      "proto_message_type": "Basic.Payload",
+      "proto_serialized_b64": "CAE=",
+      "signable_serialized_b64": "AAAAAQAAAAAAAAABAAAAAwAAAAAAAAAEAA==",
+      "signable_signed_b64": "MEYCIQDc7hnyaPnZHUDq4FyD98rq5V6GnJOXbR+HURLp7RJ02wIhAO+KCNlWuKul4EUPswHxHCtOeOc8NfrTSDx3JgoXEZLg",
+      "test_description": "1st test case"
+    },
+    {
+      "proto_message_type": "Text.Payload",
+      "proto_serialized_b64": "CiXRgdC10LrRgNC10YLQvdC+0LUg0YHQvtC+0LHRidC10L3QuNC1",
+      "signable_serialized_b64": "AAAAAdGB0LXQutGA0LXRgtC90L7QtSDRgdC+0L7QsdGJ0LXQvdC40LU=",
+      "signable_signed_b64": "MEUCIQCgQrSmHbRM3363D96XjfW+VVRj0aL65JrsmUbkSYGb6QIgK6XGmsSxggHcBcjki4QOwoU+YCa/gXvZj+cD1kPPht0=",
+      "test_description": "cyrillic characters in string test"
+    }
+  ]
+}

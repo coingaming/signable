@@ -76,10 +76,10 @@ defmodule Signable do
     cond do
       not is_nil(oneof_index) ->
         oneof_key = Map.fetch!(oneof_map, oneof_index)
-        {key, oneof_val} = Map.fetch!(message, oneof_key)
+        oneof_val = Map.fetch!(message, oneof_key)
 
-        if key == name_atom do
-          serialize_index(index) <> serialize_one_property(prop, oneof_val)
+        if !is_nil(oneof_val) and elem(oneof_val, 0) == name_atom do
+          serialize_index(index) <> serialize_one_property(prop, elem(oneof_val, 1))
         else
           <<>>
         end

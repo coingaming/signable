@@ -23,7 +23,7 @@ defmodule SignablePropTest do
   end
 
   def to_gen() do
-    oneof([to_user_id_gen(), to_merchant_id_gen(), to_invoice_gen()])
+    oneof([to_user_id_gen(), to_merchant_id_gen(), to_invoice_gen(), nil])
   end
 
   def to_user_id_gen() do
@@ -49,7 +49,8 @@ defmodule SignablePropTest do
   end
 
   def user_id_gen() do
-    choose(1, 100_000_000_000)
+    ## 0-uint64 max
+    choose(0, 18_446_744_073_709_551_615)
   end
 
   def umoney_gen() do
@@ -65,7 +66,8 @@ defmodule SignablePropTest do
   end
 
   def amount_gen() do
-    choose(1, 100_000_000_000)
+    ## 0-uint64 max
+    choose(0, 18_446_744_073_709_551_615)
   end
 
   def currency_code_gen() do
