@@ -34,7 +34,8 @@ defmodule Signable.SignableTest do
 
   describe "serialize/2" do
     setup do
-      test_config = File.read!("../testcases.json") |> Poison.decode!()
+      tc_filepath = System.get_env("SIGNABLE_TC_FILEPATH", "../testcases.json")
+      test_config = File.read!(tc_filepath) |> Poison.decode!()
 
       public_key =
         test_config
@@ -68,7 +69,7 @@ defmodule Signable.SignableTest do
               public_key,
               curve,
               actual_result,
-              tc["signable_signed_b64"],
+              tc["signable_signature_b64"],
               tc["test_description"]
             ) and success?
           else

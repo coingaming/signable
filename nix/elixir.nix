@@ -50,6 +50,7 @@ mix {
     export MIX_NO_DEPS=1
 
     echo "checkPhase ==> test"
+    export SIGNABLE_TC_FILEPATH="$(pwd)/testcases.json"
     mix test
   '';
   doCheck = true;
