@@ -81,7 +81,7 @@ defmodule SignablePropTest do
   property "Basic.Payload serialization" do
     forall payload <- payload_gen() do
       try do
-        res = Signable.serialize(Basic.Payload, payload)
+        res = Signable.serialize(payload)
 
         is_binary(res)
         |> when_fail(
