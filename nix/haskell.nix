@@ -23,7 +23,7 @@ in
     src = ./..;
     prePatch = ''
       cp -R ./haskell/* ./
-      HASKELL_TEST_DIR=test ./script/gen-proto.sh
+      HASKELL_TEST_DIR=test ./script/gen-proto.sh --haskell
       hpack --force
     '';
     setupHaskellDepends =
