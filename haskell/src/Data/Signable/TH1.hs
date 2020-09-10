@@ -2,7 +2,9 @@
 
 module Data.Signable.TH1
   ( ProtoModuleRoot (..),
+    mkProtoProxy,
     mkSignableProtoLensFile,
+    protoModule,
   )
 where
 
@@ -26,23 +28,51 @@ data Proto3SuiteType
   | Proto3SuiteEnum Proto3SuiteModule String
   deriving (Show)
 
+mkProtoProxy :: ProtoModuleRoot -> [FilePath] -> FilePath -> Q [Dec]
+mkProtoProxy mr fps fp = do
+  dp <- fst <$> (liftEither =<< runExceptT (readDotProtoWithContext fps fp))
+  print dp
+  let ts = parseProto3Suite mr dp
+  concat
+    <$> mapM
+      ( \t -> do
+          t0 <- [t|Proxy $(pure . ConT $ protoTypeName t)|]
+          let sig = [SigD (proxyName t) t0]
+          dec <- [d|$(pure . VarP $ proxyName t) = Proxy :: $(pure t0)|]
+          return $ sig <> dec
+      )
+      ts
+
+protoTypeName :: Proto3SuiteType -> Name
+protoTypeName = mkName . \case
+  Proto3SuiteMessage m x -> coerce m <> "." <> x
+  Proto3SuiteEnum m x -> coerce m <> "." <> x
+
+proxyName :: Proto3SuiteType -> Name
+proxyName = mkName
+  . ("proxy" <>)
+  --
+  -- TODO : replace . with _
+  --
+  . filter (/= '.')
+  . \case
+    Proto3SuiteMessage m x -> coerce m <> x
+    Proto3SuiteEnum m x -> coerce m <> x
+
 mkSignableProtoLensFile :: ProtoModuleRoot -> [FilePath] -> FilePath -> Q [Dec]
 mkSignableProtoLensFile mr fps fp = do
-  proto <- fst <$> (liftEither =<< runExceptT (readDotProtoWithContext fps fp))
-  let xs = parseProto3Suite mr proto
-  liftIO $ print xs
-  es <-
-    mapM
-      ( \case
-          Proto3SuiteMessage _ _ ->
-            --p <- mkProxy (coerce m) x
-            --[d|$(mkSignable $(return $ lift p))|]
-            [d||]
-          Proto3SuiteEnum _ _ ->
-            [d||]
+  dp <- fst <$> (liftEither =<< runExceptT (readDotProtoWithContext fps fp))
+  let ts = parseProto3Suite mr dp
+  concat
+    <$> mapM
+      ( \x ->
+          case x of
+            Proto3SuiteMessage _ _ ->
+              [d||]
+            Proto3SuiteEnum _ _ ->
+              [d||]
       )
-      xs
-  return $ concat es
+      ts
 
 --
 -- Utils
@@ -52,7 +82,7 @@ parseProto3Suite :: ProtoModuleRoot -> DotProto -> [Proto3SuiteType]
 parseProto3Suite m0 x0 =
   protoDefinitions x0 >>= parseDef mempty
   where
-    m = protoModule m0 $ protoPackage x0
+    m = protoModule' m0 $ protoMeta x0
     parseDef ns = \case
       DotProtoMessage _ x xs ->
         let this = ns <> protoName x
@@ -64,6 +94,16 @@ parseProto3Suite m0 x0 =
     parseMsg ns = \case
       DotProtoMessageDefinition x -> parseDef ns x
       _ -> []
+
+protoModule' :: ProtoModuleRoot -> DotProtoMeta -> Proto3SuiteModule
+protoModule' x =
+  Proto3SuiteModule
+    . intercalate "."
+    . (toPascal . fromSnake <$>)
+    . (coerce x :)
+    . NE.toList
+    . components
+    . metaModulePath
 
 protoModule :: ProtoModuleRoot -> DotProtoPackageSpec -> Proto3SuiteModule
 protoModule x = \case
