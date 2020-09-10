@@ -11,14 +11,32 @@ import Data.Signable.Import hiding (show)
 import Filesystem.Path.CurrentOS ()
 import Proto.Basic
 import Proto.Basic_Fields
+import Proto.Coins
+import Proto.Coins_Fields
+import Proto.EmbeddedSchema
+import Proto.EmbeddedSchema_Fields
 import Proto.GoogleProtobuf
 import Proto.GoogleProtobuf_Fields
+import Proto.Number
+import Proto.Number_Fields
+import Proto.Text
+import Proto.Text_Fields
 import Prelude (Show (..))
 
 instance Show Sig where
   show = show . exportSig
 
-$(mkSignable $(mkProxy "Proto.GoogleProtobuf" "Int32Value"))
+$( mkSignableProtoLensFile
+     (ProtoModuleRoot "Proto")
+     ["test/Support/test-proto/"]
+     "basic.proto"
+ )
+
+$( mkSignableProtoLensFile
+     (ProtoModuleRoot "Proto")
+     ["test/Support/test-proto/"]
+     "coins.proto"
+ )
 
 $( mkSignableProtoLensFile
      (ProtoModuleRoot "Proto")
@@ -26,14 +44,20 @@ $( mkSignableProtoLensFile
      "embedded_schema.proto"
  )
 
-$(mkSignable $(mkProxy "Proto.GoogleProtobuf" "StringValue"))
+$( mkSignableProtoLensFile
+     (ProtoModuleRoot "Proto")
+     ["test/Support/test-proto/"]
+     "google_protobuf.proto"
+ )
 
-$(mkSignable $(mkProxy "Proto.Basic" "UMoney"))
+$( mkSignableProtoLensFile
+     (ProtoModuleRoot "Proto")
+     ["test/Support/test-proto/"]
+     "number.proto"
+ )
 
-$(mkSignable $(mkProxy "Proto.Basic" "CurrencyCodeValue"))
-
-$(mkSignable $(mkProxy "Proto.Basic" "Payload"))
-
-$(mkSignableEnum $(mkProxy "Proto.Basic" "RequestType"))
-
-$(mkSignableEnum $(mkProxy "Proto.Basic" "CurrencyCode"))
+$( mkSignableProtoLensFile
+     (ProtoModuleRoot "Proto")
+     ["test/Support/test-proto/"]
+     "text.proto"
+ )

@@ -96,6 +96,18 @@ class Signable a where
       . coerce
       . toHash
 
+instance Signable ByteString where
+  toBinary = B.encode
+
+instance Signable Int64 where
+  toBinary = B.encode
+
+instance Signable Double where
+  toBinary = B.encode
+
+instance Signable Float where
+  toBinary = B.encode
+
 instance Signable Int32 where
   toBinary = B.encode
 

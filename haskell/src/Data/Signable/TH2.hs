@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 
-module Data.Signable.TH1
+module Data.Signable.TH2
   ( ProtoModuleRoot (..),
     mkProtoProxy,
     mkSignableProtoLensFile,
@@ -9,10 +9,10 @@ module Data.Signable.TH1
 where
 
 import qualified Data.List.NonEmpty as NE (toList)
+import Data.Signable.Class
 import Data.Signable.Import hiding (lift, toList)
---import Data.Signable.TH
-import Language.Haskell.TH.Syntax
-import Proto3.Suite.DotProto.AST
+import Language.Haskell.TH.Syntax hiding (Prim)
+import Proto3.Suite
 import Proto3.Suite.DotProto.Generate
 
 newtype ProtoModuleRoot
@@ -31,7 +31,7 @@ data Proto3SuiteType
 mkProtoProxy :: ProtoModuleRoot -> [FilePath] -> FilePath -> Q [Dec]
 mkProtoProxy mr fps fp = do
   dp <- fst <$> (liftEither =<< runExceptT (readDotProtoWithContext fps fp))
-  mapM_ (\x -> print x >> putStrLn ("" :: String)) $ protoDefinitions dp
+  print dp
   let ts = parseProto3Suite mr dp
   concat
     <$> mapM
@@ -60,19 +60,76 @@ proxyName = mkName
     Proto3SuiteEnum m x -> coerce m <> x
 
 mkSignableProtoLensFile :: ProtoModuleRoot -> [FilePath] -> FilePath -> Q [Dec]
-mkSignableProtoLensFile mr fps fp = do
+mkSignableProtoLensFile r fps fp = do
   dp <- fst <$> (liftEither =<< runExceptT (readDotProtoWithContext fps fp))
-  let ts = parseProto3Suite mr dp
-  concat
-    <$> mapM
-      ( \x ->
-          case x of
-            Proto3SuiteMessage _ _ ->
-              [d||]
-            Proto3SuiteEnum _ _ ->
-              [d||]
-      )
-      ts
+  mkSignableProtoLens r dp
+
+mkSignableProtoLens :: ProtoModuleRoot -> DotProto -> Q [Dec]
+mkSignableProtoLens r dp =
+  concat <$> mapM (parseDef mempty) (protoDefinitions dp)
+  where
+    m0 = protoModule' r $ protoMeta dp
+    parseDef ns = \case
+      DotProtoMessage _ n ds -> do
+        let t0 = ns <> protoName n
+        x <- newName "x"
+        xs <- mkChunks m0 x ds
+        other <- parseIns (t0 <> "'") ds
+        this <-
+          [d|
+            instance Signable $(pure $ ConT $ mkName $ coerce m0 <> "." <> t0) where
+              toBinary $(pure $ VarP x) = mconcat $(pure $ ListE xs)
+            |]
+        return $ this <> other
+      DotProtoEnum _ n _ -> do
+        let t0 = ns <> protoName n
+        x <- newName "x"
+        [d|
+          instance Signable $(pure $ ConT $ mkName $ coerce m0 <> "." <> t0) where
+            toBinary $(pure $ VarP x) =
+              case safeFromIntegral $ fromEnum $(pure $ VarE x) :: Maybe Int32 of
+                Just v -> toBinary v
+                Nothing -> error "ENUM_OVERFLOW"
+          |]
+      DotProtoService {} ->
+        return []
+    parseIns ns ds =
+      concat
+        <$> mapM
+          ( \case
+              DotProtoMessageDefinition d -> parseDef ns d
+              _ -> return []
+          )
+          ds
+
+mkChunks :: Proto3SuiteModule -> Name -> [DotProtoMessagePart] -> Q [Exp]
+mkChunks m x ds =
+  --
+  -- TODO : sort by index
+  --
+  catMaybes <$> mapM (mkChunk m x) ds
+
+mkChunk :: Proto3SuiteModule -> Name -> DotProtoMessagePart -> Q (Maybe Exp)
+mkChunk m x = \case
+  DotProtoMessageField f -> do
+    let n0 = protoName $ dotProtoFieldName f
+    let n = mkName $ coerce m <> "_Fields." <> camel n0
+    let mn = mkName $ coerce m <> "_Fields." <> "maybe'" <> camel n0
+    tag <- case safeFromIntegral . getFieldNumber $ dotProtoFieldNumber f of
+      Just (v :: Int32) -> [e|toBinary ($(lift v) :: Int32)|]
+      Nothing -> fail "TAG_OVERFLOW"
+    case dotProtoFieldType f of
+      Optional _ ->
+        Just
+          <$> [e|
+            case view $(pure $ VarE mn) $(pure $ VarE x) of
+              Nothing -> mempty
+              Just v -> $(pure tag) <> toBinary v
+            |]
+      _ ->
+        Just <$> [e|$(pure tag) <> toBinary (view $(pure $ VarE n) $(pure $ VarE x))|]
+  _ ->
+    return Nothing
 
 --
 -- Utils
