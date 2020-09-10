@@ -1,69 +1,111 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Data.Signable.TH
-  ( mkProxy,
-    mkSignable,
-    mkSignableEnum,
+  ( ProtoModuleRoot (..),
+    mkSignableProtoLens,
+    mkSignableProtoLensFile,
   )
 where
 
-import Data.Map (toList)
-import Data.ProtoLens
+import qualified Data.List.NonEmpty as NE (toList)
 import Data.Signable.Class
 import Data.Signable.Import hiding (lift, toList)
-import Language.Haskell.TH.Syntax
+import Language.Haskell.TH.Syntax hiding (Prim)
+import Proto3.Suite as P3S
+import Proto3.Suite.DotProto.Generate as P3S
 
-mkProxy :: String -> String -> Q Exp
-mkProxy m0 t0 = do
-  let t = pure $ ConT $ mkName $ m0 <> "." <> t0
-  [e|($(lift m0), $(lift t0), Proxy :: Proxy $(t))|]
+newtype ProtoModuleRoot
+  = ProtoModuleRoot String
 
-mkSignable :: forall a. Message a => (String, String, Proxy a) -> Q [Dec]
-mkSignable (m0, t0, _) = do
-  let t = pure $ ConT $ mkName $ m0 <> "." <> t0
-  x <- newName "x"
-  xs <- mkChunks m0 x
-  [d|
-    instance Signable $(t) where
-      toBinary $(pure $ VarP x) = mconcat $(pure $ ListE xs)
-    |]
+newtype ProtoModule
+  = ProtoModule String
+
+mkSignableProtoLensFile :: ProtoModuleRoot -> [FilePath] -> FilePath -> Q [Dec]
+mkSignableProtoLensFile r fps fp = do
+  dp <- fst <$> (liftEither =<< runExceptT (readDotProtoWithContext fps fp))
+  mkSignableProtoLens r dp
+
+mkSignableProtoLens :: ProtoModuleRoot -> DotProto -> Q [Dec]
+mkSignableProtoLens r dp =
+  concat <$> mapM (parseDef mempty) (protoDefinitions dp)
   where
-    mkChunks :: String -> Name -> Q [Exp]
-    mkChunks m x =
-      mapM (mkChunk m x)
-        $ sortBy (\(x0, _) (x1, _) -> compare x0 x1)
-        $ toList fieldsByTag
-    mkChunk :: String -> Name -> (Tag, FieldDescriptor a) -> Q Exp
-    mkChunk m x (tag0, (FieldDescriptor n0 t1 _)) = do
-      let n = mkName $ m <> "_Fields." <> camel n0
-      let mn = mkName $ m <> "_Fields." <> "maybe'" <> camel n0
-      tag <- case safeFromIntegral $ unTag tag0 of
-        Just (v :: Int32) -> [e|toBinary ($(lift v) :: Int32)|]
-        Nothing -> fail "TAG_OVERFLOW"
-      case t1 of
-        ScalarField _ ->
-          [e|$(pure tag) <> toBinary (view $(pure $ VarE n) $(pure $ VarE x))|]
-        MessageField _ ->
-          [e|
+    m0 = protoModule r $ protoMeta dp
+    parseDef ns = \case
+      DotProtoMessage _ n ds -> do
+        let t0 = ns <> protoName n
+        x <- newName "x"
+        xs <- mkChunks m0 x ds
+        other <- parseIns (t0 <> "'") ds
+        this <-
+          [d|
+            instance Signable $(pure $ ConT $ mkName $ coerce m0 <> "." <> t0) where
+              toBinary $(pure $ VarP x) = mconcat $(pure $ ListE xs)
+            |]
+        return $ this <> other
+      DotProtoEnum _ n _ -> do
+        let t0 = ns <> protoName n
+        x <- newName "x"
+        [d|
+          instance Signable $(pure $ ConT $ mkName $ coerce m0 <> "." <> t0) where
+            toBinary $(pure $ VarP x) =
+              case safeFromIntegral $ fromEnum $(pure $ VarE x) :: Maybe Int32 of
+                Just v -> toBinary v
+                Nothing -> error "ENUM_OVERFLOW"
+          |]
+      DotProtoService {} ->
+        return []
+    parseIns ns ds =
+      concat
+        <$> mapM
+          ( \case
+              DotProtoMessageDefinition d -> parseDef ns d
+              _ -> return []
+          )
+          ds
+
+mkChunks :: ProtoModule -> Name -> [DotProtoMessagePart] -> Q [Exp]
+mkChunks m x ds =
+  --
+  -- TODO : sort by index
+  --
+  catMaybes <$> mapM (mkChunk m x) ds
+
+mkChunk :: ProtoModule -> Name -> DotProtoMessagePart -> Q (Maybe Exp)
+mkChunk m x = \case
+  DotProtoMessageField f -> do
+    let n0 = protoName $ dotProtoFieldName f
+    let n = mkName $ coerce m <> "_Fields." <> camel n0
+    let mn = mkName $ coerce m <> "_Fields." <> "maybe'" <> camel n0
+    tag <- case safeFromIntegral . getFieldNumber $ dotProtoFieldNumber f of
+      Just (v :: Int32) -> [e|toBinary ($(lift v) :: Int32)|]
+      Nothing -> fail "TAG_OVERFLOW"
+    case dotProtoFieldType f of
+      P3S.Optional _ ->
+        Just
+          <$> [e|
             case view $(pure $ VarE mn) $(pure $ VarE x) of
               Nothing -> mempty
               Just v -> $(pure tag) <> toBinary v
             |]
+      _ ->
+        Just
+          <$> [e|$(pure tag) <> toBinary (view $(pure $ VarE n) $(pure $ VarE x))|]
+  _ ->
+    return Nothing
 
---
--- TODO : make this function in generic way?
--- probably don't need TH there?
--- just need to be able to shrink enum set
--- to protobuf-only enums.
---
-mkSignableEnum :: (String, String, Proxy a) -> Q [Dec]
-mkSignableEnum (m0, t0, _) = do
-  let t = pure $ ConT $ mkName $ m0 <> "." <> t0
-  x <- newName "x"
-  [d|
-    instance Signable $(t) where
-      toBinary $(pure $ VarP x) =
-        case safeFromIntegral $ fromEnum $(pure $ VarE x) :: Maybe Int32 of
-          Just v -> toBinary v
-          Nothing -> error "ENUM_OVERFLOW"
-    |]
+protoModule :: ProtoModuleRoot -> DotProtoMeta -> ProtoModule
+protoModule x =
+  ProtoModule
+    . intercalate "."
+    . (toPascal . fromSnake <$>)
+    . (coerce x :)
+    . NE.toList
+    . components
+    . metaModulePath
+
+protoName :: DotProtoIdentifier -> String
+protoName = \case
+  Single x -> x
+  Dots xs -> intercalate "." $ NE.toList $ components xs
+  Qualified l r -> protoName l <> "." <> protoName r
+  Anonymous -> mempty

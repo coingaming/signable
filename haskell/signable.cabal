@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 81a7a98b365d18e561b626dfecfd04d5257942df72b7ea21c3e31836bba35afe
+-- hash: 62a78633ea4252a58d6213ddd82ac338ef8335d3b5c8375cf10ed12f840e9320
 
 name:           signable
 version:        0.1
@@ -33,8 +33,6 @@ library
       Data.Signable.Class
       Data.Signable.Import
       Data.Signable.TH
-      Data.Signable.TH1
-      Data.Signable.TH2
       Data.Signable.Util
   other-modules:
       Paths_signable
