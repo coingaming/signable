@@ -122,8 +122,3 @@ protoName = \case
   Dots xs -> intercalate "." $ NE.toList $ components xs
   Qualified l r -> protoName l <> "." <> protoName r
   Anonymous -> mempty
-
-liftEither :: (MonadFail m, Show a) => Either a b -> m b
-liftEither = \case
-  Left x -> fail $ show x
-  Right x -> return x

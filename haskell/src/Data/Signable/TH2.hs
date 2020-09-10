@@ -2,9 +2,8 @@
 
 module Data.Signable.TH2
   ( ProtoModuleRoot (..),
-    mkProtoProxy,
+    mkSignableProtoLens,
     mkSignableProtoLensFile,
-    protoModule,
   )
 where
 
@@ -19,45 +18,9 @@ newtype ProtoModuleRoot
   = ProtoModuleRoot String
   deriving (Show)
 
-newtype Proto3SuiteModule
-  = Proto3SuiteModule String
+newtype ProtoModule
+  = ProtoModule String
   deriving (Show)
-
-data Proto3SuiteType
-  = Proto3SuiteMessage Proto3SuiteModule String
-  | Proto3SuiteEnum Proto3SuiteModule String
-  deriving (Show)
-
-mkProtoProxy :: ProtoModuleRoot -> [FilePath] -> FilePath -> Q [Dec]
-mkProtoProxy mr fps fp = do
-  dp <- fst <$> (liftEither =<< runExceptT (readDotProtoWithContext fps fp))
-  print dp
-  let ts = parseProto3Suite mr dp
-  concat
-    <$> mapM
-      ( \t -> do
-          t0 <- [t|Proxy $(pure . ConT $ protoTypeName t)|]
-          let sig = [SigD (proxyName t) t0]
-          dec <- [d|$(pure . VarP $ proxyName t) = Proxy :: $(pure t0)|]
-          return $ sig <> dec
-      )
-      ts
-
-protoTypeName :: Proto3SuiteType -> Name
-protoTypeName = mkName . \case
-  Proto3SuiteMessage m x -> coerce m <> "." <> x
-  Proto3SuiteEnum m x -> coerce m <> "." <> x
-
-proxyName :: Proto3SuiteType -> Name
-proxyName = mkName
-  . ("proxy" <>)
-  --
-  -- TODO : replace . with _
-  --
-  . filter (/= '.')
-  . \case
-    Proto3SuiteMessage m x -> coerce m <> x
-    Proto3SuiteEnum m x -> coerce m <> x
 
 mkSignableProtoLensFile :: ProtoModuleRoot -> [FilePath] -> FilePath -> Q [Dec]
 mkSignableProtoLensFile r fps fp = do
@@ -68,7 +31,7 @@ mkSignableProtoLens :: ProtoModuleRoot -> DotProto -> Q [Dec]
 mkSignableProtoLens r dp =
   concat <$> mapM (parseDef mempty) (protoDefinitions dp)
   where
-    m0 = protoModule' r $ protoMeta dp
+    m0 = protoModule r $ protoMeta dp
     parseDef ns = \case
       DotProtoMessage _ n ds -> do
         let t0 = ns <> protoName n
@@ -102,14 +65,14 @@ mkSignableProtoLens r dp =
           )
           ds
 
-mkChunks :: Proto3SuiteModule -> Name -> [DotProtoMessagePart] -> Q [Exp]
+mkChunks :: ProtoModule -> Name -> [DotProtoMessagePart] -> Q [Exp]
 mkChunks m x ds =
   --
   -- TODO : sort by index
   --
   catMaybes <$> mapM (mkChunk m x) ds
 
-mkChunk :: Proto3SuiteModule -> Name -> DotProtoMessagePart -> Q (Maybe Exp)
+mkChunk :: ProtoModule -> Name -> DotProtoMessagePart -> Q (Maybe Exp)
 mkChunk m x = \case
   DotProtoMessageField f -> do
     let n0 = protoName $ dotProtoFieldName f
@@ -127,34 +90,14 @@ mkChunk m x = \case
               Just v -> $(pure tag) <> toBinary v
             |]
       _ ->
-        Just <$> [e|$(pure tag) <> toBinary (view $(pure $ VarE n) $(pure $ VarE x))|]
+        Just
+          <$> [e|$(pure tag) <> toBinary (view $(pure $ VarE n) $(pure $ VarE x))|]
   _ ->
     return Nothing
 
---
--- Utils
---
-
-parseProto3Suite :: ProtoModuleRoot -> DotProto -> [Proto3SuiteType]
-parseProto3Suite m0 x0 =
-  protoDefinitions x0 >>= parseDef mempty
-  where
-    m = protoModule' m0 $ protoMeta x0
-    parseDef ns = \case
-      DotProtoMessage _ x xs ->
-        let this = ns <> protoName x
-         in (Proto3SuiteMessage m this) : (xs >>= parseMsg (this <> "'"))
-      DotProtoEnum _ x _ ->
-        [Proto3SuiteEnum m $ ns <> protoName x]
-      DotProtoService _ _ _ ->
-        []
-    parseMsg ns = \case
-      DotProtoMessageDefinition x -> parseDef ns x
-      _ -> []
-
-protoModule' :: ProtoModuleRoot -> DotProtoMeta -> Proto3SuiteModule
-protoModule' x =
-  Proto3SuiteModule
+protoModule :: ProtoModuleRoot -> DotProtoMeta -> ProtoModule
+protoModule x =
+  ProtoModule
     . intercalate "."
     . (toPascal . fromSnake <$>)
     . (coerce x :)
@@ -162,25 +105,9 @@ protoModule' x =
     . components
     . metaModulePath
 
-protoModule :: ProtoModuleRoot -> DotProtoPackageSpec -> Proto3SuiteModule
-protoModule x = \case
-  DotProtoNoPackage ->
-    Proto3SuiteModule $ coerce x
-  DotProtoPackageSpec s ->
-    let n = protoName s
-     in Proto3SuiteModule $
-          if n == mempty
-            then coerce x
-            else coerce x <> "." <> n
-
 protoName :: DotProtoIdentifier -> String
 protoName = \case
   Single x -> x
   Dots xs -> intercalate "." $ NE.toList $ components xs
   Qualified l r -> protoName l <> "." <> protoName r
   Anonymous -> mempty
-
-liftEither :: (MonadFail m, Show a) => Either a b -> m b
-liftEither = \case
-  Left x -> fail $ show x
-  Right x -> return x

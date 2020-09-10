@@ -1,4 +1,8 @@
-module Data.Signable.Util (safeFromIntegral) where
+module Data.Signable.Util
+  ( safeFromIntegral,
+    liftEither,
+  )
+where
 
 import Universum
 
@@ -12,3 +16,8 @@ safeFromIntegral x =
     intX = fromIntegral x :: Integer
     intMin = fromIntegral (minBound :: b) :: Integer
     intMax = fromIntegral (maxBound :: b) :: Integer
+
+liftEither :: (MonadFail m, Show a) => Either a b -> m b
+liftEither = \case
+  Left x -> fail $ show x
+  Right x -> return x
