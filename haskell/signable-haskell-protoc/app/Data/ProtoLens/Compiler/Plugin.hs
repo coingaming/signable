@@ -1,3 +1,6 @@
+{-# LANGUAGE OverloadedLabels #-}
+{-# LANGUAGE OverloadedStrings #-}
+
 -- Copyright 2016 Google Inc. All Rights Reserved.
 --
 -- Use of this source code is governed by a BSD-style
@@ -6,47 +9,44 @@
 --
 -- Code for writing protocol compiler plugins.
 
-{-# LANGUAGE CPP #-}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE OverloadedStrings #-}
 module Data.ProtoLens.Compiler.Plugin
-    ( ProtoFileName
-    , ProtoFile(..)
-    , analyzeProtoFiles
-    , collectEnvFromDeps
-    ) where
+  ( ProtoFileName,
+    ProtoFile (..),
+    analyzeProtoFiles,
+    collectEnvFromDeps,
+  )
+where
 
 import Data.List (foldl')
 import qualified Data.Map.Strict as Map
-import Data.Map.Strict (Map, unions, (!))
+import Data.Map.Strict ((!), Map, unions)
+import Data.ProtoLens.Compiler.Definitions
+import Data.ProtoLens.Compiler.ModuleName
 import Data.String (fromString)
 import qualified Data.Text as T
 import Data.Text (Text)
+import GHC.SourceGen (ModuleNameStr, OccNameStr, RdrNameStr)
 import Lens.Family2
 import Proto.Google.Protobuf.Descriptor (FileDescriptorProto)
-
-import Data.ProtoLens.Compiler.Definitions
-import Data.ProtoLens.Compiler.ModuleName
-
-import GHC.SourceGen (ModuleNameStr, OccNameStr, RdrNameStr)
 
 -- | The filename of an input .proto file.
 type ProtoFileName = Text
 
-data ProtoFile = ProtoFile
-    { descriptor :: FileDescriptorProto
-    , haskellModule :: ModuleNameStr
-    , definitions :: Env OccNameStr
-    , services :: [ServiceInfo]
-    , exportedEnv :: Env RdrNameStr
-    , publicImports :: [ModuleNameStr]
-    }
+data ProtoFile
+  = ProtoFile
+      { descriptor :: FileDescriptorProto,
+        haskellModule :: ModuleNameStr,
+        definitions :: Env OccNameStr,
+        services :: [ServiceInfo],
+        exportedEnv :: Env RdrNameStr,
+        publicImports :: [ModuleNameStr]
+      }
 
 -- Given a list of FileDescriptorProtos, collect information about each file
 -- into a map of 'ProtoFile's keyed by 'ProtoFileName'.
 analyzeProtoFiles :: [FileDescriptorProto] -> Map ProtoFileName ProtoFile
 analyzeProtoFiles files =
-    Map.fromList [ (f ^. #name, ingestFile f) | f <- files ]
+  Map.fromList [(f ^. #name, ingestFile f) | f <- files]
   where
     filesByName = Map.fromList [(f ^. #name, f) | f <- files]
     moduleNames = fmap fdModuleName filesByName
@@ -55,31 +55,31 @@ analyzeProtoFiles files =
     servicesByName = fmap collectServices filesByName
     exportsByName = transitiveExports files
     exportedEnvs = fmap (foldMap (definitionsByName !)) exportsByName
-
-    ingestFile f = ProtoFile
-        { descriptor = f
-        , haskellModule = m
-        , definitions = definitionsByName ! n
-        , services = servicesByName ! n
-        , exportedEnv = qualifyEnv m $ exportedEnvs ! n
-        , publicImports = [moduleNames ! i | i <- reexported]
+    ingestFile f =
+      ProtoFile
+        { descriptor = f,
+          haskellModule = m,
+          definitions = definitionsByName ! n,
+          services = servicesByName ! n,
+          exportedEnv = qualifyEnv m $ exportedEnvs ! n,
+          publicImports = [moduleNames ! i | i <- reexported]
         }
       where
         n = f ^. #name
         m = moduleNames ! n
         reexported =
-            [ (f ^. #dependency) !! fromIntegral i
+          [ (f ^. #dependency) !! fromIntegral i
             | i <- f ^. #publicDependency
-            ]
+          ]
 
 collectEnvFromDeps :: [ProtoFileName] -> Map ProtoFileName ProtoFile -> Env RdrNameStr
 collectEnvFromDeps deps filesByName =
-    unions $ fmap (exportedEnv . (filesByName !)) deps
+  unions $ fmap (exportedEnv . (filesByName !)) deps
 
 -- | Get the Haskell 'ModuleName' corresponding to a given .proto file.
 fdModuleName :: FileDescriptorProto -> ModuleNameStr
-fdModuleName fd
-      = fromString $ protoModuleName (T.unpack $ fd ^. #name)
+fdModuleName fd =
+  fromString $ protoModuleName (T.unpack $ fd ^. #name)
 
 -- | Given a list of .proto files (topologically sorted), determine which
 -- files' definitions are exported by which files.
@@ -92,14 +92,18 @@ transitiveExports :: [FileDescriptorProto] -> Map ProtoFileName [ProtoFileName]
 -- topological order.
 transitiveExports = foldl' setExportsFromFile Map.empty
   where
-    setExportsFromFile :: Map ProtoFileName [ProtoFileName]
-                       -> FileDescriptorProto
-                       -> Map ProtoFileName [ProtoFileName]
-    setExportsFromFile prevExports fd
-        = flip (Map.insert n) prevExports $
-            n : concat [ prevExports ! ((fd ^. #dependency) !! fromIntegral i)
-                       -- Note that publicDependency is a list of indices into
-                       -- the dependency list.
-                       | i <- fd ^. #publicDependency
-                       ]
-      where n = fd ^. #name
+    setExportsFromFile ::
+      Map ProtoFileName [ProtoFileName] ->
+      FileDescriptorProto ->
+      Map ProtoFileName [ProtoFileName]
+    setExportsFromFile prevExports fd =
+      flip (Map.insert n) prevExports $
+        n
+          : concat
+            [ prevExports ! ((fd ^. #dependency) !! fromIntegral i)
+              | -- Note that publicDependency is a list of indices into
+                -- the dependency list.
+                i <- fd ^. #publicDependency
+            ]
+      where
+        n = fd ^. #name

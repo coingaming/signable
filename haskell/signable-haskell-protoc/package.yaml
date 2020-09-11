@@ -1,17 +1,12 @@
-name: proto-lens-protoc
-version: '0.7.0.0'
-synopsis: Protocol buffer compiler for the proto-lens library.
-description: >
-  Turn protocol buffer files (.proto) into Haskell files (.hs) which
-  can be used with the proto-lens package.
- 
-  The library component of this package contains compiler code (namely
-  Data.ProtoLens.Compiler.*) is not guaranteed to have stable APIs.'
+name: signable-haskell-protoc
+version: '0.1'
+synopsis: Signable orphan instances compiler.
+description: Signable orphan instances compiler.
 category: Data
-author: Judah Jacobson
-maintainer: proto-lens@googlegroups.com
-github: google/proto-lens/proto-lens-protoc
-copyright: Google Inc.
+author: Ilja Tkachuk
+maintainer: ilja@heathmont.net
+github: coingaming/signable/haskell
+copyright: Coingaming
 license: BSD3
 extra-source-files:
   - Changelog.md
@@ -26,8 +21,8 @@ library:
     - Data.ProtoLens.Compiler.ModuleName
 
 executables:
-  proto-lens-protoc:
-    main: protoc-gen-haskell.hs
+  signable-haskell-protoc:
+    main: main.hs
     source-dirs: app
     dependencies:
       - bytestring == 0.10.*
@@ -38,6 +33,6 @@ executables:
       - lens-family >= 1.2 && < 2.1
       - pretty == 1.1.*
       - proto-lens == 0.7.*
-      - proto-lens-protoc
+      - signable-haskell-protoc
       - proto-lens-runtime == 0.7.*
       - text == 1.2.*
