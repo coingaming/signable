@@ -19,6 +19,20 @@ packages:
   original:
     hackage: parameterized-0.5.0.0@sha256:880717fbb958de1bac015f0a375ab6636f162a72483d987a11e305da6fac6c97,1969
 - completed:
+    hackage: ghc-source-gen-0.4.0.0@sha256:b6cdde6b183e70f6fbed3b0a45ad6640204b636e9a7fb898c5d7ec79719f14a1,3698
+    pantry-tree:
+      size: 2304
+      sha256: c7b9e9e90e9bb22ff0fb39970eb9fb6abbc157590f4ebb148897a174290bf028
+  original:
+    hackage: ghc-source-gen-0.4.0.0@sha256:b6cdde6b183e70f6fbed3b0a45ad6640204b636e9a7fb898c5d7ec79719f14a1,3698
+- completed:
+    hackage: proto-lens-0.7.0.0@sha256:2c44a62375f7712f9381f84b1d30cee2f94384f1c98801db2f4450359a8e5036,3036
+    pantry-tree:
+      size: 1857
+      sha256: b8e95cae7459e6a601abe32df92c5b24685765f4dd402fd84d8fd1e5b04892d2
+  original:
+    hackage: proto-lens-0.7.0.0@sha256:2c44a62375f7712f9381f84b1d30cee2f94384f1c98801db2f4450359a8e5036,3036
+- completed:
     size: 91575
     url: https://github.com/coingaming/proto3-suite/archive/45950a3860cbcb3f3177e9725dbdf460d6da9d45.tar.gz
     name: proto3-suite
