@@ -23,8 +23,6 @@ import Data.List (sortBy)
 import qualified Data.Map as Map
 import Data.Map.Strict ((!))
 import Data.ProtoLens (decodeMessage, defMessage, encodeMessage)
-import Data.ProtoLens.Compiler.Generate
-import Data.ProtoLens.Compiler.Generate.Commented (CommentedModule, getModuleName)
 import Data.ProtoLens.Compiler.ModuleName
 import Data.ProtoLens.Compiler.Plugin
 import qualified Data.Set as Set

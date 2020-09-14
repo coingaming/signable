@@ -12,6 +12,8 @@ extra-deps:
   - parameterized-0.5.0.0@sha256:880717fbb958de1bac015f0a375ab6636f162a72483d987a11e305da6fac6c97,1969
   - ghc-source-gen-0.4.0.0@sha256:b6cdde6b183e70f6fbed3b0a45ad6640204b636e9a7fb898c5d7ec79719f14a1,3698
   - proto-lens-0.7.0.0@sha256:2c44a62375f7712f9381f84b1d30cee2f94384f1c98801db2f4450359a8e5036,3036
+  - proto-lens-protoc-0.7.0.0
+  - proto-lens-runtime-0.7.0.0
   - github: coingaming/proto3-suite
     commit: 45950a3860cbcb3f3177e9725dbdf460d6da9d45
   - github: coingaming/proto3-wire

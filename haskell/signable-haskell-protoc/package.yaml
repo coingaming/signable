@@ -11,20 +11,12 @@ license: BSD3
 extra-source-files:
   - Changelog.md
 
-dependencies:
-  - base >= 4.9 && < 4.15
-  - filepath >= 1.4 && < 1.6
-
-library:
-  source-dirs: src
-  exposed-modules:
-    - Data.ProtoLens.Compiler.ModuleName
-
 executables:
   signable-haskell-protoc:
     main: main.hs
-    source-dirs: app
+    source-dirs: src
     dependencies:
+      - base
       - bytestring == 0.10.*
       - casing
       - containers >= 0.5 && < 0.7
@@ -34,6 +26,6 @@ executables:
       - lens-family >= 1.2 && < 2.1
       - pretty == 1.1.*
       - proto-lens == 0.7.*
-      - signable-haskell-protoc
+      - proto-lens-protoc == 0.7.*
       - proto-lens-runtime == 0.7.*
       - text == 1.2.*
