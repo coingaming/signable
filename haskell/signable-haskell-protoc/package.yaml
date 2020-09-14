@@ -26,6 +26,7 @@ executables:
     source-dirs: app
     dependencies:
       - bytestring == 0.10.*
+      - casing
       - containers >= 0.5 && < 0.7
       - ghc >= 8.2 && < 8.11
       - ghc-paths == 0.1.*

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 49b18dd39057f2df589c60d0e63701d257d79bcc4add934ab2ceb5b74d649b03
+-- hash: 6948bc594913baa22f20c65c500d70c77ec590180e75156364d09c1b45e044a9
 
 name:           signable
 version:        0.1
@@ -87,7 +87,7 @@ test-suite signable-test
   hs-source-dirs:
       test
   default-extensions: NoImplicitPrelude MultiParamTypeClasses LambdaCase OverloadedStrings ScopedTypeVariables
-  ghc-options: -Weverything -Werror -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction -Wno-missing-export-lists -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Weverything -Werror -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction -Wno-missing-export-lists -Wno-missing-methods -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       QuickCheck >=2.13.2 && <2.14
     , base >=4.7 && <5

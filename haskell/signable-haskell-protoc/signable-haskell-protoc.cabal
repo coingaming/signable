@@ -56,6 +56,7 @@ executable signable-haskell-protoc
   build-depends:
       base >=4.9 && <4.15
     , bytestring ==0.10.*
+    , casing
     , containers >=0.5 && <0.7
     , filepath >=1.4 && <1.6
     , ghc >=8.2 && <8.11

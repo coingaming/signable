@@ -89,6 +89,7 @@ tests:
     - -Wno-missing-local-signatures # Warning for polymorphic local bindings; nothing wrong with those.
     - -Wno-monomorphism-restriction # Don’t warn if the monomorphism restriction is used
     - -Wno-missing-export-lists # Because of generated Proto files (by proto-lens)
+    - -Wno-missing-methods # Because of generated Proto files (by proto-lens)
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N

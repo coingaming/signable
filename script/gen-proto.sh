@@ -30,6 +30,10 @@ gen_haskell() {
       --plugin=protoc-gen-haskell=`which proto-lens-protoc` \
       --haskell_out=../$HASKELL_TEST_DIR)
     echo "==> generated $HASKELL_TEST_DIR_PROTO"
+    #(cd ./test-proto/ && protoc \
+    #  ./*.proto \
+    #  --plugin=protoc-gen-signable=/root/.local/bin/signable-haskell-protoc \
+    #  --signable_out=../$HASKELL_TEST_DIR)
 }
 
 gen_elixir() {
