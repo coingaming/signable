@@ -72,7 +72,7 @@ makeResponse dflags prog req =
     & #file
       .~ [ defMessage
              & #name .~ "Proto/SignableOrphan.hs"
-             & #content .~ header <> body
+             & #content .~ header <> "\n\n" <> body
          ]
   where
     protoMods :: [ProtoMod]
