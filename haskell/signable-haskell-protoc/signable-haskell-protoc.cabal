@@ -26,7 +26,7 @@ source-repository head
   subdir: haskell
 
 executable signable-haskell-protoc
-  main-is: main.hs
+  main-is: Main.hs
   other-modules:
       Data.ProtoLens.Compiler.Definitions
       Data.ProtoLens.Compiler.Generate
@@ -41,10 +41,11 @@ executable signable-haskell-protoc
       Paths_signable_haskell_protoc
   hs-source-dirs:
       src
+  ghc-options: -Weverything -Werror -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction -Wno-implicit-prelude -Wno-missing-export-lists -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base
+      base >=4.7 && <5
     , bytestring ==0.10.*
-    , casing
+    , casing >=0.1 && <0.2
     , containers >=0.5 && <0.7
     , ghc >=8.2 && <8.11
     , ghc-paths ==0.1.*

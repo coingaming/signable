@@ -20,12 +20,9 @@ import qualified Data.ByteString as B
 
 import Data.Int
 import Data.List (sortBy)
-import qualified Data.Map as Map
-import Data.Map.Strict ((!))
 import Data.ProtoLens (decodeMessage, defMessage, encodeMessage)
 import Data.ProtoLens.Compiler.ModuleName
-import Data.ProtoLens.Compiler.Plugin
-import qualified Data.Set as Set
+import Data.ProtoLens.Compiler.Plugin ()
 import Data.String (fromString)
 import qualified Data.Text as T
 import Data.Text (Text, intercalate, pack, unpack)

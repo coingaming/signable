@@ -1,6 +1,11 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# OPTIONS_GHC -Wno-incomplete-record-updates #-}
+
+--
+-- TODO : remove OPTIONS_GHC
+--
 
 -- Copyright 2016 Google Inc. All Rights Reserved.
 --
