@@ -78,6 +78,26 @@ in
               stdenv = self.stdenv;
               fetchgit = self.fetchgit;
             };
+            proto-lens = callPackage ./overlay/proto-lens.nix {
+              stdenv = self.stdenv;
+              fetchgit = self.fetchgit;
+            };
+            proto-lens-protoc = callPackage ./overlay/proto-lens-protoc.nix {
+              stdenv = self.stdenv;
+              fetchgit = self.fetchgit;
+            };
+            proto-lens-runtime = callPackage ./overlay/proto-lens-runtime.nix {
+              stdenv = self.stdenv;
+              fetchgit = self.fetchgit;
+            };
+            proto-lens-arbitrary = callPackage ./overlay/proto-lens-arbitrary.nix {
+              stdenv = self.stdenv;
+              fetchgit = self.fetchgit;
+            };
+            ghc-source-gen = callPackage ./overlay/ghc-source-gen.nix {
+              stdenv = self.stdenv;
+              fetchgit = self.fetchgit;
+            };
           }
         );
       })
