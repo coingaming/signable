@@ -9,6 +9,7 @@ import Data.Signable.Import
 import Lens.Micro
 import Proto.Basic
 import Proto.Basic_Fields
+import Proto.SignableOrphan ()
 import Test.Hspec
 import Test.QuickCheck
 import Test.QuickCheck.Instances ()

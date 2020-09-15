@@ -4,12 +4,8 @@ set -e
 
 ./nix/bootstrap.sh
 
-NIXPKGS_ALLOW_BROKEN=1 nix-build ./nix/haskell.nix \
-  -I ssh-config-file=/tmp/.ssh/config \
-  --option sandbox false \
-  -v --show-trace
+export NIXPKGS_ALLOW_BROKEN=1
 
-NIXPKGS_ALLOW_BROKEN=1 nix-build ./nix/elixir.nix \
-  -I ssh-config-file=/tmp/.ssh/config \
-  --option sandbox false \
-  -v --show-trace
+nix-build ./nix/signable-haskell-protoc.nix -v --show-trace
+nix-build ./nix/haskell.nix -v --show-trace
+nix-build ./nix/elixir.nix -v --show-trace

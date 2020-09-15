@@ -1,5 +1,6 @@
 .DS_store
 .stack-work/
+signable-haskell-protoc/.stack-work/
 *~
 postgres
 postgres_data

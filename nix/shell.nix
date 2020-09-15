@@ -1,4 +1,5 @@
 let nixpkgs = import ./nixpkgs.nix;
+    signable-haskell-protoc = import ./signable-haskell-protoc.nix {};
 in
 {
   pkgs ? import nixpkgs {
@@ -24,6 +25,7 @@ stdenv.mkDerivation {
     /* Protobuf */
     protobuf
     haskellPackages.proto-lens-protoc
+    signable-haskell-protoc
     protoc-gen-elixir
     /* Crypto */
     secp256k1

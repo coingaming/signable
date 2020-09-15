@@ -1,5 +1,4 @@
 let nixpkgs = import ./nixpkgs.nix;
-    signable-haskell-protoc = import ./signable-haskell-protoc.nix {};
 in
 {
   pkgs ? import nixpkgs {
@@ -8,26 +7,12 @@ in
   },
 }:
 with pkgs;
-
 let callPackage = lib.callPackageWith haskellPackages;
-    pkg = callPackage ./pkg.nix {inherit stdenv;};
-    systemDeps = [
-      protobuf
-      haskellPackages.proto-lens-protoc
-      signable-haskell-protoc
-      which
-      makeWrapper
-      cacert
-    ];
-    testDeps = [];
+    pkg = callPackage ./pkg-signable-haskell-protoc.nix {inherit stdenv;};
+    systemDeps = [ protobuf cacert ];
+    testDeps = [ ];
 in
   haskell.lib.overrideCabal pkg (drv: {
-    src = ./..;
-    prePatch = ''
-      cp -R ./haskell/* ./
-      HASKELL_TEST_DIR=test ./script/gen-proto.sh --haskell
-      hpack --force
-    '';
     setupHaskellDepends =
       if drv ? "setupHaskellDepends"
       then drv.setupHaskellDepends ++ systemDeps
@@ -36,9 +21,11 @@ in
       if drv ? "testSystemDepends"
       then drv.testSystemDepends ++ testDeps
       else testDeps;
-    isExecutable = false;
+    isExecutable = true;
     enableSharedExecutables = false;
     enableLibraryProfiling = false;
-    isLibrary = true;
+    isLibrary = false;
     doHaddock = false;
+    prePatch = "hpack --force";
+    postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
   })

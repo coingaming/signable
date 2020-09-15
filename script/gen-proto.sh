@@ -7,7 +7,9 @@ gen_haskell() {
     # Haskell
     #
     # To install Haskell protoc plugin without nix,
-    # run `stack install proto-lens-protoc`.
+    # run `stack install proto-lens-protoc` and the
+    # same for `signable-haskell-protoc`.
+    #
     # Haskell stack is needed for this as well
     # https://docs.haskellstack.org/
     #
@@ -30,6 +32,11 @@ gen_haskell() {
       --plugin=protoc-gen-haskell=`which proto-lens-protoc` \
       --haskell_out=../$HASKELL_TEST_DIR)
     echo "==> generated $HASKELL_TEST_DIR_PROTO"
+    (cd ./test-proto/ && protoc \
+      ./*.proto \
+      --plugin=protoc-gen-signable=`which signable-haskell-protoc` \
+      --signable_out=../$HASKELL_TEST_DIR)
+    echo "==> generated orphan signable instances in $HASKELL_TEST_DIR_PROTO"
 }
 
 gen_elixir() {

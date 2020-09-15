@@ -1,0 +1,54 @@
+name: signable-haskell-protoc
+version: '0.1'
+synopsis: Signable orphan instances compiler.
+description: Signable orphan instances compiler.
+category: Data
+author: Ilja Tkachuk
+maintainer: ilja@heathmont.net
+github: coingaming/signable/haskell
+copyright: Coingaming
+license: BSD3
+extra-source-files:
+  - Changelog.md
+
+executables:
+  signable-haskell-protoc:
+    main: Main.hs
+    source-dirs: src
+    dependencies:
+      - base >= 4.7 && < 5
+      - bytestring == 0.10.*
+      - casing >= 0.1 && < 0.2
+      - containers >= 0.5 && < 0.7
+      - ghc >= 8.2 && < 8.11
+      - ghc-paths == 0.1.*
+      - ghc-source-gen >= 0.4 && < 0.5
+      - lens-family >= 1.2 && < 2.1
+      - pretty == 1.1.*
+      - proto-lens == 0.7.*
+      - proto-lens-protoc == 0.7.*
+      - proto-lens-runtime == 0.7.*
+      - text == 1.2.*
+    ghc-options:
+    # For details on warnings: https://downloads.haskell.org/~ghc/master/users-guide/using-warnings.html
+    # This list taken from https://medium.com/mercury-bank/enable-all-the-warnings-a0517bc081c3
+    # Enable all warnings with -Weverything, then disable the ones we don’t care about
+    - -Weverything
+    - -Werror
+    - -Wno-missing-exported-signatures # missing-exported-signatures turns off the more strict -Wmissing-signatures. See https://ghc.haskell.org/trac/ghc/ticket/14794#ticket
+    - -Wno-missing-import-lists # Requires explicit imports of _every_ function (e.g. ‘$’); too strict
+    - -Wno-missed-specialisations # When GHC can’t specialize a polymorphic function. No big deal and requires fixing underlying libraries to solve.
+    - -Wno-all-missed-specialisations # See missed-specialisations
+    - -Wno-unsafe # Don’t use Safe Haskell warnings
+    - -Wno-safe # Don’t use Safe Haskell warnings
+    - -Wno-missing-local-signatures # Warning for polymorphic local bindings; nothing wrong with those.
+    - -Wno-monomorphism-restriction # Don’t warn if the monomorphism restriction is used
+    #
+    # TODO : fix more loose restrictions for legacy code
+    #
+    - -Wno-implicit-prelude
+    - -Wno-missing-export-lists
+    # other opts
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
