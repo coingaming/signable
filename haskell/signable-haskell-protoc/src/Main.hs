@@ -162,7 +162,7 @@ mkMsgChunk m d =
             (op tag "<>" (var "toBinary" @@ var "v")),
           match
             [conP_ "Nothing"]
-            (var "mempty")
+            tag
         ]
     _ ->
       op
