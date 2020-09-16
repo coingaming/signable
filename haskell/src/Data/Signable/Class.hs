@@ -34,6 +34,7 @@ import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BL
 import Data.Foldable (foldr)
 import Data.Signable.Import hiding (foldr)
+import qualified Data.Text.Encoding as T
 
 newtype PubKey = PubKeySecp256k1 C.PubKey
 
@@ -97,7 +98,7 @@ class Signable a where
       . toHash
 
 instance Signable ByteString where
-  toBinary = B.encode
+  toBinary = BL.drop 8 . B.encode
 
 instance Signable Int64 where
   toBinary = B.encode
@@ -121,7 +122,7 @@ instance Signable Bool where
   toBinary = B.encode
 
 instance Signable Text where
-  toBinary = B.encode
+  toBinary = toBinary . T.encodeUtf8
 
 instance (Foldable f, Signable a) => Signable (f a) where
   toBinary = foldr (\x acc -> toBinary x <> acc) mempty

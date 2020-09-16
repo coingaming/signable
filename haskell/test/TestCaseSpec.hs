@@ -17,18 +17,56 @@ import Data.Aeson.Types (Parser)
 import qualified Data.ByteString.Base64 as B64
 import qualified Data.ByteString.Lazy as BL
 import Data.PEM
+import Data.ProtoLens
 import Data.Signable
 import Data.Signable.Import
 import qualified Data.Text as T
+import Proto.Basic
+import Proto.Coins
+import Proto.Number
 import Proto.SignableOrphan ()
+import Proto.Text
 import Test.Hspec
 import TestOrphan ()
 
 spec :: Spec
 spec = before readEnv
   $ it "complies testcases.json"
-  $ \_ -> do
-    True `shouldBe` True
+  $ \env -> do
+    let pub = envPubKey env
+    mapM_
+      ( \tc -> do
+          let t = tcProtoType tc
+          let x = coerce $ tcProtoBin tc
+          s <- case importSig . coerce $ tcSignatureBin tc of
+            Just s0 -> return s0
+            Nothing -> fail "INVALID_SIG"
+          putStrLn $ tcDescription tc
+          (BL.unpack <$> serializer t x)
+            `shouldBe` (Right . BL.unpack . coerce $ tcSignableBin tc)
+          verifier pub s t x
+            `shouldBe` Right True
+      )
+      $ envTCS env
+  where
+    serializer = \case
+      BasicPayload ->
+        ((toBinary :: Proto.Basic.Payload -> BL.ByteString) <$>) . decodeMessage
+      TextPayload ->
+        ((toBinary :: Proto.Text.Payload -> BL.ByteString) <$>) . decodeMessage
+      NumberPayload ->
+        ((toBinary :: Proto.Number.Payload -> BL.ByteString) <$>) . decodeMessage
+      CoinsRequest ->
+        ((toBinary :: Proto.Coins.Request -> BL.ByteString) <$>) . decodeMessage
+    verifier pub s = \case
+      BasicPayload ->
+        ((verify pub s :: Proto.Basic.Payload -> Bool) <$>) . decodeMessage
+      TextPayload ->
+        ((verify pub s :: Proto.Text.Payload -> Bool) <$>) . decodeMessage
+      NumberPayload ->
+        ((verify pub s :: Proto.Number.Payload -> Bool) <$>) . decodeMessage
+      CoinsRequest ->
+        ((verify pub s :: Proto.Coins.Request -> Bool) <$>) . decodeMessage
 
 data Env
   = Env
@@ -55,7 +93,7 @@ data ProtoType
 
 newtype ProtoBin = ProtoBin ByteString
 
-newtype SignableBin = SignableBin ByteString
+newtype SignableBin = SignableBin BL.ByteString
 
 newtype SignatureBin = SignatureBin ByteString
 
@@ -105,7 +143,7 @@ instance FromJSON ProtoBin where
   parseJSON = (ProtoBin <$>) . parseB64
 
 instance FromJSON SignableBin where
-  parseJSON = (SignableBin <$>) . parseB64
+  parseJSON = (SignableBin . BL.fromStrict <$>) . parseB64
 
 instance FromJSON SignatureBin where
   parseJSON = (SignatureBin <$>) . parseB64
