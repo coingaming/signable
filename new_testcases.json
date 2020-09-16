@@ -2,35 +2,35 @@
   "testcases": [
     {
       "test_description": "1st test case",
-      "signable_signature_b64": "MEQCICzvWMvhiTPdBNVv3IOuUKuLM+dAAZJFmJ+JMDrsOxVQAiAgFljqxBdupcINJmRDxbaHLbR3u2mGfwNIdkGWUTQixw==",
+      "signable_signature_b64": "MEYCIQCPlDHDY9i7zdAs6CXb98i2O/Qs1qCrODTTWFsZUnwU5gIhANgn5C3LegnPuI3suUta7PzPUiPaUvrBEERL53I1ERc6",
       "signable_serialized_b64": "AAAAAQAAAAAAAAABAAAAAgAAAAMAAAAAAAAABAAAAAAFAAAABgAAAAAAAAAAAAAABwAAAAg=",
       "proto_serialized_b64": "CAE=",
       "proto_message_type": "Basic.Payload"
     },
     {
       "test_description": "2nd test case",
-      "signable_signature_b64": "MEUCIAoGmPPtaXQGi/Pt41Nm+etTBbKGwvfKPmGPysgWFGhsAiEApuNfSOZHfbAeJr5KOlpEhY8lPkZkzQblFKZrPjq7pmI=",
+      "signable_signature_b64": "MEUCIQCFJUOAwu2gs2Q4dOpMqr828Jov4Qik0aMFCx78TytoEwIgRFnhuejEfN3RF62Sax7sfgkiRcCf3whl/noln6rIYvM=",
       "signable_serialized_b64": "AAAAAQAAAAAAAADIAAAAAgAAAAEAAAAAAAAAMgAAAAIAAAABAAAAAQAAAAMAAAABAAAABAEAAAAFYWIAAAAGAAAAAAAAAGQAAAAHAAAACA==",
       "proto_serialized_b64": "CMgBEgYIMhICCAEYASABKgFhKgFiMGQ=",
       "proto_message_type": "Basic.Payload"
     },
     {
       "test_description": "cyrillic characters in string test",
-      "signable_signature_b64": "MEUCIQDjYZZod5eWdJ/R1kTfW91CTpAYLNME4aG+z7b3w2NMbwIgZ4Ve/q08El2KiN0sSNatD7ilpS3TnjnNusrPTXrp5k4=",
+      "signable_signature_b64": "MEYCIQCFL60jUQKYRXaMh6oRoftbhlvosfLH3EAe91zT9rGONwIhAMIXoLMd9/aLv6Hz9sDAIzMRDBMWKFhjC0UWQ5tGsa3J",
       "signable_serialized_b64": "AAAAAdGB0LXQutGA0LXRgtC90L7QtSDRgdC+0L7QsdGJ0LXQvdC40LU=",
       "proto_serialized_b64": "CiXRgdC10LrRgNC10YLQvdC+0LUg0YHQvtC+0LHRidC10L3QuNC1",
       "proto_message_type": "Text.Payload"
     },
     {
       "test_description": "various integers",
-      "signable_signature_b64": "MEYCIQD+7j61V881d56vILwzljdACbL0WUlnQJPCWFX4hkM/hwIhAPYkB2itLTkgRCS9AS6FH7PFY9Bn8ExiXOMEkVoyFLZt",
+      "signable_signature_b64": "MEQCICBNfy5jOrYES0MEdeNliz67ajV4dfi6nUfa74Gs0GLcAiAvLSLTXm6xbqtuc1HQAkmBhp4iwbhG5Q1Hq7zx9Oc+wQ==",
       "signable_serialized_b64": "AAAAAQAAAA0AAAAC////8wAAAAMAAa/HVZE/QwAAAAT//lA4qm7AvQ==",
       "proto_serialized_b64": "CA0Q8///////////ARjD/sSs9fhrIL2Bu9OKh5T//wE=",
       "proto_message_type": "Number.Payload"
     },
     {
       "test_description": "complex ledger transfer request",
-      "signable_signature_b64": "MEUCIF8mcWcr9zEsu9WXNIkOb4jFxn+bnsI54uuwgzwao/BZAiEArTExjLashCPnnqiZFXbpz78oPAwln6cwiiaLqJtuIEA=",
+      "signable_signature_b64": "MEQCIHKPF7LZWZSXC2JuXiUMLwGtmQl2eELYFTTP8DHdZTjBAiATGnxonRUwFIKo8VFn5GLldxdrqvhZew06UIU4IGfyQw==",
       "signable_serialized_b64": "AAAAAQAAAAEAAAABAAAAAQECAwAAAAIAAAABAAAAAQAAAAAAAAAKAAAAAgAAAAAAAAACAAAAAQAAAAEAAAADBAUGAAAAAgAAAAMAAAABBAQEAAAAAmxuZGFkZmFzZGFzZGFzZAAAAAMAAAAAAAAAAmkgc2lnbiBpdAAAAAMAAAABMTIzAAAAAmxuZGFzZGFzZGFkcwAAAAMAAAABAAAAAmxlZGdlciBzaWduZWQgaXQ=",
       "proto_serialized_b64": "ClIKLgoUCgMBAgMSCAoCCAoSAggBGgMEBQYaFgoDBAQEEg9sbmRhZGZhc2Rhc2Rhc2QSCWkgc2lnbiBpdBoVCgMxMjMSDGxuZGFzZGFzZGFkcxgBEhBsZWRnZXIgc2lnbmVkIGl0",
       "proto_message_type": "Coins.Request"

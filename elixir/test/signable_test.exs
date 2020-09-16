@@ -83,11 +83,11 @@ defmodule Signable.SignableTest do
   defp test_serialization(proto_message, expected_result, test_description) do
     actual_result = Signable.serialize(proto_message)
 
-    if actual_result |> Base.encode64() != expected_result do
+    b64 = actual_result |> Base.encode64()
+
+    if b64 != expected_result do
       IO.puts(
-        "Test #{test_description} serialization failed: expected #{expected_result}, got #{
-          actual_result
-        }"
+        "Test #{test_description} serialization failed: expected #{expected_result}, got #{b64}"
       )
 
       IO.puts("Failed message: #{inspect(proto_message)}")

@@ -80,23 +80,24 @@ defmodule Signable do
 
     prop_val = Map.get(message, name_atom)
 
-    cond do
-      not is_nil(oneof_index) ->
+    serialize_index(index) <>
+      if not is_nil(oneof_index) do
         oneof_key = Map.fetch!(oneof_map, oneof_index)
         oneof_val = Map.fetch!(message, oneof_key)
 
-        if !is_nil(oneof_val) and elem(oneof_val, 0) == name_atom do
-          serialize_index(index) <> serialize_one_property(prop, elem(oneof_val, 1))
-        else
-          <<>>
+        cond do
+          !is_nil(oneof_val) and elem(oneof_val, 0) == name_atom ->
+            serialize_one_property(prop, elem(oneof_val, 1))
+
+          !is_nil(oneof_val) ->
+            <<>>
+
+          true ->
+            serialize_one_property(prop, oneof_val)
         end
-
-      is_nil(prop_val) or prop_val == [] ->
-        <<>>
-
-      true ->
-        serialize_index(index) <> serialize_one_property(prop, prop_val)
-    end
+      else
+        serialize_one_property(prop, prop_val)
+      end
   end
 
   defp prop_handler({index, prop}, message, _oneof_map) do
@@ -121,7 +122,11 @@ defmodule Signable do
         serialize_enum(enum_type, message)
 
       embedded? ->
-        serialize(type, message)
+        if is_nil(message) do
+          <<>>
+        else
+          serialize(type, message)
+        end
 
       true ->
         serialize_scalar(type, message)
@@ -139,7 +144,12 @@ defmodule Signable do
     serialize_scalar(:uint32, index)
   end
 
-  @spec serialize_scalar(type :: atom(), value :: integer() | String.t() | boolean()) :: binary()
+  @spec serialize_scalar(type :: atom(), value :: integer() | String.t() | boolean() | nil) ::
+          binary()
+  defp serialize_scalar(type, nil) do
+    serialize_scalar(type, Protobuf.Builder.type_default(type))
+  end
+
   defp serialize_scalar(type, value) when type == :uint32 or type == :int32 do
     <<value::32>>
   end
