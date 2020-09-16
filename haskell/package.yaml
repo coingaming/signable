@@ -98,4 +98,5 @@ tests:
     - pem
     - asn1-encoding
     - asn1-types
+    - base64-bytestring
     - hspec >= 2.7.1 && < 2.8

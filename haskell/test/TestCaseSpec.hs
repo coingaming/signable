@@ -12,14 +12,23 @@ import Data.ASN1.BinaryEncoding
 import Data.ASN1.BitArray
 import Data.ASN1.Encoding
 import Data.ASN1.Prim
-import Data.Aeson as A
+import Data.Aeson
+import Data.Aeson.Types (Parser)
+import qualified Data.ByteString.Base64 as B64
 import qualified Data.ByteString.Lazy as BL
 import Data.PEM
 import Data.Signable
 import Data.Signable.Import
+import qualified Data.Text as T
 import Proto.SignableOrphan ()
 import Test.Hspec
 import TestOrphan ()
+
+spec :: Spec
+spec = before readEnv
+  $ it "complies testcases.json"
+  $ \_ -> do
+    True `shouldBe` True
 
 data Env
   = Env
@@ -30,12 +39,25 @@ data Env
 
 data TestCase
   = TestCase
-      { tcProtoMsgType :: Text,
-        tcProtoPayload :: Text,
-        tcSignableBin :: Text,
-        tcSignature :: Text,
+      { tcProtoType :: ProtoType,
+        tcProtoBin :: ProtoBin,
+        tcSignableBin :: SignableBin,
+        tcSignatureBin :: SignatureBin,
         tcDescription :: Text
       }
+
+data ProtoType
+  = BasicPayload
+  | TextPayload
+  | NumberPayload
+  | CoinsRequest
+  deriving (Read)
+
+newtype ProtoBin = ProtoBin ByteString
+
+newtype SignableBin = SignableBin ByteString
+
+newtype SignatureBin = SignatureBin ByteString
 
 instance FromJSON Env where
   parseJSON = withObject "Env" $ \x ->
@@ -73,11 +95,20 @@ instance FromJSON PubKey where
           Nothing -> fail "INVALID_PUB_PEM"
           Just k -> return k
 
-spec :: Spec
-spec = before readEnv
-  $ it "complies testcases.json"
-  $ \_ -> do
-    True `shouldBe` True
+instance FromJSON ProtoType where
+  parseJSON = withText "ProtoType" $ \x0 ->
+    case readMaybe . T.unpack $ T.replace "." "" x0 of
+      Just x -> return x
+      Nothing -> fail "INVALID_PROTO_TYPE"
+
+instance FromJSON ProtoBin where
+  parseJSON = (ProtoBin <$>) . parseB64
+
+instance FromJSON SignableBin where
+  parseJSON = (SignableBin <$>) . parseB64
+
+instance FromJSON SignatureBin where
+  parseJSON = (SignatureBin <$>) . parseB64
 
 readEnv :: IO Env
 readEnv = do
@@ -103,3 +134,9 @@ parseASN1 f p = do
     [] -> Left "ZERO_ASN1_CHUNKS"
     [x] -> Right x
     _ -> Left "TOO_MANY_ASN1_CHUNKS"
+
+parseB64 :: Value -> Parser ByteString
+parseB64 = withText "B64" $ \x0 ->
+  case B64.decode $ encodeUtf8 x0 of
+    Left e -> fail e
+    Right x -> return x
