@@ -7,9 +7,9 @@ module Data.Signable.Class
   ( -- * Key
     PubKey,
     PrvKey,
-    importPubKey,
+    importPubKeyRaw,
     derivePubKey,
-    importPrvKey,
+    importPrvKeyRaw,
     newRandomPrvKey,
 
     -- * Hash
@@ -17,13 +17,14 @@ module Data.Signable.Class
 
     -- * Signature
     Sig,
-
-    -- ** DER
-    importSig,
-    exportSig,
+    importSigDer,
+    exportSigDer,
 
     -- * Class
     Signable (..),
+
+    -- * Misc
+    Alg (..),
   )
 where
 
@@ -33,8 +34,12 @@ import qualified Data.ByteArray as BA
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BL
 import Data.Foldable (foldr)
-import Data.Signable.Import hiding (foldr)
+import Data.Signable.Import hiding (foldr, show)
 import qualified Data.Text.Encoding as T
+import Prelude (show)
+
+data Alg = AlgSecp256k1
+  deriving (Show)
 
 newtype PubKey = PubKeySecp256k1 C.PubKey
 
@@ -46,34 +51,37 @@ newtype Sig
   = SigSecp256k1 C.Sig
   deriving newtype (Eq)
 
+instance Show Sig where
+  show = const "SECRET"
+
 --
 -- TODO : add KeyKind argument later
 -- when we will have more algorithms
 --
-importPubKey :: ByteString -> Maybe PubKey
-importPubKey = (PubKeySecp256k1 <$>) . C.importPubKey
+importPubKeyRaw :: Alg -> ByteString -> Maybe PubKey
+importPubKeyRaw AlgSecp256k1 = (PubKeySecp256k1 <$>) . C.importPubKey
 
 derivePubKey :: PrvKey -> PubKey
 derivePubKey (PrvKeySecp256k1 x) = PubKeySecp256k1 $ C.derivePubKey x
 
-importPrvKey :: ByteString -> Maybe PrvKey
-importPrvKey = (PrvKeySecp256k1 <$>) . C.secKey
+importPrvKeyRaw :: Alg -> ByteString -> Maybe PrvKey
+importPrvKeyRaw AlgSecp256k1 = (PrvKeySecp256k1 <$>) . C.secKey
 
-newRandomPrvKey :: (MonadIO m, MonadFail m) => m PrvKey
-newRandomPrvKey = do
+newRandomPrvKey :: (MonadIO m, MonadFail m) => Alg -> m PrvKey
+newRandomPrvKey AlgSecp256k1 = do
   r <- liftIO $ getRandomBytes 32
-  case importPrvKey r of
+  case importPrvKeyRaw AlgSecp256k1 r of
     -- it's bad practice to fail
     -- in IO but in this case it
     -- should never happen in reality
     Nothing -> fail "BAD_PRV_KEY"
     Just x -> return x
 
-importSig :: ByteString -> Maybe Sig
-importSig = (SigSecp256k1 <$>) . C.importSig
+importSigDer :: Alg -> ByteString -> Maybe Sig
+importSigDer AlgSecp256k1 = (SigSecp256k1 <$>) . C.importSig
 
-exportSig :: Sig -> ByteString
-exportSig (SigSecp256k1 x) = C.exportSig x
+exportSigDer :: Alg -> Sig -> ByteString
+exportSigDer AlgSecp256k1 (SigSecp256k1 x) = C.exportSig x
 
 class Signable a where
   toBinary :: a -> BL.ByteString

@@ -13,10 +13,9 @@ import Proto.SignableOrphan ()
 import Test.Hspec
 import Test.QuickCheck
 import Test.QuickCheck.Instances ()
-import TestOrphan ()
 
 spec :: Spec
-spec = before newRandomPrvKey $ do
+spec = before (newRandomPrvKey AlgSecp256k1) $ do
   it "is able to sign proto message" $
     \k -> property $ \x0 ->
       sign k (unArbitraryMessage x0 :: Payload)

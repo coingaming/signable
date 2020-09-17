@@ -27,7 +27,6 @@ import Proto.Number
 import Proto.SignableOrphan ()
 import Proto.Text
 import Test.Hspec
-import TestOrphan ()
 
 spec :: Spec
 spec = before readEnv
@@ -38,7 +37,7 @@ spec = before readEnv
       ( \tc -> do
           let t = tcProtoType tc
           let x = coerce $ tcProtoBin tc
-          s <- case importSig . coerce $ tcSignatureBin tc of
+          s <- case importSigDer AlgSecp256k1 . coerce $ tcSignatureBin tc of
             Just s0 -> return s0
             Nothing -> fail "INVALID_SIG"
           putStrLn $ tcDescription tc
@@ -119,7 +118,7 @@ instance FromJSON PrvKey where
       >>= parseASN1 (\case OctetString x -> [x]; _ -> []) of
       Left e -> fail e
       Right x ->
-        case importPrvKey x of
+        case importPrvKeyRaw AlgSecp256k1 x of
           Nothing -> fail "INVALID_PRV_PEM"
           Just k -> return k
 
@@ -129,7 +128,7 @@ instance FromJSON PubKey where
       >>= parseASN1 (\case BitString (BitArray _ x) -> [x]; _ -> []) of
       Left e -> fail e
       Right x ->
-        case importPubKey x of
+        case importPubKeyRaw AlgSecp256k1 x of
           Nothing -> fail "INVALID_PUB_PEM"
           Just k -> return k
 
