@@ -96,6 +96,7 @@ tests:
     - signable
     - aeson
     - pem
+    - unordered-containers
     - asn1-encoding
     - asn1-types
     - base64-bytestring

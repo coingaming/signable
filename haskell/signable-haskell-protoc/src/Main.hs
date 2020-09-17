@@ -20,6 +20,7 @@ import qualified Data.ByteString as B
 
 import Data.Int
 import Data.List (sortBy)
+import Data.Maybe (isJust)
 import Data.ProtoLens (decodeMessage, defMessage, encodeMessage)
 import Data.ProtoLens.Compiler.ModuleName
 import Data.ProtoLens.Compiler.Plugin ()
@@ -153,10 +154,29 @@ mkMsgImpl m t d =
 
 mkMsgChunk :: String -> FieldDescriptorProto -> HsExpr'
 mkMsgChunk m d =
-  case d ^. #type' of
-    FieldDescriptorProto'TYPE_MESSAGE ->
+  if (d ^. #type' == FieldDescriptorProto'TYPE_MESSAGE)
+    || (isJust $ d ^. #maybe'oneofIndex)
+    then mExpr
+    else expr
+  where
+    n0 = camel . unpack $ d ^. #name
+    tag = case safeFromIntegral $ d ^. #number :: Maybe Int32 of
+      Just v ->
+        var "toBinary"
+          @@ int (fromIntegral v :: Integer) @::@ var "Int32"
+      Nothing -> error "TAG_OVERFLOW"
+    expr =
+      op
+        tag
+        "<>"
+        ( var
+            "toBinary"
+            @@ par
+              (var "view" @@ var (fromString $ m <> "_Fields." <> n0) @@ var "x")
+        )
+    mExpr =
       case'
-        (var "view" @@ var (fromString mn) @@ var "x")
+        (var "view" @@ var (fromString $ m <> "_Fields.maybe'" <> n0) @@ var "x")
         [ match
             [conP "Just" [bvar "v"]]
             (op tag "<>" (var "toBinary" @@ var "v")),
@@ -164,20 +184,6 @@ mkMsgChunk m d =
             [conP_ "Nothing"]
             tag
         ]
-    _ ->
-      op
-        tag
-        "<>"
-        (var "toBinary" @@ par (var "view" @@ var (fromString n) @@ var "x"))
-  where
-    n0 = camel . unpack $ d ^. #name
-    n = m <> "_Fields." <> n0
-    mn = m <> "_Fields." <> "maybe'" <> n0
-    tag = case safeFromIntegral $ d ^. #number :: Maybe Int32 of
-      Just v ->
-        var "toBinary"
-          @@ int (fromIntegral v :: Integer) @::@ var "Int32"
-      Nothing -> error "TAG_OVERFLOW"
 
 mkEnumImpl :: String -> String -> HsDecl'
 mkEnumImpl m t =

@@ -80,8 +80,8 @@ newRandomPrvKey AlgSecp256k1 = do
 importSigDer :: Alg -> ByteString -> Maybe Sig
 importSigDer AlgSecp256k1 = (SigSecp256k1 <$>) . C.importSig
 
-exportSigDer :: Alg -> Sig -> ByteString
-exportSigDer AlgSecp256k1 (SigSecp256k1 x) = C.exportSig x
+exportSigDer :: Sig -> ByteString
+exportSigDer (SigSecp256k1 x) = C.exportSig x
 
 class Signable a where
   toBinary :: a -> BL.ByteString
@@ -108,22 +108,25 @@ class Signable a where
 instance Signable ByteString where
   toBinary = BL.drop 8 . B.encode
 
-instance Signable Int64 where
-  toBinary = B.encode
-
-instance Signable Double where
-  toBinary = B.encode
-
-instance Signable Float where
-  toBinary = B.encode
+instance Signable BL.ByteString where
+  toBinary = toBinary . BL.toStrict
 
 instance Signable Int32 where
+  toBinary = B.encode
+
+instance Signable Int64 where
   toBinary = B.encode
 
 instance Signable Word32 where
   toBinary = B.encode
 
 instance Signable Word64 where
+  toBinary = B.encode
+
+instance Signable Double where
+  toBinary = B.encode
+
+instance Signable Float where
   toBinary = B.encode
 
 instance Signable Bool where
