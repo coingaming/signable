@@ -39,36 +39,7 @@ spec = before readEnv $ do
       generate $
         concat
           <$> mapM
-            ( \(i :: Int) ->
-                concat
-                  <$> mapM
-                    ( \t ->
-                        case t of
-                          Basic'Payload -> do
-                            x <-
-                              unArbitraryMessage
-                                <$> ( arbitrary ::
-                                        Gen (ArbitraryMessage Proto.Basic.Payload)
-                                    )
-                            let pb = encodeMessage x
-                            let sb = toBinary x
-                            sig <- case exportSigDer <$> sign prv x of
-                              Nothing -> error "SIGNATURE_FAILURE"
-                              Just s -> return s
-                            return $
-                              [ TestCase
-                                  { tcProtoType = t,
-                                    tcProtoBin = ProtoBin pb,
-                                    tcSignableBin = SignableBin sb,
-                                    tcSignatureBin = SignatureBin sig,
-                                    tcDescription = show t <> "-" <> show i
-                                  }
-                              ]
-                          _ ->
-                            return []
-                    )
-                    [minBound .. maxBound]
-            )
+            (\i -> mapM (genTestCase prv i) [minBound .. maxBound])
             [1 .. 1000]
     writeEnv $ env {envTCS = tcs}
     True `shouldBe` True
@@ -107,6 +78,78 @@ spec = before readEnv $ do
         ((verify pub s :: Proto.Number.Payload -> Bool) <$>) . decodeMessage
       Coins'Request ->
         ((verify pub s :: Proto.Coins.Request -> Bool) <$>) . decodeMessage
+
+genTestCase :: PrvKey -> Int -> ProtoType -> Gen TestCase
+genTestCase prv i t =
+  case t of
+    Basic'Payload -> do
+      x <-
+        unArbitraryMessage
+          <$> (arbitrary :: Gen (ArbitraryMessage Proto.Basic.Payload))
+      let pb = encodeMessage x
+      let sb = toBinary x
+      sig <- case exportSigDer <$> sign prv x of
+        Nothing -> error "SIGNATURE_FAILURE"
+        Just s -> return s
+      return $
+        TestCase
+          { tcProtoType = t,
+            tcProtoBin = ProtoBin pb,
+            tcSignableBin = SignableBin sb,
+            tcSignatureBin = SignatureBin sig,
+            tcDescription = show t <> "-" <> show i
+          }
+    Text'Payload -> do
+      x <-
+        unArbitraryMessage
+          <$> (arbitrary :: Gen (ArbitraryMessage Proto.Text.Payload))
+      let pb = encodeMessage x
+      let sb = toBinary x
+      sig <- case exportSigDer <$> sign prv x of
+        Nothing -> error "SIGNATURE_FAILURE"
+        Just s -> return s
+      return $
+        TestCase
+          { tcProtoType = t,
+            tcProtoBin = ProtoBin pb,
+            tcSignableBin = SignableBin sb,
+            tcSignatureBin = SignatureBin sig,
+            tcDescription = show t <> "-" <> show i
+          }
+    Number'Payload -> do
+      x <-
+        unArbitraryMessage
+          <$> (arbitrary :: Gen (ArbitraryMessage Proto.Number.Payload))
+      let pb = encodeMessage x
+      let sb = toBinary x
+      sig <- case exportSigDer <$> sign prv x of
+        Nothing -> error "SIGNATURE_FAILURE"
+        Just s -> return s
+      return $
+        TestCase
+          { tcProtoType = t,
+            tcProtoBin = ProtoBin pb,
+            tcSignableBin = SignableBin sb,
+            tcSignatureBin = SignatureBin sig,
+            tcDescription = show t <> "-" <> show i
+          }
+    Coins'Request -> do
+      x <-
+        unArbitraryMessage
+          <$> (arbitrary :: Gen (ArbitraryMessage Proto.Coins.Request))
+      let pb = encodeMessage x
+      let sb = toBinary x
+      sig <- case exportSigDer <$> sign prv x of
+        Nothing -> error "SIGNATURE_FAILURE"
+        Just s -> return s
+      return $
+        TestCase
+          { tcProtoType = t,
+            tcProtoBin = ProtoBin pb,
+            tcSignableBin = SignableBin sb,
+            tcSignatureBin = SignatureBin sig,
+            tcDescription = show t <> "-" <> show i
+          }
 
 data Env
   = Env
