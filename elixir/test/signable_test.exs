@@ -23,12 +23,27 @@ defmodule Signable.SignableTest do
 
     test "invalid signature", %{pk: pk, sk: sk, crv: crv} do
       Signable.sign("payload", sk, crv)
-      assert Signable.verify_signature("payload", "bad signature", pk, crv) == false
+      refute Signable.verify_signature("payload", "bad signature", pk, crv)
     end
 
     test "bad payload", %{pk: pk, sk: sk, crv: crv} do
       signature = Signable.sign("payload", sk, crv)
-      assert Signable.verify_signature("bad payload", signature, pk, crv) == false
+      refute Signable.verify_signature("bad payload", signature, pk, crv)
+    end
+
+    test "with der pubkey", %{pk: pk, sk: sk, crv: crv} do
+      pk_info =
+        {:SubjectPublicKeyInfo,
+         {:AlgorithmIdentifier, {1, 2, 840, 10_045, 2, 1},
+          :public_key.der_encode(
+            :EcpkParameters,
+            {:namedCurve, :pubkey_cert_records.namedCurves(crv)}
+          )}, pk}
+
+      der_pk = :public_key.der_encode(:SubjectPublicKeyInfo, pk_info)
+
+      signature = Signable.sign("payload", sk, crv)
+      assert Signable.verify_signature("payload", signature, der_pk)
     end
   end
 
