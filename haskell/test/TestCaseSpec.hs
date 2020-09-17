@@ -14,6 +14,8 @@ import Data.ASN1.Encoding
 import Data.ASN1.Prim
 import Data.Aeson
 import Data.Aeson.Types (Parser)
+import qualified Data.ByteString as BS
+--import qualified Data.ByteString.Base16 as B16
 import qualified Data.ByteString.Base64 as B64
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.HashMap.Strict as Map
@@ -33,6 +35,14 @@ import Test.QuickCheck
 
 spec :: Spec
 spec = before readEnv $ do
+  --it "openssl hex" $ \env -> do
+  --  let pub = envPubKey env
+  --  m <- b16decode "0000000100000000000000c800000002000000010000000000000032000000020000000100000001000000030000000100000004010000000561620000000600000000000000640000000700000008"
+  --  s0 <- b16decode "3046022100bce8c72730084060ff3ae5f39af3bd6e95376752cedff1d74744f5045fd38533022100fc516da299706187212844ccbf8c42a0589110778ba90bd71b378a4530fb637a"
+  --  s <- case importSigDer AlgSecp256k1 s0 of
+  --    Just x -> return x
+  --    Nothing -> fail "INVALID_SIG"
+  --  verify pub s m `shouldBe` True
   it "generates haskell-testcases.json" $ \env -> do
     let prv = envPrvKey env
     tcs <-
@@ -53,6 +63,8 @@ spec = before readEnv $ do
             Just s0 -> return s0
             Nothing -> fail "INVALID_SIG"
           putStrLn $ tcDescription tc
+          (BS.unpack . exportSigDer $ s)
+            `shouldBe` (BS.unpack . coerce $ tcSignatureBin tc)
           (BL.unpack <$> serializer t x)
             `shouldBe` (Right . BL.unpack . coerce $ tcSignableBin tc)
           verifier pub s t x
@@ -60,6 +72,10 @@ spec = before readEnv $ do
       )
       $ envTCS env
   where
+    --b16decode x =
+    --  case B16.decode x of
+    --    (v, "") -> return v
+    --    _ -> fail "INVALID_HEX"
     serializer = \case
       Basic'Payload ->
         ((toBinary :: Proto.Basic.Payload -> BL.ByteString) <$>) . decodeMessage

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 21dddd9d0d76994d6f42133d3b2069c75ad63c34afd559e7101a342af38b7d76
+-- hash: b5a7e94d50d5f9e9f973126c470bc7196476afafacf2ed068ecba8cfd4f88583
 
 name:           signable
 version:        0.1
@@ -56,7 +56,7 @@ library
     , proto-lens-runtime
     , proto3-suite
     , quickcheck-instances >=0.3.22 && <0.4
-    , secp256k1-haskell
+    , secp256k1-haskell >=0.4 && <0.5
     , system-filepath
     , template-haskell
     , text >=1.2.3 && <1.3
@@ -93,6 +93,7 @@ test-suite signable-test
     , asn1-encoding
     , asn1-types
     , base >=4.7 && <5
+    , base16-bytestring
     , base64-bytestring
     , binary
     , bytestring >=0.10.8 && <0.11
@@ -109,7 +110,7 @@ test-suite signable-test
     , proto-lens-runtime
     , proto3-suite
     , quickcheck-instances >=0.3.22 && <0.4
-    , secp256k1-haskell
+    , secp256k1-haskell >=0.4 && <0.5
     , signable
     , system-filepath
     , template-haskell

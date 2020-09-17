@@ -12,6 +12,13 @@ packages:
   original:
     hackage: cryptonite-0.26@sha256:43c722f3770c31f4c5376e7aa42645b104834103312e217aa7fe79316416d6df,17352
 - completed:
+    hackage: secp256k1-haskell-0.4.0@sha256:696dff6f5f84c83041c290b198e872d39241dbe62eb206627264ebdff6fe7958,1930
+    pantry-tree:
+      size: 599
+      sha256: e7cb3888501fc5d1084a107488be3a6de59799ba95666d055c4acbabb66fcd69
+  original:
+    hackage: secp256k1-haskell-0.4.0
+- completed:
     hackage: parameterized-0.5.0.0@sha256:880717fbb958de1bac015f0a375ab6636f162a72483d987a11e305da6fac6c97,1969
     pantry-tree:
       size: 1019
@@ -46,6 +53,13 @@ packages:
       sha256: 25214e3dfa3d36b453da5be39f392699ac78ada5ded8a1384668e3e3cd9234e4
   original:
     hackage: proto-lens-runtime-0.7.0.0
+- completed:
+    hackage: proto-lens-arbitrary-0.1.2.9@sha256:460627c82fa9df22884af158cc25f45b994f1c4c068a84f10c80225726dafffe,1273
+    pantry-tree:
+      size: 289
+      sha256: 671ae926b84350a7ac5e840c98ee23d056b076cec08517902e499b063c17204e
+  original:
+    hackage: proto-lens-arbitrary-0.1.2.9
 - completed:
     size: 91575
     url: https://github.com/coingaming/proto3-suite/archive/45950a3860cbcb3f3177e9725dbdf460d6da9d45.tar.gz

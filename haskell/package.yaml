@@ -31,7 +31,7 @@ dependencies:
 - proto3-suite
 # crypto
 - cryptonite            >= 0.25 && < 0.27
-- secp256k1-haskell
+- secp256k1-haskell     >= 0.4 && < 0.5
 # other
 - template-haskell
 - containers
@@ -100,4 +100,5 @@ tests:
     - asn1-encoding
     - asn1-types
     - base64-bytestring
+    - base16-bytestring
     - hspec >= 2.7.1 && < 2.8
