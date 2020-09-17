@@ -202,7 +202,7 @@ defmodule Signable do
 
   @spec serialize_enum(enum :: atom(), value :: atom()) :: binary()
   defp serialize_enum(enum, value) do
-    index = enum.mapping() |> Map.get(value)
+    index = enum.mapping() |> Map.get(value, value)
     serialize_scalar(:uint32, index)
   end
 
