@@ -154,11 +154,8 @@ defmodule Signable do
           !is_nil(oneof_val) and elem(oneof_val, 0) == name_atom ->
             serialize_one_property(prop, elem(oneof_val, 1))
 
-          !is_nil(oneof_val) ->
-            <<>>
-
           true ->
-            serialize_one_property(prop, oneof_val)
+            <<>>
         end
       else
         serialize_one_property(prop, prop_val)
