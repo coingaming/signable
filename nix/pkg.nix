@@ -4,6 +4,7 @@
 , pem, proto-lens, proto-lens-arbitrary, proto-lens-runtime
 , proto3-suite, QuickCheck, quickcheck-instances, secp256k1-haskell
 , stdenv, system-filepath, template-haskell, text, universum
+, unordered-containers
 }:
 mkDerivation {
   pname = "signable";
@@ -23,6 +24,7 @@ mkDerivation {
     memory microlens pem proto-lens proto-lens-arbitrary
     proto-lens-runtime proto3-suite QuickCheck quickcheck-instances
     secp256k1-haskell system-filepath template-haskell text universum
+    unordered-containers
   ];
   prePatch = "hpack";
   homepage = "https://github.com/coingaming/signable#readme";

@@ -78,7 +78,8 @@ newRandomPrvKey AlgSecp256k1 = do
     Just x -> return x
 
 importSigDer :: Alg -> ByteString -> Maybe Sig
-importSigDer AlgSecp256k1 = (SigSecp256k1 <$>) . C.importSig
+importSigDer AlgSecp256k1 =
+  (SigSecp256k1 . (\x -> fromMaybe x $ C.normalizeSig x) <$>) . C.importSig
 
 exportSigDer :: Sig -> ByteString
 exportSigDer (SigSecp256k1 x) = C.exportSig x

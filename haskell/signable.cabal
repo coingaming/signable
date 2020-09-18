@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b5a7e94d50d5f9e9f973126c470bc7196476afafacf2ed068ecba8cfd4f88583
+-- hash: f3957186567c41a6aea88795494a7abf6f87066324db34a7a36457a22712c2a9
 
 name:           signable
 version:        0.1
@@ -93,7 +93,6 @@ test-suite signable-test
     , asn1-encoding
     , asn1-types
     , base >=4.7 && <5
-    , base16-bytestring
     , base64-bytestring
     , binary
     , bytestring >=0.10.8 && <0.11
