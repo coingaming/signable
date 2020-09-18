@@ -32,6 +32,8 @@ dependencies:
 # crypto
 - cryptonite            >= 0.25 && < 0.27
 - secp256k1-haskell     >= 0.4 && < 0.5
+- asn1-encoding         >= 0.9.6 && < 0.10
+- asn1-types            >= 0.3 && < 0.4
 # other
 - template-haskell
 - containers
@@ -94,10 +96,9 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - signable
+    - directory
     - aeson
     - pem
     - unordered-containers
-    - asn1-encoding
-    - asn1-types
     - base64-bytestring
     - hspec >= 2.7.1 && < 2.8

@@ -49,7 +49,7 @@ defmodule Signable.SignableTest do
 
   describe "serialize/2" do
     setup do
-      tc_filepath = System.get_env("SIGNABLE_TC_FILEPATH", "../testcases.json")
+      tc_filepath = System.get_env("SIGNABLE_TC_FILEPATH", "../test-case/elixir.json")
       test_config = File.read!(tc_filepath) |> Poison.decode!()
 
       public_key =

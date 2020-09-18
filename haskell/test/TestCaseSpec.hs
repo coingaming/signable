@@ -28,12 +28,13 @@ import Proto.Coins
 import Proto.Number
 import Proto.SignableOrphan ()
 import Proto.Text
+import System.Directory (listDirectory)
 import Test.Hspec
 import Test.QuickCheck
 
 spec :: Spec
-spec = before readEnv $ do
-  it "generates haskell-testcases.json" $ \env -> do
+spec = before (readEnv "elixir.json") $ do
+  it "generates haskell test case" $ \env -> do
     let prv = envPrvKey env
     tcs <-
       generate $
@@ -44,7 +45,9 @@ spec = before readEnv $ do
     let newEnv = env {envTCS = tcs}
     writeEnv newEnv
     testCasesSpec newEnv
-  it "complies elixir-testcases.json" testCasesSpec
+  it "complies all test cases" $ \_ -> do
+    xs <- listDirectory testCaseDir
+    mapM_ (\x -> readEnv x >>= testCasesSpec) xs
   where
     testCasesSpec env = do
       let pub = envPubKey env
@@ -271,16 +274,19 @@ instance FromJSON SignatureBin where
 instance ToJSON SignatureBin where
   toJSON = encodeB64 . coerce
 
-readEnv :: IO Env
-readEnv = do
-  !f <- readFile "test/Support/elixir-testcases.json"
+readEnv :: String -> IO Env
+readEnv n = do
+  !f <- readFile $ testCaseDir <> "/" <> n
   case eitherDecode $ encodeUtf8 f of
     Left e -> fail e
     Right x -> return x
 
+testCaseDir :: String
+testCaseDir = "test/Support/test-case"
+
 writeEnv :: Env -> IO ()
 writeEnv =
-  writeFile "test/Support/haskell-testcases.json"
+  writeFile (testCaseDir <> "/haskell-new.json")
     . decodeUtf8
     . encode
 

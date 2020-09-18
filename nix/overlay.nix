@@ -103,6 +103,10 @@ in
               stdenv = self.stdenv;
               fetchgit = self.fetchgit;
             };
+            asn1-encoding = callPackage ./overlay/asn1-encoding.nix {
+              stdenv = self.stdenv;
+              fetchgit = self.fetchgit;
+            };
           }
         );
       })
