@@ -96,6 +96,7 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - signable
+    - directory
     - aeson
     - pem
     - unordered-containers

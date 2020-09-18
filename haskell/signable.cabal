@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 666122a2cfb22d3f67dc7994c975b32a0b2d7ee5072a1c27951c4d2019706394
+-- hash: 19b9d6ddeea4e0e1750376d057fc3fd5abd874035a6d66d9cd6d69b8fb4a2ff8
 
 name:           signable
 version:        0.1
@@ -101,6 +101,7 @@ test-suite signable-test
     , casing
     , containers
     , cryptonite >=0.25 && <0.27
+    , directory
     , generic-arbitrary >=0.1.0 && <0.2
     , hspec >=2.7.1 && <2.8
     , memory
