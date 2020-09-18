@@ -33,7 +33,7 @@ import Test.QuickCheck
 
 spec :: Spec
 spec = before readEnv $ do
-  it "generates haskell-testcases.json" $ \env -> do
+  it "generates haskell test case" $ \env -> do
     let prv = envPrvKey env
     tcs <-
       generate $
@@ -44,7 +44,7 @@ spec = before readEnv $ do
     let newEnv = env {envTCS = tcs}
     writeEnv newEnv
     testCasesSpec newEnv
-  it "complies elixir-testcases.json" testCasesSpec
+  it "complies test-case/elixir.json" testCasesSpec
   where
     testCasesSpec env = do
       let pub = envPubKey env
@@ -273,14 +273,14 @@ instance ToJSON SignatureBin where
 
 readEnv :: IO Env
 readEnv = do
-  !f <- readFile "test/Support/elixir-testcases.json"
+  !f <- readFile "test/Support/test-case/elixir.json"
   case eitherDecode $ encodeUtf8 f of
     Left e -> fail e
     Right x -> return x
 
 writeEnv :: Env -> IO ()
 writeEnv =
-  writeFile "test/Support/haskell-testcases.json"
+  writeFile "test/Support/test-case/haskell-new.json"
     . decodeUtf8
     . encode
 
