@@ -28,12 +28,6 @@ source-repository head
 executable signable-haskell-protoc
   main-is: Main.hs
   other-modules:
-      Data.ProtoLens.Compiler.Definitions
-      Data.ProtoLens.Compiler.Generate
-      Data.ProtoLens.Compiler.Generate.Commented
-      Data.ProtoLens.Compiler.Generate.Encoding
-      Data.ProtoLens.Compiler.Generate.Field
-      Data.ProtoLens.Compiler.Plugin
       Proto.Google.Protobuf.Compiler.Plugin
       Proto.Google.Protobuf.Compiler.Plugin_Fields
       Proto.Google.Protobuf.Descriptor

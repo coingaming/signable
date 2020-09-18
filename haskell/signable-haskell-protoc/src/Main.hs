@@ -4,26 +4,15 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
--- Copyright 2016 Google Inc. All Rights Reserved.
---
--- Use of this source code is governed by a BSD-style
--- license that can be found in the LICENSE file or at
--- https://developers.google.com/open-source/licenses/bsd
-
 module Main where
 
 import qualified Data.ByteString as B
--- Force the use of the Reflected API when decoding DescriptorProto
--- so that we can run the test suite against the Generated API.
--- TODO: switch back to Data.ProtoLens.Encoding once the Generated encoding is
--- good enough.
-
-import Data.Int
+import Data.Int (Int32)
 import Data.List (sortBy)
 import Data.Maybe (isJust)
 import Data.ProtoLens (decodeMessage, defMessage, encodeMessage)
-import Data.ProtoLens.Compiler.ModuleName
-import Data.ProtoLens.Compiler.Plugin ()
+import Data.ProtoLens.Compiler.ModuleName (protoModuleName)
+import Data.ProtoLens.Labels ()
 import Data.String (fromString)
 import qualified Data.Text as T
 import Data.Text (Text, intercalate, pack, unpack)
@@ -39,10 +28,16 @@ import Proto.Google.Protobuf.Compiler.Plugin
     CodeGeneratorResponse,
   )
 import Proto.Google.Protobuf.Descriptor
+  ( DescriptorProto,
+    EnumDescriptorProto,
+    FieldDescriptorProto,
+    FieldDescriptorProto'Type (FieldDescriptorProto'TYPE_MESSAGE),
+    FileDescriptorProto,
+  )
 import System.Environment (getProgName)
 import System.Exit (ExitCode (..), exitWith)
-import System.IO as IO
-import Text.Casing
+import qualified System.IO as IO
+import Text.Casing (camel)
 
 data ProtoMod
   = ProtoMod
@@ -61,7 +56,7 @@ main = do
   contents <- B.getContents
   progName <- getProgName
   case decodeMessage contents of
-    Left e -> IO.hPutStrLn stderr e >> exitWith (ExitFailure 1)
+    Left e -> IO.hPutStrLn IO.stderr e >> exitWith (ExitFailure 1)
     Right x -> runGhc (Just libdir) $ do
       dflags <- getDynFlags
       liftIO $ B.putStr $ encodeMessage $
