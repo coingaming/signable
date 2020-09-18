@@ -11,8 +11,8 @@ mkDerivation {
   version = "0.1";
   src = ./../haskell;
   libraryHaskellDepends = [
-    base binary bytestring casing containers cryptonite
-    generic-arbitrary hspec memory microlens proto-lens
+    asn1-encoding asn1-types base binary bytestring casing containers
+    cryptonite generic-arbitrary hspec memory microlens proto-lens
     proto-lens-arbitrary proto-lens-runtime proto3-suite QuickCheck
     quickcheck-instances secp256k1-haskell system-filepath
     template-haskell text universum

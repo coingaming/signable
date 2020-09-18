@@ -50,8 +50,8 @@ mix {
     export MIX_NO_DEPS=1
 
     echo "checkPhase ==> test"
-    export SIGNABLE_TC_FILEPATH="$(pwd)/testcases.json"
-    mix test
+    SIGNABLE_TC_FILEPATH="$(pwd)/elixir-testcases.json" mix test
+    SIGNABLE_TC_FILEPATH="$(pwd)/haskell-testcases.json" mix test
   '';
   doCheck = true;
   GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
