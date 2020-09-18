@@ -1,3 +1,5 @@
+version: 2.1
+
 configure: &configure
   docker:
   - image: nixos/nix:2.3
@@ -26,7 +28,6 @@ commands:
           paths:
             - /nix
 
-version: 2
 jobs:
   release:
     <<: *configure
