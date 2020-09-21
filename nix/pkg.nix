@@ -1,29 +1,26 @@
 { mkDerivation, aeson, asn1-encoding, asn1-types, base
-, base64-bytestring, binary, bytestring, casing, containers
-, cryptonite, directory, generic-arbitrary, hpack, hspec, memory
-, microlens, pem, proto-lens, proto-lens-arbitrary
-, proto-lens-runtime, proto3-suite, QuickCheck
-, quickcheck-instances, secp256k1-haskell, stdenv, system-filepath
-, template-haskell, text, universum, unordered-containers
+, base64-bytestring, binary, bytestring, casing, cryptonite
+, directory, generic-arbitrary, hpack, hspec, memory, microlens
+, pem, proto-lens, proto-lens-arbitrary, proto-lens-runtime
+, QuickCheck, quickcheck-instances, secp256k1-haskell, stdenv, text
+, universum, unordered-containers
 }:
 mkDerivation {
   pname = "signable";
   version = "0.1";
   src = ./../haskell;
   libraryHaskellDepends = [
-    asn1-encoding asn1-types base binary bytestring casing containers
-    cryptonite hspec memory microlens pem proto-lens proto-lens-runtime
-    proto3-suite secp256k1-haskell system-filepath template-haskell
-    text universum
+    asn1-encoding asn1-types base binary bytestring casing cryptonite
+    memory microlens pem proto-lens proto-lens-runtime
+    secp256k1-haskell text universum
   ];
   libraryToolDepends = [ hpack ];
   testHaskellDepends = [
     aeson asn1-encoding asn1-types base base64-bytestring binary
-    bytestring casing containers cryptonite directory generic-arbitrary
-    hspec memory microlens pem proto-lens proto-lens-arbitrary
-    proto-lens-runtime proto3-suite QuickCheck quickcheck-instances
-    secp256k1-haskell system-filepath template-haskell text universum
-    unordered-containers
+    bytestring casing cryptonite directory generic-arbitrary hspec
+    memory microlens pem proto-lens proto-lens-arbitrary
+    proto-lens-runtime QuickCheck quickcheck-instances
+    secp256k1-haskell text universum unordered-containers
   ];
   prePatch = "hpack";
   homepage = "https://github.com/coingaming/signable#readme";

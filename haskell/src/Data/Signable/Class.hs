@@ -14,8 +14,8 @@ module Data.Signable.Class
     importPrvKeyPem,
     newRandomPrvKey,
 
-    -- * Hash
-    Hash,
+    -- * Sha256
+    Sha256 (..),
 
     -- * Signature
     Sig,
@@ -64,7 +64,7 @@ newtype PubKey = PubKeySecp256k1 C.PubKey
 
 newtype PrvKey = PrvKeySecp256k1 C.SecKey
 
-newtype Hash = Sha256 ByteString
+newtype Sha256 = Sha256 ByteString
 
 newtype Sig
   = SigSecp256k1 C.Sig
@@ -143,8 +143,8 @@ parseASN1 f p = do
 
 class Signable a where
   toBinary :: a -> BL.ByteString
-  toHash :: a -> Hash
-  toHash =
+  toSha256 :: a -> Sha256
+  toSha256 =
     Sha256
       . BS.pack
       . BA.unpack
@@ -155,13 +155,13 @@ class Signable a where
     (SigSecp256k1 . C.signMsg k <$>)
       . C.msg
       . coerce
-      . toHash
+      . toSha256
   verify :: PubKey -> Sig -> a -> Bool
   verify (PubKeySecp256k1 k) (SigSecp256k1 s) =
     maybe False (C.verifySig k s)
       . C.msg
       . coerce
-      . toHash
+      . toSha256
 
 instance Signable ByteString where
   toBinary = BL.drop 8 . B.encode

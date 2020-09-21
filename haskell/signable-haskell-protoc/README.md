@@ -1,6 +1,6 @@
 # signable-haskell-protoc
 
-Signable instances protoc compiler plugin.
+Signable instances protoc compiler plugin:
 
 ```
 protoc \
