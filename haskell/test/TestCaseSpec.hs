@@ -8,16 +8,11 @@ module TestCaseSpec
   )
 where
 
-import Data.ASN1.BinaryEncoding
-import Data.ASN1.BitArray
-import Data.ASN1.Encoding
-import Data.ASN1.Prim
 import Data.Aeson
 import Data.Aeson.Types (Parser)
 import qualified Data.ByteString.Base64 as B64
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.HashMap.Strict as Map
-import Data.PEM
 import Data.ProtoLens
 import Data.ProtoLens.Arbitrary
 import Data.Signable
@@ -229,23 +224,15 @@ instance ToJSON TestCase where
 
 instance FromJSON PrvKey where
   parseJSON = withText "PrvKey" $ \x0 ->
-    case parsePEM x0
-      >>= parseASN1 (\case OctetString x -> [x]; _ -> []) of
-      Left e -> fail e
-      Right x ->
-        case importPrvKeyRaw AlgSecp256k1 x of
-          Nothing -> fail "INVALID_PRV_PEM"
-          Just k -> return k
+    case importPrvKeyPem AlgSecp256k1 . encodeUtf8 $ x0 of
+      Left e -> fail $ show e
+      Right x -> return x
 
 instance FromJSON PubKey where
   parseJSON = withText "PubKey" $ \x0 ->
-    case parsePEM x0
-      >>= parseASN1 (\case BitString (BitArray _ x) -> [x]; _ -> []) of
-      Left e -> fail e
-      Right x ->
-        case importPubKeyRaw AlgSecp256k1 x of
-          Nothing -> fail "INVALID_PUB_PEM"
-          Just k -> return k
+    case importPubKeyPem AlgSecp256k1 . encodeUtf8 $ x0 of
+      Left e -> fail $ show e
+      Right x -> return x
 
 instance FromJSON ProtoType where
   parseJSON = withText "ProtoType" $ \x0 ->
@@ -289,24 +276,6 @@ writeEnv =
   writeFile (testCaseDir <> "/haskell-new.json")
     . decodeUtf8
     . encode
-
-parsePEM :: Text -> Either String PEM
-parsePEM x0 =
-  case pemParseBS $ encodeUtf8 x0 of
-    Left _ -> Left "INVALID_PEM"
-    Right [] -> Left "ZERO_PEM_CHUNKS"
-    Right [p] -> Right p
-    Right _ -> Left "TOO_MANY_PEM_CHUNKS"
-
-parseASN1 :: (ASN1 -> [ByteString]) -> PEM -> Either String ByteString
-parseASN1 f p = do
-  xs0 <-
-    first (const "INVALID_ASN1") $
-      decodeASN1 DER (BL.fromStrict $ pemContent p)
-  case xs0 >>= f of
-    [] -> Left "ZERO_ASN1_CHUNKS"
-    [x] -> Right x
-    _ -> Left "TOO_MANY_ASN1_CHUNKS"
 
 parseB64 :: Value -> Parser ByteString
 parseB64 = withText "B64" $ \x0 ->

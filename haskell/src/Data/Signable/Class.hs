@@ -8,8 +8,10 @@ module Data.Signable.Class
     PubKey,
     PrvKey,
     importPubKeyRaw,
+    importPubKeyPem,
     derivePubKey,
     importPrvKeyRaw,
+    importPrvKeyPem,
     newRandomPrvKey,
 
     -- * Hash
@@ -25,20 +27,37 @@ module Data.Signable.Class
 
     -- * Misc
     Alg (..),
+    SE (..),
   )
 where
 
 import qualified Crypto.Secp256k1 as C
+import Data.ASN1.BinaryEncoding
+import Data.ASN1.BitArray
+import Data.ASN1.Encoding
+import Data.ASN1.Prim
 import qualified Data.Binary as B
 import qualified Data.ByteArray as BA
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BL
 import Data.Foldable (foldr)
+import Data.PEM
 import Data.Signable.Import hiding (foldr, show)
 import qualified Data.Text.Encoding as T
 import Prelude (show)
 
 data Alg = AlgSecp256k1
+  deriving (Show)
+
+data SE
+  = InvalidPem
+  | TooFewPemChunks
+  | TooManyPemChunks
+  | InvalidAsn1
+  | TooFewAsn1Chunks
+  | TooManyAsn1Chunks
+  | InvalidPubKeyRaw
+  | InvalidPrvKeyRaw
   deriving (Show)
 
 newtype PubKey = PubKeySecp256k1 C.PubKey
@@ -61,11 +80,31 @@ instance Show Sig where
 importPubKeyRaw :: Alg -> ByteString -> Maybe PubKey
 importPubKeyRaw AlgSecp256k1 = (PubKeySecp256k1 <$>) . C.importPubKey
 
+importPubKeyPem :: Alg -> ByteString -> Either SE PubKey
+importPubKeyPem AlgSecp256k1 x0 =
+  case parsePEM x0
+    >>= parseASN1 (\case BitString (BitArray _ x) -> [x]; _ -> []) of
+    Left e -> Left e
+    Right x ->
+      case importPubKeyRaw AlgSecp256k1 x of
+        Nothing -> Left InvalidPubKeyRaw
+        Just k -> Right k
+
 derivePubKey :: PrvKey -> PubKey
 derivePubKey (PrvKeySecp256k1 x) = PubKeySecp256k1 $ C.derivePubKey x
 
 importPrvKeyRaw :: Alg -> ByteString -> Maybe PrvKey
 importPrvKeyRaw AlgSecp256k1 = (PrvKeySecp256k1 <$>) . C.secKey
+
+importPrvKeyPem :: Alg -> ByteString -> Either SE PrvKey
+importPrvKeyPem AlgSecp256k1 x0 =
+  case parsePEM x0
+    >>= parseASN1 (\case OctetString x -> [x]; _ -> []) of
+    Left e -> Left e
+    Right x ->
+      case importPrvKeyRaw AlgSecp256k1 x of
+        Nothing -> Left InvalidPrvKeyRaw
+        Just k -> Right k
 
 newRandomPrvKey :: (MonadIO m, MonadFail m) => Alg -> m PrvKey
 newRandomPrvKey AlgSecp256k1 = do
@@ -83,6 +122,24 @@ importSigDer AlgSecp256k1 =
 
 exportSigDer :: Sig -> ByteString
 exportSigDer (SigSecp256k1 x) = C.exportSig x
+
+parsePEM :: ByteString -> Either SE PEM
+parsePEM x0 =
+  case pemParseBS x0 of
+    Left _ -> Left InvalidPem
+    Right [] -> Left TooFewPemChunks
+    Right [x] -> Right x
+    Right _ -> Left TooManyPemChunks
+
+parseASN1 :: (ASN1 -> [ByteString]) -> PEM -> Either SE ByteString
+parseASN1 f p = do
+  xs0 <-
+    first (const InvalidAsn1) $
+      decodeASN1 DER (BL.fromStrict $ pemContent p)
+  case xs0 >>= f of
+    [] -> Left TooFewAsn1Chunks
+    [x] -> Right x
+    _ -> Left TooManyAsn1Chunks
 
 class Signable a where
   toBinary :: a -> BL.ByteString

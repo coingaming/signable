@@ -18,30 +18,21 @@ dependencies:
 - base                  >= 4.7 && < 5
 - universum             >= 1.5.0 && < 1.6
 # bytes and text
-- memory
-- binary
+- memory                >= 0.14 && < 0.16
+- binary                >= 0.8.6 && < 0.9
 - bytestring            >= 0.10.8 && < 0.11
 - text                  >= 1.2.3 && < 1.3
-- casing
-- system-filepath
+- casing                >= 0.1.4 && < 0.2
 # protobuf
-- microlens
-- proto-lens
-- proto-lens-runtime
-- proto3-suite
+- microlens             >= 0.4.10 && < 0.5
+- proto-lens            >= 0.7.0 && < 0.8
+- proto-lens-runtime    >= 0.7.0 && < 0.8
 # crypto
 - cryptonite            >= 0.25 && < 0.27
 - secp256k1-haskell     >= 0.4 && < 0.5
 - asn1-encoding         >= 0.9.6 && < 0.10
 - asn1-types            >= 0.3 && < 0.4
-# other
-- template-haskell
-- containers
-# tests
-- QuickCheck            >= 2.13.2 && < 2.14
-- quickcheck-instances  >= 0.3.22 && < 0.4
-- generic-arbitrary     >= 0.1.0 && < 0.2
-- proto-lens-arbitrary
+- pem                   >= 0.2.4 && < 0.3
 
 library:
   source-dirs: src
@@ -64,8 +55,6 @@ library:
   - -Wno-safe # Don’t use Safe Haskell warnings
   - -Wno-missing-local-signatures # Warning for polymorphic local bindings; nothing wrong with those.
   - -Wno-monomorphism-restriction # Don’t warn if the monomorphism restriction is used
-  dependencies:
-  - hspec >= 2.7.1 && < 2.8
 
 tests:
   signable-test:
@@ -96,9 +85,12 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - signable
-    - directory
-    - aeson
-    - pem
-    - unordered-containers
-    - base64-bytestring
-    - hspec >= 2.7.1 && < 2.8
+    - QuickCheck            >= 2.13.2 && < 2.14
+    - quickcheck-instances  >= 0.3.22 && < 0.4
+    - generic-arbitrary     >= 0.1.0 && < 0.2
+    - proto-lens-arbitrary  >= 0.1.2 && < 0.2
+    - directory             >= 1.3 && < 1.4
+    - aeson                 >= 1.4 && < 1.5
+    - unordered-containers  >= 0.2 && < 0.3
+    - base64-bytestring     >= 1.0 && < 1.1
+    - hspec                 >= 2.7.1 && < 2.8

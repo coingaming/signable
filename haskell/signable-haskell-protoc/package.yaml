@@ -1,14 +1,16 @@
 name: signable-haskell-protoc
 version: '0.1'
-synopsis: Signable orphan instances compiler.
-description: Signable orphan instances compiler.
-category: Data
-author: Ilja Tkachuk
-maintainer: ilja@heathmont.net
 github: coingaming/signable/haskell
-copyright: Coingaming
 license: BSD3
+author: "Ilja Tkachuk <tkachuk.labs@gmail.com>"
+maintainer: "Ilja Tkachuk <tkachuk.labs@gmail.com>"
+copyright: "2020 Coingaming <hello@coingaming.io>"
+synopsis: Signable instances protoc compiler plugin.
+category: Data, Cryptography
+description: You can find documentation at <https://hackage.haskell.org/package/signable-haskell-protoc hackage>
+
 extra-source-files:
+  - README.md
   - Changelog.md
 
 executables:
@@ -19,12 +21,10 @@ executables:
       - base >= 4.7 && < 5
       - bytestring == 0.10.*
       - casing >= 0.1 && < 0.2
-      - containers >= 0.5 && < 0.7
       - ghc >= 8.2 && < 8.11
       - ghc-paths == 0.1.*
       - ghc-source-gen >= 0.4 && < 0.5
       - lens-family >= 1.2 && < 2.1
-      - pretty == 1.1.*
       - proto-lens == 0.7.*
       - proto-lens-protoc == 0.7.*
       - proto-lens-runtime == 0.7.*
