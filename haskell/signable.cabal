@@ -4,12 +4,12 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 311dca41f71b08d906b034cedb1f0ad7e69aeaf71f0848717e5ca917085dcc1b
+-- hash: fc0c31e9c084cd8d84aead21ef23c27caf59aa3e92e9b9a5410e1b9627ef234c
 
 name:           signable
 version:        0.1
 synopsis:       Deterministic serialisation and signatures with proto-lens support
-description:    You can find documentation at <http://hackage.haskell.org/package/signable/docs/Data-Signable.html hackage>
+description:    You can find documentation at <https://hackage.haskell.org/package/signable/docs/Data-Signable.html hackage>
 category:       Data, Cryptography
 homepage:       https://github.com/coingaming/signable#readme
 bug-reports:    https://github.com/coingaming/signable/issues
@@ -38,7 +38,7 @@ library
   hs-source-dirs:
       src
   default-extensions: NoImplicitPrelude MultiParamTypeClasses LambdaCase OverloadedStrings ScopedTypeVariables
-  ghc-options: -Weverything -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction
+  ghc-options: -Weverything -Werror -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction
   build-depends:
       asn1-encoding >=0.9.6 && <0.10
     , asn1-types >=0.3 && <0.4
@@ -80,7 +80,7 @@ test-suite signable-test
   hs-source-dirs:
       test
   default-extensions: NoImplicitPrelude MultiParamTypeClasses LambdaCase OverloadedStrings ScopedTypeVariables
-  ghc-options: -Weverything -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction -Wno-missing-export-lists -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Weverything -Werror -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction -Wno-missing-export-lists -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       QuickCheck >=2.13.2 && <2.14
     , aeson >=1.4 && <1.5
