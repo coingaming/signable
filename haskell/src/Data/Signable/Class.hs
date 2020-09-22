@@ -7,11 +7,13 @@ module Data.Signable.Class
   ( -- * Key
     PubKey,
     PrvKey,
-    importPubKeyRaw,
+    importPubKeyDer,
     importPubKeyPem,
+    exportPubKeyDer,
     derivePubKey,
     importPrvKeyRaw,
     importPrvKeyPem,
+    exportPrvKeyRaw,
     newRandomPrvKey,
 
     -- * Sha256
@@ -27,7 +29,8 @@ module Data.Signable.Class
 
     -- * Misc
     Alg (..),
-    SE (..),
+    SignableError (..),
+    ECPointFormat (..),
   )
 where
 
@@ -49,16 +52,21 @@ import Prelude (show)
 data Alg = AlgSecp256k1
   deriving (Show)
 
-data SE
+data SignableError
   = InvalidPem
   | TooFewPemChunks
   | TooManyPemChunks
   | InvalidAsn1
   | TooFewAsn1Chunks
   | TooManyAsn1Chunks
-  | InvalidPubKeyRaw
-  | InvalidPrvKeyRaw
+  | InvalidPubKeyDer
+  | InvalidPrvKeyDer
   deriving (Show)
+
+data ECPointFormat
+  = ECPointCompressed
+  | ECPointUncompressed
+  deriving (Eq, Show)
 
 newtype PubKey = PubKeySecp256k1 C.PubKey
 
@@ -77,18 +85,21 @@ instance Show Sig where
 -- TODO : add KeyKind argument later
 -- when we will have more algorithms
 --
-importPubKeyRaw :: Alg -> ByteString -> Maybe PubKey
-importPubKeyRaw AlgSecp256k1 = (PubKeySecp256k1 <$>) . C.importPubKey
+importPubKeyDer :: Alg -> ByteString -> Maybe PubKey
+importPubKeyDer AlgSecp256k1 = (PubKeySecp256k1 <$>) . C.importPubKey
 
-importPubKeyPem :: Alg -> ByteString -> Either SE PubKey
+importPubKeyPem :: Alg -> ByteString -> Either SignableError PubKey
 importPubKeyPem AlgSecp256k1 x0 =
   case parsePEM x0
     >>= parseASN1 (\case BitString (BitArray _ x) -> [x]; _ -> []) of
     Left e -> Left e
     Right x ->
-      case importPubKeyRaw AlgSecp256k1 x of
-        Nothing -> Left InvalidPubKeyRaw
+      case importPubKeyDer AlgSecp256k1 x of
+        Nothing -> Left InvalidPubKeyDer
         Just k -> Right k
+
+exportPubKeyDer :: ECPointFormat -> PubKey -> ByteString
+exportPubKeyDer f (PubKeySecp256k1 x) = C.exportPubKey (f == ECPointCompressed) x
 
 derivePubKey :: PrvKey -> PubKey
 derivePubKey (PrvKeySecp256k1 x) = PubKeySecp256k1 $ C.derivePubKey x
@@ -96,15 +107,18 @@ derivePubKey (PrvKeySecp256k1 x) = PubKeySecp256k1 $ C.derivePubKey x
 importPrvKeyRaw :: Alg -> ByteString -> Maybe PrvKey
 importPrvKeyRaw AlgSecp256k1 = (PrvKeySecp256k1 <$>) . C.secKey
 
-importPrvKeyPem :: Alg -> ByteString -> Either SE PrvKey
+importPrvKeyPem :: Alg -> ByteString -> Either SignableError PrvKey
 importPrvKeyPem AlgSecp256k1 x0 =
   case parsePEM x0
     >>= parseASN1 (\case OctetString x -> [x]; _ -> []) of
     Left e -> Left e
     Right x ->
       case importPrvKeyRaw AlgSecp256k1 x of
-        Nothing -> Left InvalidPrvKeyRaw
+        Nothing -> Left InvalidPrvKeyDer
         Just k -> Right k
+
+exportPrvKeyRaw :: PrvKey -> ByteString
+exportPrvKeyRaw (PrvKeySecp256k1 x) = C.getSecKey x
 
 newRandomPrvKey :: (MonadIO m, MonadFail m) => Alg -> m PrvKey
 newRandomPrvKey AlgSecp256k1 = do
@@ -123,7 +137,7 @@ importSigDer AlgSecp256k1 =
 exportSigDer :: Sig -> ByteString
 exportSigDer (SigSecp256k1 x) = C.exportSig x
 
-parsePEM :: ByteString -> Either SE PEM
+parsePEM :: ByteString -> Either SignableError PEM
 parsePEM x0 =
   case pemParseBS x0 of
     Left _ -> Left InvalidPem
@@ -131,7 +145,7 @@ parsePEM x0 =
     Right [x] -> Right x
     Right _ -> Left TooManyPemChunks
 
-parseASN1 :: (ASN1 -> [ByteString]) -> PEM -> Either SE ByteString
+parseASN1 :: (ASN1 -> [ByteString]) -> PEM -> Either SignableError ByteString
 parseASN1 f p = do
   xs0 <-
     first (const InvalidAsn1) $
