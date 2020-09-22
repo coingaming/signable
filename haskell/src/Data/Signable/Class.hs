@@ -60,7 +60,7 @@ data SignableError
   | TooFewAsn1Chunks
   | TooManyAsn1Chunks
   | InvalidPubKeyDer
-  | InvalidPrvKeyDer
+  | InvalidPrvKeyRaw
   deriving (Show)
 
 data ECPointFormat
@@ -114,7 +114,7 @@ importPrvKeyPem AlgSecp256k1 x0 =
     Left e -> Left e
     Right x ->
       case importPrvKeyRaw AlgSecp256k1 x of
-        Nothing -> Left InvalidPrvKeyDer
+        Nothing -> Left InvalidPrvKeyRaw
         Just k -> Right k
 
 exportPrvKeyRaw :: PrvKey -> ByteString
