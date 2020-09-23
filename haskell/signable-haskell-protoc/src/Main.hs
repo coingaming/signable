@@ -197,7 +197,7 @@ mkEnumImpl m t =
                   (var "toBinary" @@ var "v"),
                 match
                   [conP_ "Nothing"]
-                  (var "error" @@ string "ENUM_OVERFLOW")
+                  (var "Universum.error" @@ string "ENUM_OVERFLOW")
               ]
           )
     ]
