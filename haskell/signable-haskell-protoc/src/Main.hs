@@ -138,13 +138,26 @@ mkMsgImpl m t d =
     (var "Signable" @@ var (fromString $ m <> "." <> t))
     [ funBind "toBinary" $
         match
-          [bvar "x"]
-          ( var "mconcat"
-              @@ ( list
-                     . (mkMsgChunk m <$>)
-                     . sortBy (\x y -> compare (x ^. #number) (y ^. #number))
-                     $ d ^. #field
-                 )
+          []
+          ( op
+              (var "mconcat")
+              "."
+              ( op
+                  ( var "flip" @@ var "<$>"
+                      @@ ( list
+                             . (mkMsgChunk m <$>)
+                             . sortBy
+                               ( \x y ->
+                                   compare
+                                     (x ^. #number)
+                                     (y ^. #number)
+                               )
+                             $ d ^. #field
+                         )
+                  )
+                  "."
+                  (var "flip" @@ var "$")
+              )
           )
     ]
 
@@ -163,23 +176,25 @@ mkMsgChunk m d =
       Nothing -> error "TAG_OVERFLOW"
     expr =
       op
-        tag
-        "<>"
-        ( var
-            "toBinary"
-            @@ par
-              (var "view" @@ var (fromString $ m <> "_Fields." <> n0) @@ var "x")
+        (var "<>" @@ tag)
+        "."
+        ( op
+            (var "toBinary")
+            "."
+            (var "view" @@ var (fromString $ m <> "_Fields." <> n0))
         )
     mExpr =
-      case'
-        (var "view" @@ var (fromString $ m <> "_Fields.maybe'" <> n0) @@ var "x")
-        [ match
-            [conP "Just" [bvar "v"]]
-            (op tag "<>" (var "toBinary" @@ var "v")),
-          match
-            [conP_ "Nothing"]
-            tag
-        ]
+      op
+        ( var "Universum.maybe"
+            @@ tag
+            @@ ( op
+                   (var "<>" @@ tag)
+                   "."
+                   (var "toBinary")
+               )
+        )
+        "."
+        (var "view" @@ var (fromString $ m <> "_Fields.maybe'" <> n0))
 
 mkEnumImpl :: String -> String -> HsDecl'
 mkEnumImpl m t =
@@ -187,18 +202,20 @@ mkEnumImpl m t =
     (var "Signable" @@ var (fromString $ m <> "." <> t))
     [ funBind "toBinary" $
         match
-          [bvar "x"]
-          ( case'
-              ( (var "safeFromIntegral" @@ par (var "fromEnum" @@ var "x"))
-                  @::@ par (var "Maybe" @@ var "Int32")
+          []
+          ( op
+              ( (var "Universum.maybe")
+                  @@ par (var "Universum.error" @@ string "ENUM_OVERFLOW")
+                  @@ (var "toBinary")
               )
-              [ match
-                  [conP "Just" [bvar "v"]]
-                  (var "toBinary" @@ var "v"),
-                match
-                  [conP_ "Nothing"]
-                  (var "Universum.error" @@ string "ENUM_OVERFLOW")
-              ]
+              "."
+              ( op
+                  ( (var "Data.Signable.safeFromIntegral")
+                      @::@ (var "Int" --> var "Maybe" @@ var "Int32")
+                  )
+                  "."
+                  (var "Universum.fromEnum")
+              )
           )
     ]
 
