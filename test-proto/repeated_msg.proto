@@ -1,0 +1,9 @@
+syntax = "proto3";
+package RepeatedMsg;
+
+message Payload {
+  repeated Msg msg = 1;
+  message Msg {
+    uint32 x = 1;
+  }
+}

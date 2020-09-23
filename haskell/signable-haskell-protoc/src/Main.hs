@@ -31,6 +31,7 @@ import Proto.Google.Protobuf.Descriptor
   ( DescriptorProto,
     EnumDescriptorProto,
     FieldDescriptorProto,
+    FieldDescriptorProto'Label (FieldDescriptorProto'LABEL_REPEATED),
     FieldDescriptorProto'Type (FieldDescriptorProto'TYPE_MESSAGE),
     FileDescriptorProto,
   )
@@ -164,6 +165,7 @@ mkMsgImpl m t d =
 mkMsgChunk :: String -> FieldDescriptorProto -> HsExpr'
 mkMsgChunk m d =
   if (d ^. #type' == FieldDescriptorProto'TYPE_MESSAGE)
+    && (d ^. #label /= FieldDescriptorProto'LABEL_REPEATED)
     || (isJust $ d ^. #maybe'oneofIndex)
     then mExpr
     else expr
