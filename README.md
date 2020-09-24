@@ -31,18 +31,17 @@ In order to deterministically serialize and sign a protobuf message specific ser
 
 Suppose we have upgraded proto message by adding a new required field. Signature verification is going to work like this:
 
-| Sender    | Receiver  | Explanation          |
-|-----------|-----------|----------------------|
-| aware     | aware     | signatures are equal |
-| aware     | not aware | signature mismatch   |
-| not aware | aware     | signatures are equal |
-| not aware | not aware | signatures are equal |
+| Sender    | Receiver  | Signature status    |
+|-----------|-----------|---------------------|
+| aware     | aware     | signatures match    |
+| aware     | not aware | signatures mismatch |
+| not aware | aware     | signatures match    |
+| not aware | not aware | signatures match    |
 
 From this table its clear that only scenario where signatures can mismatch is the second one. To prevent that, we must
 start all proto upgrades from receiver side. However if we add a required field and upgrade the receiver, he will get a signature
 mismatch since there will be no data for serialized representation of newly added field (since sender is not aware of upgrade yet).
 To avoid this issue, all newly added scalar fields must be added in wrapper type (Google.Protobuf.StringValue, Google.Protobuf.BytesValue, etc.).
-
 
 # Signature
 
