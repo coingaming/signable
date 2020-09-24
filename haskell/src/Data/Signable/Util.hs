@@ -1,6 +1,7 @@
 module Data.Signable.Util
   ( safeFromIntegral,
     liftEither,
+    ifThenElse,
   )
 where
 
@@ -21,3 +22,6 @@ liftEither :: (MonadFail m, Show a) => Either a b -> m b
 liftEither = \case
   Left x -> fail $ show x
   Right x -> return x
+
+ifThenElse :: (a -> Bool) -> (a -> b) -> (a -> b) -> a -> b
+ifThenElse p t f x = if p x then t x else f x

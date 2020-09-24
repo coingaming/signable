@@ -80,7 +80,8 @@ makeResponse dflags prog req =
     imports :: [ImportDecl']
     imports =
       [ import' "Universum",
-        import' "Data.Signable"
+        import' "Data.Signable",
+        qualified' $ import' "GHC.List"
       ]
         <> ( protoMods
                >>= ( \x ->
@@ -164,12 +165,14 @@ mkMsgImpl m t d =
     ]
 
 mkMsgChunk :: String -> FieldDescriptorProto -> HsExpr'
-mkMsgChunk m d =
-  if (d ^. #type' == FieldDescriptorProto'TYPE_MESSAGE)
-    && (d ^. #label /= FieldDescriptorProto'LABEL_REPEATED)
-    || (isJust $ d ^. #maybe'oneofIndex)
-    then mExpr
-    else expr
+mkMsgChunk m d
+  | d ^. #label == FieldDescriptorProto'LABEL_REPEATED =
+    rExpr
+  | (d ^. #type' == FieldDescriptorProto'TYPE_MESSAGE)
+      || (isJust $ d ^. #maybe'oneofIndex) =
+    mExpr
+  | otherwise =
+    expr
   where
     n0 = unReserve . camel . unpack $ d ^. #name
     tag = case safeFromIntegral $ d ^. #number :: Maybe Int32 of
@@ -177,6 +180,31 @@ mkMsgChunk m d =
         var "toBinary"
           @@ int (fromIntegral v :: Integer) @::@ var "Int32"
       Nothing -> error "TAG_OVERFLOW"
+    rExpr =
+      op
+        ( var "Data.Signable.ifThenElse"
+            @@ (var "GHC.List.null")
+            @@ (var "Universum.const" @@ var "Universum.mempty")
+            @@ ( op
+                   (var "<>" @@ tag)
+                   "."
+                   (var "toBinary")
+               )
+        )
+        "."
+        (var "view" @@ var (fromString $ m <> "_Fields." <> n0))
+    mExpr =
+      op
+        ( var "Universum.maybe"
+            @@ (var "Universum.mempty")
+            @@ ( op
+                   (var "<>" @@ tag)
+                   "."
+                   (var "toBinary")
+               )
+        )
+        "."
+        (var "view" @@ var (fromString $ m <> "_Fields.maybe'" <> n0))
     expr =
       op
         (var "<>" @@ tag)
@@ -186,18 +214,6 @@ mkMsgChunk m d =
             "."
             (var "view" @@ var (fromString $ m <> "_Fields." <> n0))
         )
-    mExpr =
-      op
-        ( var "Universum.maybe"
-            @@ tag
-            @@ ( op
-                   (var "<>" @@ tag)
-                   "."
-                   (var "toBinary")
-               )
-        )
-        "."
-        (var "view" @@ var (fromString $ m <> "_Fields.maybe'" <> n0))
 
 mkEnumImpl :: String -> String -> HsDecl'
 mkEnumImpl m t =
@@ -208,7 +224,7 @@ mkEnumImpl m t =
           []
           ( op
               ( (var "Universum.maybe")
-                  @@ par (var "Universum.error" @@ string "ENUM_OVERFLOW")
+                  @@ (var "Universum.error" @@ string "ENUM_OVERFLOW")
                   @@ (var "toBinary")
               )
               "."
