@@ -4,7 +4,7 @@
 }:
 mkDerivation {
   pname = "signable-haskell-protoc";
-  version = "0.1";
+  version = "0.2";
   src = ./../haskell/signable-haskell-protoc;
   isLibrary = false;
   isExecutable = true;
@@ -15,6 +15,6 @@ mkDerivation {
   ];
   prePatch = "hpack";
   homepage = "https://github.com/coingaming/signable#readme";
-  description = "Signable instances protoc compiler plugin";
+  description = "Deterministic serialisation and signatures with proto-lens support";
   license = stdenv.lib.licenses.bsd3;
 }

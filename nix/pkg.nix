@@ -7,7 +7,7 @@
 }:
 mkDerivation {
   pname = "signable";
-  version = "0.1";
+  version = "0.2";
   src = ./../haskell;
   libraryHaskellDepends = [
     asn1-encoding asn1-types base binary bytestring casing cryptonite

@@ -1,11 +1,11 @@
 name: signable-haskell-protoc
-version: '0.1'
+version: '0.2'
 github: "coingaming/signable"
 license: BSD3
 author: "Ilja Tkachuk <tkachuk.labs@gmail.com>"
 maintainer: "Ilja Tkachuk <tkachuk.labs@gmail.com>"
 copyright: "2020 Coingaming <hello@coingaming.io>"
-synopsis: Signable instances protoc compiler plugin.
+synopsis: Deterministic serialisation and signatures with proto-lens support
 category: Data, Cryptography
 description: You can find documentation at <https://hackage.haskell.org/package/signable-haskell-protoc hackage>
 

@@ -1,6 +1,7 @@
 # signable-haskell-protoc
 
-Signable instances protoc compiler plugin:
+Deterministic serialisation and signatures with proto-lens support.
+Generate Signable class instances with command:
 
 ```
 protoc \
