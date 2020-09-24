@@ -8,8 +8,8 @@ Protobuf standard doesn't guarantee deterministic serialization.
 In order to deterministically serialize and sign a protobuf message specific serialization protocol should be followed:
 
 1) Sort all message fields by index (ASC order)
-2) Serialize field value (take a look to notes below)
-3) If field value is unset (message/oneof) or is empty list (repeated) then leave serialized value as is it (empty bytestring), otherwise prepend it with serialized field index (as uint32 4 bytes)
+2) Serialize every field value (take a look to type-specific notes below)
+3) If field value is unset (message/oneof) or is empty list (repeated) then leave serialized value as it is (empty bytestring), otherwise prepend it with serialized field index (as uint32 4 bytes)
 4) Concatenate resulting bytestrings
 
 ## Type-specific notes

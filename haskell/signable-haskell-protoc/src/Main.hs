@@ -79,16 +79,18 @@ makeResponse dflags prog req =
         <$> req ^. #protoFile
     imports :: [ImportDecl']
     imports =
-      [ import' "Universum",
-        import' "Data.Signable",
-        qualified' $ import' "GHC.List"
-      ]
-        <> ( protoMods
-               >>= ( \x ->
-                       let n = modName x
-                        in import' . fromString <$> [n, n <> "_Fields"]
+      qualified'
+        <$> ( [ import' "Universum",
+                import' "Data.Signable",
+                import' "GHC.List"
+              ]
+                <> ( protoMods
+                       >>= ( \x ->
+                               let n = modName x
+                                in import' . fromString <$> [n, n <> "_Fields"]
+                           )
                    )
-           )
+            )
     body :: Text
     body =
       pack . showPpr dflags $
@@ -138,15 +140,15 @@ mkImpls x =
 mkMsgImpl :: String -> String -> DescriptorProto -> HsDecl'
 mkMsgImpl m t d =
   instance'
-    (var "Signable" @@ var (fromString $ m <> "." <> t))
+    (var "Data.Signable.Signable" @@ var (fromString $ m <> "." <> t))
     [ funBind "toBinary" $
         match
           []
           ( op
-              (var "mconcat")
-              "."
+              (var "Universum.mconcat")
+              compose
               ( op
-                  ( var "flip" @@ var "<$>"
+                  ( var "Universum.<&>"
                       @@ ( list
                              . (mkMsgChunk m <$>)
                              . sortBy
@@ -158,8 +160,8 @@ mkMsgImpl m t d =
                              $ d ^. #field
                          )
                   )
-                  "."
-                  (var "flip" @@ var "$")
+                  compose
+                  (var "Universum.&")
               )
           )
     ]
@@ -177,8 +179,8 @@ mkMsgChunk m d
     n0 = unReserve . camel . unpack $ d ^. #name
     tag = case safeFromIntegral $ d ^. #number :: Maybe Int32 of
       Just v ->
-        var "toBinary"
-          @@ int (fromIntegral v :: Integer) @::@ var "Int32"
+        var "Data.Signable.toBinary"
+          @@ int (fromIntegral v :: Integer) @::@ var "Universum.Int32"
       Nothing -> error "TAG_OVERFLOW"
     rExpr =
       op
@@ -186,57 +188,63 @@ mkMsgChunk m d
             @@ (var "GHC.List.null")
             @@ (var "Universum.const" @@ var "Universum.mempty")
             @@ ( op
-                   (var "<>" @@ tag)
-                   "."
-                   (var "toBinary")
+                   (var "Universum.<>" @@ tag)
+                   compose
+                   (var "Data.Signable.toBinary")
                )
         )
-        "."
-        (var "view" @@ var (fromString $ m <> "_Fields." <> n0))
+        compose
+        (var "Universum.view" @@ var (fromString $ m <> "_Fields." <> n0))
     mExpr =
       op
         ( var "Universum.maybe"
             @@ (var "Universum.mempty")
             @@ ( op
-                   (var "<>" @@ tag)
-                   "."
-                   (var "toBinary")
+                   (var "Universum.<>" @@ tag)
+                   compose
+                   (var "Data.Signable.toBinary")
                )
         )
-        "."
-        (var "view" @@ var (fromString $ m <> "_Fields.maybe'" <> n0))
+        compose
+        (var "Universum.view" @@ var (fromString $ m <> "_Fields.maybe'" <> n0))
     expr =
       op
-        (var "<>" @@ tag)
-        "."
+        (var "Universum.<>" @@ tag)
+        compose
         ( op
-            (var "toBinary")
-            "."
-            (var "view" @@ var (fromString $ m <> "_Fields." <> n0))
+            (var "Data.Signable.toBinary")
+            compose
+            (var "Universum.view" @@ var (fromString $ m <> "_Fields." <> n0))
         )
 
 mkEnumImpl :: String -> String -> HsDecl'
 mkEnumImpl m t =
   instance'
-    (var "Signable" @@ var (fromString $ m <> "." <> t))
+    (var "Data.Signable.Signable" @@ var (fromString $ m <> "." <> t))
     [ funBind "toBinary" $
         match
           []
           ( op
               ( (var "Universum.maybe")
                   @@ (var "Universum.error" @@ string "ENUM_OVERFLOW")
-                  @@ (var "toBinary")
+                  @@ (var "Data.Signable.toBinary")
               )
-              "."
+              compose
               ( op
                   ( (var "Data.Signable.safeFromIntegral")
-                      @::@ (var "Int" --> var "Maybe" @@ var "Int32")
+                      @::@ ( var "Universum.Int"
+                               --> var "Universum.Maybe"
+                               @@ var "Universum.Int32"
+                           )
                   )
-                  "."
+                  compose
                   (var "Universum.fromEnum")
               )
           )
     ]
+
+compose :: RdrNameStr
+compose = "Universum.."
 
 unReserve :: String -> String
 unReserve x =
