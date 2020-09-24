@@ -13,6 +13,7 @@ import Data.Maybe (isJust)
 import Data.ProtoLens (decodeMessage, defMessage, encodeMessage)
 import Data.ProtoLens.Compiler.ModuleName (protoModuleName)
 import Data.ProtoLens.Labels ()
+import qualified Data.Set as Set
 import Data.String (fromString)
 import qualified Data.Text as T
 import Data.Text (Text, intercalate, pack, unpack)
@@ -170,7 +171,7 @@ mkMsgChunk m d =
     then mExpr
     else expr
   where
-    n0 = camel . unpack $ d ^. #name
+    n0 = unReserve . camel . unpack $ d ^. #name
     tag = case safeFromIntegral $ d ^. #number :: Maybe Int32 of
       Just v ->
         var "toBinary"
@@ -220,6 +221,50 @@ mkEnumImpl m t =
               )
           )
     ]
+
+unReserve :: String -> String
+unReserve x =
+  if x `Set.member` reservedKeywords
+    then x <> "'"
+    else x
+
+-- | A list of reserved keywords that aren't valid as variable names.
+reservedKeywords :: Set.Set String
+reservedKeywords =
+  Set.fromList $
+    -- Haskell2010 keywords:
+    -- https://www.haskell.org/onlinereport/haskell2010/haskellch2.html#x7-180002.4
+    -- We don't include keywords that are allowed to be variable names,
+    -- in particular: "as", "forall", and "hiding".
+    [ "case",
+      "class",
+      "data",
+      "default",
+      "deriving",
+      "do",
+      "else",
+      "foreign",
+      "if",
+      "import",
+      "in",
+      "infix",
+      "infixl",
+      "infixr",
+      "instance",
+      "let",
+      "module",
+      "newtype",
+      "of",
+      "then",
+      "type",
+      "where"
+    ]
+      ++ [ "mdo", -- Nonstandard extensions
+           -- RecursiveDo
+           "rec", -- Arrows, RecursiveDo
+           "pattern", -- PatternSynonyms
+           "proc" -- Arrows
+         ]
 
 safeFromIntegral ::
   forall a b. (Integral a, Integral b, Bounded b) => a -> Maybe b

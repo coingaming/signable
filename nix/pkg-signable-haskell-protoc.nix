@@ -1,6 +1,6 @@
-{ mkDerivation, base, bytestring, casing, ghc, ghc-paths
-, ghc-source-gen, hpack, lens-family, proto-lens, proto-lens-protoc
-, proto-lens-runtime, stdenv, text
+{ mkDerivation, base, bytestring, casing, containers, ghc
+, ghc-paths, ghc-source-gen, hpack, lens-family, proto-lens
+, proto-lens-protoc, proto-lens-runtime, stdenv, text
 }:
 mkDerivation {
   pname = "signable-haskell-protoc";
@@ -10,8 +10,8 @@ mkDerivation {
   isExecutable = true;
   libraryToolDepends = [ hpack ];
   executableHaskellDepends = [
-    base bytestring casing ghc ghc-paths ghc-source-gen lens-family
-    proto-lens proto-lens-protoc proto-lens-runtime text
+    base bytestring casing containers ghc ghc-paths ghc-source-gen
+    lens-family proto-lens proto-lens-protoc proto-lens-runtime text
   ];
   prePatch = "hpack";
   homepage = "https://github.com/coingaming/signable#readme";
