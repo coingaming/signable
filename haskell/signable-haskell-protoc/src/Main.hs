@@ -106,7 +106,8 @@ makeResponse dflags prog req =
             <> pack prog
             <> " program. -}",
           "{-# OPTIONS_GHC -fno-warn-orphans #-}",
-          "{-# LANGUAGE NoImplicitPrelude #-}"
+          "{-# LANGUAGE NoImplicitPrelude #-}",
+          "{-# LANGUAGE OverloadedStrings #-}"
         ]
 
 parseModName :: FileDescriptorProto -> String
