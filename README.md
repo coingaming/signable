@@ -9,7 +9,7 @@ In order to deterministically serialize and sign a protobuf message specific ser
 
 1) Sort all message fields by index (ASC order)
 2) Serialize field value (take a look to notes below)
-3) If serialized field value is not empty bytestring then prepend it with serialized field index (as uint32 4 bytes), otherwise leave it as it is (empty bytestring)
+3) If field value is unset (message/oneof) or is empty list (repeated) then leave serialized value as is it (empty bytestring), otherwise prepend it with serialized field index (as uint32 4 bytes)
 4) Concatenate resulting bytestrings
 
 ## Type-specific notes
