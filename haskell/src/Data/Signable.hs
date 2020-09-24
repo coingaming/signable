@@ -13,4 +13,4 @@ module Data.Signable
 where
 
 import Data.Signable.Class as X
-import Data.Signable.Util as X (safeFromIntegral)
+import Data.Signable.Util as X (ifThenElse, safeFromIntegral)

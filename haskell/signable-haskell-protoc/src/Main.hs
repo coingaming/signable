@@ -13,6 +13,7 @@ import Data.Maybe (isJust)
 import Data.ProtoLens (decodeMessage, defMessage, encodeMessage)
 import Data.ProtoLens.Compiler.ModuleName (protoModuleName)
 import Data.ProtoLens.Labels ()
+import qualified Data.Set as Set
 import Data.String (fromString)
 import qualified Data.Text as T
 import Data.Text (Text, intercalate, pack, unpack)
@@ -79,7 +80,8 @@ makeResponse dflags prog req =
     imports :: [ImportDecl']
     imports =
       [ import' "Universum",
-        import' "Data.Signable"
+        import' "Data.Signable",
+        qualified' $ import' "GHC.List"
       ]
         <> ( protoMods
                >>= ( \x ->
@@ -163,19 +165,46 @@ mkMsgImpl m t d =
     ]
 
 mkMsgChunk :: String -> FieldDescriptorProto -> HsExpr'
-mkMsgChunk m d =
-  if (d ^. #type' == FieldDescriptorProto'TYPE_MESSAGE)
-    && (d ^. #label /= FieldDescriptorProto'LABEL_REPEATED)
-    || (isJust $ d ^. #maybe'oneofIndex)
-    then mExpr
-    else expr
+mkMsgChunk m d
+  | d ^. #label == FieldDescriptorProto'LABEL_REPEATED =
+    rExpr
+  | (d ^. #type' == FieldDescriptorProto'TYPE_MESSAGE)
+      || (isJust $ d ^. #maybe'oneofIndex) =
+    mExpr
+  | otherwise =
+    expr
   where
-    n0 = camel . unpack $ d ^. #name
+    n0 = unReserve . camel . unpack $ d ^. #name
     tag = case safeFromIntegral $ d ^. #number :: Maybe Int32 of
       Just v ->
         var "toBinary"
           @@ int (fromIntegral v :: Integer) @::@ var "Int32"
       Nothing -> error "TAG_OVERFLOW"
+    rExpr =
+      op
+        ( var "Data.Signable.ifThenElse"
+            @@ (var "GHC.List.null")
+            @@ (var "Universum.const" @@ var "Universum.mempty")
+            @@ ( op
+                   (var "<>" @@ tag)
+                   "."
+                   (var "toBinary")
+               )
+        )
+        "."
+        (var "view" @@ var (fromString $ m <> "_Fields." <> n0))
+    mExpr =
+      op
+        ( var "Universum.maybe"
+            @@ (var "Universum.mempty")
+            @@ ( op
+                   (var "<>" @@ tag)
+                   "."
+                   (var "toBinary")
+               )
+        )
+        "."
+        (var "view" @@ var (fromString $ m <> "_Fields.maybe'" <> n0))
     expr =
       op
         (var "<>" @@ tag)
@@ -185,18 +214,6 @@ mkMsgChunk m d =
             "."
             (var "view" @@ var (fromString $ m <> "_Fields." <> n0))
         )
-    mExpr =
-      op
-        ( var "Universum.maybe"
-            @@ tag
-            @@ ( op
-                   (var "<>" @@ tag)
-                   "."
-                   (var "toBinary")
-               )
-        )
-        "."
-        (var "view" @@ var (fromString $ m <> "_Fields.maybe'" <> n0))
 
 mkEnumImpl :: String -> String -> HsDecl'
 mkEnumImpl m t =
@@ -207,7 +224,7 @@ mkEnumImpl m t =
           []
           ( op
               ( (var "Universum.maybe")
-                  @@ par (var "Universum.error" @@ string "ENUM_OVERFLOW")
+                  @@ (var "Universum.error" @@ string "ENUM_OVERFLOW")
                   @@ (var "toBinary")
               )
               "."
@@ -220,6 +237,50 @@ mkEnumImpl m t =
               )
           )
     ]
+
+unReserve :: String -> String
+unReserve x =
+  if x `Set.member` reservedKeywords
+    then x <> "'"
+    else x
+
+-- | A list of reserved keywords that aren't valid as variable names.
+reservedKeywords :: Set.Set String
+reservedKeywords =
+  Set.fromList $
+    -- Haskell2010 keywords:
+    -- https://www.haskell.org/onlinereport/haskell2010/haskellch2.html#x7-180002.4
+    -- We don't include keywords that are allowed to be variable names,
+    -- in particular: "as", "forall", and "hiding".
+    [ "case",
+      "class",
+      "data",
+      "default",
+      "deriving",
+      "do",
+      "else",
+      "foreign",
+      "if",
+      "import",
+      "in",
+      "infix",
+      "infixl",
+      "infixr",
+      "instance",
+      "let",
+      "module",
+      "newtype",
+      "of",
+      "then",
+      "type",
+      "where"
+    ]
+      ++ [ "mdo", -- Nonstandard extensions
+           -- RecursiveDo
+           "rec", -- Arrows, RecursiveDo
+           "pattern", -- PatternSynonyms
+           "proc" -- Arrows
+         ]
 
 safeFromIntegral ::
   forall a b. (Integral a, Integral b, Bounded b) => a -> Maybe b
