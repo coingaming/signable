@@ -29,6 +29,7 @@ executables:
       - proto-lens-protoc == 0.7.*
       - proto-lens-runtime == 0.7.*
       - text == 1.2.*
+      - containers >= 0.5 && < 0.7
     ghc-options:
     # For details on warnings: https://downloads.haskell.org/~ghc/master/users-guide/using-warnings.html
     # This list taken from https://medium.com/mercury-bank/enable-all-the-warnings-a0517bc081c3
