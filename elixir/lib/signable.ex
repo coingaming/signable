@@ -145,30 +145,39 @@ defmodule Signable do
 
     prop_val = Map.get(message, name_atom)
 
-    serialize_index(index) <>
-      if not is_nil(oneof_index) do
-        oneof_key = Map.fetch!(oneof_map, oneof_index)
-        oneof_val = Map.fetch!(message, oneof_key)
+    if not is_nil(oneof_index) do
+      oneof_key = Map.fetch!(oneof_map, oneof_index)
+      oneof_val = Map.fetch!(message, oneof_key)
 
-        cond do
-          !is_nil(oneof_val) and elem(oneof_val, 0) == name_atom ->
-            serialize_one_property(prop, elem(oneof_val, 1))
+      cond do
+        !is_nil(oneof_val) and elem(oneof_val, 0) == name_atom ->
+          index
+          |> serialize_index()
+          |> safe_concat(serialize_one_property(prop, elem(oneof_val, 1)))
 
-          true ->
-            <<>>
-        end
-      else
-        serialize_one_property(prop, prop_val)
+        true ->
+          <<>>
       end
+    else
+      index
+      |> serialize_index()
+      |> safe_concat(serialize_one_property(prop, prop_val))
+    end
   end
 
   defp prop_handler({index, prop}, message, _oneof_map) do
-    serialize_index(index) <> serialize_one_property(prop, message)
+    index
+    |> serialize_index()
+    |> safe_concat(serialize_one_property(prop, message))
   end
 
-  @spec serialize_one_property(prop :: Protobuf.FieldProps.t(), message :: any()) :: binary()
+  @spec serialize_one_property(prop :: Protobuf.FieldProps.t(), message :: any()) ::
+          binary() | nil
   defp serialize_one_property(prop, message) when is_list(message) do
-    Enum.reduce(message, <<>>, &(&2 <> serialize_one_property(prop, &1)))
+    case message do
+      [] -> nil
+      message -> Enum.reduce(message, <<>>, &safe_concat(&2, serialize_one_property(prop, &1)))
+    end
   end
 
   defp serialize_one_property(prop, message) do
@@ -185,7 +194,7 @@ defmodule Signable do
 
       embedded? ->
         if is_nil(message) do
-          <<>>
+          nil
         else
           serialize(type, message)
         end
@@ -232,8 +241,16 @@ defmodule Signable do
     end
   end
 
+  defp safe_concat(left, right) when is_nil(left) or is_nil(right) do
+    <<>>
+  end
+
+  defp safe_concat(left, right) do
+    left <> right
+  end
+
   @spec der_pk_to_ec_pubkey(der_pk :: binary()) :: ec_public_key()
-  def der_pk_to_ec_pubkey(der_pk) do
+  defp der_pk_to_ec_pubkey(der_pk) do
     {:SubjectPublicKeyInfo, {:AlgorithmIdentifier, _, ec_params}, pubkey} =
       :public_key.der_decode(:SubjectPublicKeyInfo, der_pk)
 
