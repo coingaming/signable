@@ -53,7 +53,7 @@ spec = before (readEnv "elixir.json") $ do
             s <- case importSigDer AlgSecp256k1 . coerce $ tcSignatureBin tc of
               Just s0 -> return s0
               Nothing -> fail "INVALID_SIG"
-            putStrLn $ tcDescription tc
+            --putStrLn $ tcDescription tc
             (BL.unpack <$> serializer t x)
               `shouldBe` (Right . BL.unpack . coerce $ tcSignableBin tc)
             verifier pub s t x
