@@ -27,6 +27,23 @@ In order to deterministically serialize and sign a protobuf message specific ser
 2) Upgrade **receiver** side (signatures of unupgraded sender still will be valid in case where optional field has been added)
 3) Upgrade **sender** side
 
+## Explanation
+
+Suppose we have upgraded proto message by adding a new required field. Signature verification is going to work like this:
+
+| Sender    | Receiver  | Explanation          |
+|-----------|-----------|----------------------|
+| aware     | aware     | signatures are equal |
+| aware     | not aware | signature mismatch   |
+| not aware | aware     | signatures are equal |
+| not aware | not aware | signatures are equal |
+
+From this table its clear that only scenario where signatures can mismatch is the second one. To prevent that, we must
+start all proto upgrades from receiver side. However if we add a required field and upgrade the receiver, he will get a signature
+mismatch since there will be no data for serialized representation of newly added field (since sender is not aware of upgrade yet).
+To avoid this issue, all newly added scalar fields must be added in wrapper type (Google.Protobuf.StringValue, Google.Protobuf.BytesValue, etc.).
+
+
 # Signature
 
 Signature is defined as a ECDSA signature of SHA256 hash of serialized payload. At the moment only SECP256K1 curve is supported.
