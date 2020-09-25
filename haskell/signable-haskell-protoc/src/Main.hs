@@ -106,6 +106,7 @@ makeResponse dflags prog req =
             <> pack prog
             <> " program. -}",
           "{-# OPTIONS_GHC -fno-warn-orphans #-}",
+          "{-# OPTIONS_GHC -fno-warn-unused-imports #-}",
           "{-# LANGUAGE NoImplicitPrelude #-}",
           "{-# LANGUAGE OverloadedStrings #-}"
         ]
