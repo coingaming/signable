@@ -9,7 +9,8 @@ let nixpkgs20 = import ./nixpkgs20.nix;
 in
 {
   vimBackground ? "light",
-  vimColorScheme ? "PaperColor"
+  vimColorScheme ? "PaperColor",
+  haskellPackagesLens ? (x: x.haskell.packages.ghc865)
 }:
 [
   (self: super:
@@ -29,7 +30,7 @@ in
         hex = hex;
         mix = mix;
         protoc-gen-elixir = import ./overlay/protoc-gen-elixir.nix {};
-        haskellPackages = super.haskell.packages.ghc865.extend(
+        haskellPackages = (haskellPackagesLens super).extend(
           self': super': {
             universum = dontCheck super'.universum;
             persistent-migration = dontCheck (
