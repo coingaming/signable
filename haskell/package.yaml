@@ -30,7 +30,7 @@ dependencies:
 # crypto
 - cryptonite            >= 0.25 && < 0.27
 - secp256k1-haskell     >= 0.4 && < 0.5
-- asn1-encoding         >= 0.9 && < 0.10
+- asn1-encoding         >= 0.9.6 && < 0.10
 - asn1-types            >= 0.3 && < 0.4
 - pem                   >= 0.2.4 && < 0.3
 
