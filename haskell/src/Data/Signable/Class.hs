@@ -27,6 +27,11 @@ module Data.Signable.Class
     -- * Class
     Signable (..),
 
+    -- * Util
+    pubKey2Alg,
+    prvKey2Alg,
+    sig2Alg,
+
     -- * Misc
     Alg (..),
     SignableError (..),
@@ -81,10 +86,15 @@ newtype Sig
 instance Show Sig where
   show = const "SECRET"
 
---
--- TODO : add KeyKind argument later
--- when we will have more algorithms
---
+pubKey2Alg :: PubKey -> Alg
+pubKey2Alg (PubKeySecp256k1 _) = AlgSecp256k1
+
+prvKey2Alg :: PrvKey -> Alg
+prvKey2Alg (PrvKeySecp256k1 _) = AlgSecp256k1
+
+sig2Alg :: Sig -> Alg
+sig2Alg (SigSecp256k1 _) = AlgSecp256k1
+
 importPubKeyDer :: Alg -> ByteString -> Maybe PubKey
 importPubKeyDer AlgSecp256k1 = (PubKeySecp256k1 <$>) . C.importPubKey
 
