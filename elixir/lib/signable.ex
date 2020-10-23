@@ -1,10 +1,10 @@
 defmodule Signable do
   @moduledoc "Protobuf deterministic serialization module"
 
-  @type ec_private_key ::
-          {:ECPrivateKey, non_neg_integer(), binary(), {:namedCurve, tuple()}, binary() | nil}
+  alias HmCrypto.EcUtils
 
-  @type ec_public_key :: {{:ECPoint, binary()}, {:namedCurve, tuple()}}
+  require EcUtils.ECPrivateKey, as: ECPrivateKey
+  require EcUtils.ECPoint, as: ECPoint
 
   @doc """
     Generate a ECDSA signature using SHA256 hash of provided payload.
@@ -20,10 +20,7 @@ defmodule Signable do
   """
   @spec sign(payload :: binary(), private_key :: binary(), curve :: atom()) :: binary()
   def sign(payload, private_key, curve) do
-    key =
-      {:ECPrivateKey, 1, private_key, {:namedCurve, :pubkey_cert_records.namedCurves(curve)}, nil}
-
-    sign(payload, key)
+    sign(payload, EcUtils.crypto_secret_to_ec_private_key(private_key, curve))
   end
 
   @doc """
@@ -35,7 +32,7 @@ defmodule Signable do
     ## Examples
 
       iex> {public, private} = :crypto.generate_key(:ecdh, :secp256r1)
-      iex> ec_key = {:ECPrivateKey, 1, private, {:namedCurve, :pubkey_cert_records.namedCurves(:secp256r1)}, public}
+      iex> ec_key = HmCrypto.EcUtils.crypto_secret_to_ec_private_key(private, :secp256r1, public)
       iex> Signable.sign("secret message", ec_key)
       iex> der_key = :public_key.der_encode(:ECPrivateKey, ec_key)
       iex> Signable.sign("secret message", der_key)
@@ -44,14 +41,14 @@ defmodule Signable do
   @spec sign(
           payload :: binary(),
           private_key ::
-            binary() | ec_private_key()
+            binary() | ECPrivateKey.t()
         ) :: binary()
   def sign(payload, private_key) when is_binary(private_key) do
     key = :public_key.der_decode(:ECPrivateKey, private_key)
     sign(payload, key)
   end
 
-  def sign(payload, {:ECPrivateKey, _, _, _, _} = private_key) do
+  def sign(payload, ECPrivateKey.record() = private_key) do
     :public_key.sign(payload, :sha256, private_key)
   end
 
@@ -76,7 +73,9 @@ defmodule Signable do
           curve :: atom()
         ) :: bool()
   def verify_signature(payload, signature, public_key, curve) do
-    ec_pubkey = {{:ECPoint, public_key}, {:namedCurve, :pubkey_cert_records.namedCurves(curve)}}
+    ec_pubkey =
+      EcUtils.crypto_pubkey_to_der(public_key, curve) |> EcUtils.der_pubkey_to_ec_point()
+
     verify_signature(payload, signature, ec_pubkey)
   end
 
@@ -91,20 +90,20 @@ defmodule Signable do
       iex> {public, private} = :crypto.generate_key(:ecdh, :secp256r1)
       iex> payload = "secret message"
       iex> signature = Signable.sign(payload, private, :secp256r1)
-      iex> ec_key = {{:ECPoint, public}, {:namedCurve, :pubkey_cert_records.namedCurves(:secp256r1)}}
+      iex> ec_key = HmCrypto.EcUtils.crypto_pubkey_to_der(public, :secp256r1) |> HmCrypto.EcUtils.der_pubkey_to_ec_point()
       iex> Signable.verify_signature(payload, signature, ec_key)
       true
   """
   @spec verify_signature(
           payload :: binary(),
           signature :: binary(),
-          public_key :: binary() | ec_public_key()
+          public_key :: binary() | EcUtils.ec_point()
         ) :: boolean()
   def verify_signature(payload, signature, public_key) when is_binary(public_key) do
-    verify_signature(payload, signature, der_pk_to_ec_pubkey(public_key))
+    verify_signature(payload, signature, EcUtils.der_pubkey_to_ec_point(public_key))
   end
 
-  def verify_signature(payload, signature, {{:ECPoint, _}, {_, _}} = public_key) do
+  def verify_signature(payload, signature, {ECPoint.record(), {_, _}} = public_key) do
     :public_key.verify(payload, :sha256, signature, public_key)
   end
 
@@ -145,23 +144,21 @@ defmodule Signable do
 
     prop_val = Map.get(message, name_atom)
 
-    if not is_nil(oneof_index) do
-      oneof_key = Map.fetch!(oneof_map, oneof_index)
-      oneof_val = Map.fetch!(message, oneof_key)
-
-      cond do
-        !is_nil(oneof_val) and elem(oneof_val, 0) == name_atom ->
-          index
-          |> serialize_index()
-          |> safe_concat(serialize_one_property(prop, elem(oneof_val, 1)))
-
-        true ->
-          <<>>
-      end
-    else
+    if is_nil(oneof_index) do
       index
       |> serialize_index()
       |> safe_concat(serialize_one_property(prop, prop_val))
+    else
+      oneof_key = Map.fetch!(oneof_map, oneof_index)
+      oneof_val = Map.fetch!(message, oneof_key)
+
+      if !is_nil(oneof_val) and elem(oneof_val, 0) == name_atom do
+        index
+        |> serialize_index()
+        |> safe_concat(serialize_one_property(prop, elem(oneof_val, 1)))
+      else
+        <<>>
+      end
     end
   end
 
@@ -247,14 +244,5 @@ defmodule Signable do
 
   defp safe_concat(left, right) do
     left <> right
-  end
-
-  @spec der_pk_to_ec_pubkey(der_pk :: binary()) :: ec_public_key()
-  defp der_pk_to_ec_pubkey(der_pk) do
-    {:SubjectPublicKeyInfo, {:AlgorithmIdentifier, _, ec_params}, pubkey} =
-      :public_key.der_decode(:SubjectPublicKeyInfo, der_pk)
-
-    namedCurve = :public_key.der_decode(:EcpkParameters, ec_params)
-    {{:ECPoint, pubkey}, namedCurve}
   end
 end

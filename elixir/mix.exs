@@ -11,7 +11,8 @@ defmodule Signable.MixProject do
       deps: deps(),
       dialyzer: [
         plt_file: {:no_warn, "./plts/dialyzer.plt"},
-        ignore_warnings: ".dialyzer_ignore"
+        ignore_warnings: ".dialyzer_ignore",
+        plt_add_apps: [:mix, :ex_unit, :ex_env, :public_key]
       ],
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
@@ -46,7 +47,8 @@ defmodule Signable.MixProject do
       {:excoveralls, "~> 0.11", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.3", only: [:dev, :test], runtime: false},
       {:propcheck, "~> 1.1", only: [:test, :dev]},
-      {:poison, "~> 3.1", only: [:dev, :test]}
+      {:poison, "~> 3.1", only: [:dev, :test]},
+      {:hm_crypto, github: "coingaming/hm-crypto"}
     ]
   end
 end
