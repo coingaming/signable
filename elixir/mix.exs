@@ -48,7 +48,7 @@ defmodule Signable.MixProject do
       {:credo, "~> 1.3", only: [:dev, :test], runtime: false},
       {:propcheck, "~> 1.1", only: [:test, :dev]},
       {:poison, "~> 3.1", only: [:dev, :test]},
-      {:hm_crypto, git: "git@github.com:coingaming/hm-crypto"}
+      {:hm_crypto, github: "coingaming/hm-crypto"}
     ]
   end
 end
