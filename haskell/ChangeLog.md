@@ -1,12 +1,12 @@
 # Version 0.3
 
-- support `secp256k1-haskell-0.5`
+- Support of `secp256k1-haskell-0.5`
 
-- removed `toSha256` and `Sha256` redundant exports
+- Removed `toSha256` and `Sha256` redundant exports
 
-- moved `sign` and `verify` out of the `Signable` class
+- Moved `sign` and `verify` out of the `Signable` class
 
-- `sign` function output is `Sig` instead of `Maybe Sig`
+- Function `sign` output is `Sig` instead of `Maybe Sig`
 
 # Version 0.2
 
