@@ -4,10 +4,10 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d2ca7c022b411bf6414f28eb06271292ba76564333f33e10983299e7035a1980
+-- hash: bc26e1197c6afbfabb516d891f696c2a8453b622bb8765c5564f848b57b6b7a3
 
 name:           signable
-version:        0.2
+version:        0.3
 synopsis:       Deterministic serialisation and signatures with proto-lens support
 description:    You can find documentation at <https://hackage.haskell.org/package/signable/docs/Data-Signable.html hackage>
 category:       Data, Cryptography
@@ -52,7 +52,7 @@ library
     , pem >=0.2.4 && <0.3
     , proto-lens >=0.7.0 && <0.8
     , proto-lens-runtime >=0.7.0 && <0.8
-    , secp256k1-haskell >=0.4 && <0.5
+    , secp256k1-haskell >=0.4 && <0.6
     , text >=1.2.3 && <1.3
     , universum >=1.5.0 && <1.6
   default-language: Haskell2010
@@ -106,7 +106,7 @@ test-suite signable-test
     , proto-lens-arbitrary >=0.1.2 && <0.2
     , proto-lens-runtime >=0.7.0 && <0.8
     , quickcheck-instances >=0.3.22 && <0.4
-    , secp256k1-haskell >=0.4 && <0.5
+    , secp256k1-haskell >=0.4 && <0.6
     , signable
     , text >=1.2.3 && <1.3
     , universum >=1.5.0 && <1.6

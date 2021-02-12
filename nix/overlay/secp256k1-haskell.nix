@@ -1,29 +1,23 @@
 { mkDerivation, base, base16-bytestring, bytestring, cereal
-, deepseq, entropy, fetchgit, hashable, hpack, hspec
-, hspec-discover, HUnit, libsecp256k1, monad-par, mtl, QuickCheck
-, stdenv, string-conversions, unliftio
+, deepseq, entropy, hashable, hspec, hspec-discover, HUnit
+, libsecp256k1, monad-par, mtl, QuickCheck, stdenv
+, string-conversions, unliftio-core
 }:
 mkDerivation {
   pname = "secp256k1-haskell";
-  version = "0.4.0";
-  src = fetchgit {
-    url = "https://github.com/coingaming/secp256k1-haskell";
-    sha256 = "0rvch2yvhx7sgqipggd5acqmg6ckkp1rs3z3gc3a0ii5vl62mvlh";
-    rev = "5c6bc5601ee2cd6725789df3edd052b5697ecbc6";
-    fetchSubmodules = true;
-  };
+  version = "0.5.0";
+  sha256 = "edbc125b19143ffe697b483bb92774829d0c704f601ffacadcd5678e2535b7a2";
   libraryHaskellDepends = [
     base base16-bytestring bytestring cereal deepseq entropy hashable
-    QuickCheck string-conversions unliftio
+    QuickCheck string-conversions unliftio-core
   ];
   libraryPkgconfigDepends = [ libsecp256k1 ];
-  libraryToolDepends = [ hpack ];
   testHaskellDepends = [
     base base16-bytestring bytestring cereal deepseq entropy hashable
-    hspec HUnit monad-par mtl QuickCheck string-conversions unliftio
+    hspec HUnit monad-par mtl QuickCheck string-conversions
+    unliftio-core
   ];
   testToolDepends = [ hspec-discover ];
-  prePatch = "hpack";
   homepage = "http://github.com/haskoin/secp256k1-haskell#readme";
   description = "Bindings for secp256k1";
   license = stdenv.lib.licenses.mit;

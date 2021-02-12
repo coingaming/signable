@@ -1,3 +1,13 @@
+# Version 0.3
+
+- support `secp256k1-haskell-0.5`
+
+- removed `toSha256` and `Sha256` redundant exports
+
+- moved `sign` and `verify` out of the `Signable` class
+
+- `sign` function output is `Sig` instead of `Maybe Sig`
+
 # Version 0.2
 
 - Field indexes of any unset field (message/repeated/oneof) are ignored in serialized payload to make possible rolling upgrades **BREAKING CHANGE**
