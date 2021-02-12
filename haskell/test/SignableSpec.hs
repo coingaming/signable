@@ -19,21 +19,13 @@ spec = before (newRandomPrvKey AlgSecp256k1) $ do
   it "is able to sign proto message" $
     \k -> property $ \x0 ->
       sign k (unArbitraryMessage x0 :: Payload)
-        `shouldSatisfy` isJust
+        `shouldSatisfy` const True
   it "is able to verify valid proto message signature" $
     \k -> property $ \x0 -> do
       let x :: Payload = unArbitraryMessage x0
-      maybe
-        False
-        (\s -> verify (derivePubKey k) s x)
-        (sign k x)
-        `shouldBe` True
+      verify (derivePubKey k) (sign k x) x `shouldBe` True
   it "is able to discard invalid proto message signature" $
     \k -> property $ \x0 -> do
       let x :: Payload = unArbitraryMessage x0
       let y = x & (amount . amount) +~ 1
-      maybe
-        False
-        (\s -> verify (derivePubKey k) s y)
-        (sign k x)
-        `shouldBe` False
+      verify (derivePubKey k) (sign k x) y `shouldBe` False

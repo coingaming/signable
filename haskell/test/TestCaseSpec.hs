@@ -50,34 +50,47 @@ spec = before (readEnv "elixir.json") $ do
         ( \tc -> do
             let t = tcProtoType tc
             let x = coerce $ tcProtoBin tc
-            s <- case importSigDer AlgSecp256k1 . coerce $ tcSignatureBin tc of
+            s <- case importSigDer AlgSecp256k1 . coerce $
+              tcSignatureBin tc of
               Just s0 -> return s0
               Nothing -> fail "INVALID_SIG"
             --putStrLn $ tcDescription tc
             (BL.unpack <$> serializer t x)
-              `shouldBe` (Right . BL.unpack . coerce $ tcSignableBin tc)
+              `shouldBe` ( Right
+                             . BL.unpack
+                             . coerce
+                             $ tcSignableBin tc
+                         )
             verifier pub s t x
               `shouldBe` Right True
         )
         $ envTCS env
     serializer = \case
       Basic'Payload ->
-        ((toBinary :: Proto.Basic.Payload -> BL.ByteString) <$>) . decodeMessage
+        ((toBinary :: Proto.Basic.Payload -> BL.ByteString) <$>)
+          . decodeMessage
       Text'Payload ->
-        ((toBinary :: Proto.Text.Payload -> BL.ByteString) <$>) . decodeMessage
+        ((toBinary :: Proto.Text.Payload -> BL.ByteString) <$>)
+          . decodeMessage
       Number'Payload ->
-        ((toBinary :: Proto.Number.Payload -> BL.ByteString) <$>) . decodeMessage
+        ((toBinary :: Proto.Number.Payload -> BL.ByteString) <$>)
+          . decodeMessage
       Coins'Request ->
-        ((toBinary :: Proto.Coins.Request -> BL.ByteString) <$>) . decodeMessage
+        ((toBinary :: Proto.Coins.Request -> BL.ByteString) <$>)
+          . decodeMessage
     verifier pub s = \case
       Basic'Payload ->
-        ((verify pub s :: Proto.Basic.Payload -> Bool) <$>) . decodeMessage
+        ((verify pub s :: Proto.Basic.Payload -> Bool) <$>)
+          . decodeMessage
       Text'Payload ->
-        ((verify pub s :: Proto.Text.Payload -> Bool) <$>) . decodeMessage
+        ((verify pub s :: Proto.Text.Payload -> Bool) <$>)
+          . decodeMessage
       Number'Payload ->
-        ((verify pub s :: Proto.Number.Payload -> Bool) <$>) . decodeMessage
+        ((verify pub s :: Proto.Number.Payload -> Bool) <$>)
+          . decodeMessage
       Coins'Request ->
-        ((verify pub s :: Proto.Coins.Request -> Bool) <$>) . decodeMessage
+        ((verify pub s :: Proto.Coins.Request -> Bool) <$>)
+          . decodeMessage
 
 genTestCase :: PrvKey -> Int -> ProtoType -> Gen TestCase
 genTestCase prv i t =
@@ -85,12 +98,12 @@ genTestCase prv i t =
     Basic'Payload -> do
       x <-
         unArbitraryMessage
-          <$> (arbitrary :: Gen (ArbitraryMessage Proto.Basic.Payload))
+          <$> ( arbitrary ::
+                  Gen (ArbitraryMessage Proto.Basic.Payload)
+              )
       let pb = encodeMessage x
       let sb = toBinary x
-      sig <- case exportSigDer <$> sign prv x of
-        Nothing -> error "SIGNATURE_FAILURE"
-        Just s -> return s
+      let sig = exportSigDer $ sign prv x
       return $
         TestCase
           { tcProtoType = t,
@@ -102,12 +115,12 @@ genTestCase prv i t =
     Text'Payload -> do
       x <-
         unArbitraryMessage
-          <$> (arbitrary :: Gen (ArbitraryMessage Proto.Text.Payload))
+          <$> ( arbitrary ::
+                  Gen (ArbitraryMessage Proto.Text.Payload)
+              )
       let pb = encodeMessage x
       let sb = toBinary x
-      sig <- case exportSigDer <$> sign prv x of
-        Nothing -> error "SIGNATURE_FAILURE"
-        Just s -> return s
+      let sig = exportSigDer $ sign prv x
       return $
         TestCase
           { tcProtoType = t,
@@ -119,12 +132,12 @@ genTestCase prv i t =
     Number'Payload -> do
       x <-
         unArbitraryMessage
-          <$> (arbitrary :: Gen (ArbitraryMessage Proto.Number.Payload))
+          <$> ( arbitrary ::
+                  Gen (ArbitraryMessage Proto.Number.Payload)
+              )
       let pb = encodeMessage x
       let sb = toBinary x
-      sig <- case exportSigDer <$> sign prv x of
-        Nothing -> error "SIGNATURE_FAILURE"
-        Just s -> return s
+      let sig = exportSigDer $ sign prv x
       return $
         TestCase
           { tcProtoType = t,
@@ -136,12 +149,12 @@ genTestCase prv i t =
     Coins'Request -> do
       x <-
         unArbitraryMessage
-          <$> (arbitrary :: Gen (ArbitraryMessage Proto.Coins.Request))
+          <$> ( arbitrary ::
+                  Gen (ArbitraryMessage Proto.Coins.Request)
+              )
       let pb = encodeMessage x
       let sb = toBinary x
-      sig <- case exportSigDer <$> sign prv x of
-        Nothing -> error "SIGNATURE_FAILURE"
-        Just s -> return s
+      let sig = exportSigDer $ sign prv x
       return $
         TestCase
           { tcProtoType = t,

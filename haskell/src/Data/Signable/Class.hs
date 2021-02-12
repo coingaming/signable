@@ -16,11 +16,10 @@ module Data.Signable.Class
     exportPrvKeyRaw,
     newRandomPrvKey,
 
-    -- * Sha256
-    Sha256 (..),
-
     -- * Signature
     Sig,
+    sign,
+    verify,
     importSigDer,
     exportSigDer,
 
@@ -167,25 +166,27 @@ parseASN1 f p = do
 
 class Signable a where
   toBinary :: a -> BL.ByteString
-  toSha256 :: a -> Sha256
-  toSha256 =
-    Sha256
-      . BS.pack
-      . BA.unpack
-      . (hashlazy :: BL.ByteString -> Digest SHA256)
-      . toBinary
-  sign :: PrvKey -> a -> Maybe Sig
-  sign (PrvKeySecp256k1 k) =
-    (SigSecp256k1 . C.signMsg k <$>)
-      . C.msg
-      . coerce
-      . toSha256
-  verify :: PubKey -> Sig -> a -> Bool
-  verify (PubKeySecp256k1 k) (SigSecp256k1 s) =
-    maybe False (C.verifySig k s)
-      . C.msg
-      . coerce
-      . toSha256
+
+toSha256 :: Signable a => a -> Sha256
+toSha256 =
+  Sha256
+    . BS.pack
+    . BA.unpack
+    . (hashlazy :: BL.ByteString -> Digest SHA256)
+    . toBinary
+
+sign :: Signable a => PrvKey -> a -> Sig
+sign (PrvKeySecp256k1 k) x0 =
+  case C.msg . coerce $ toSha256 x0 of
+    Just x -> SigSecp256k1 $ C.signMsg k x
+    Nothing -> error "SECP256K1_MSG_CONS_IMPOSSIBLE_FAILURE"
+
+verify :: Signable a => PubKey -> Sig -> a -> Bool
+verify (PubKeySecp256k1 k) (SigSecp256k1 s) =
+  maybe False (C.verifySig k s)
+    . C.msg
+    . coerce
+    . toSha256
 
 instance Signable ByteString where
   toBinary = BL.drop 8 . B.encode
