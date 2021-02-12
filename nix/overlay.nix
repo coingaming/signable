@@ -97,7 +97,6 @@ in
             };
             secp256k1-haskell = callPackage ./overlay/secp256k1-haskell.nix {
               stdenv = self.stdenv;
-              fetchgit = self.fetchgit;
               libsecp256k1 = self.secp256k1;
             };
             ghc-source-gen = callPackage ./overlay/ghc-source-gen.nix {
