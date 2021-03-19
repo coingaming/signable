@@ -1,5 +1,6 @@
 resolver: lts-14.27
 system-ghc: true
+allow-different-user: true
 packages:
   - .
   - signable-haskell-protoc
