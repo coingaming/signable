@@ -1,3 +1,7 @@
+# Version 0.4
+
+- Deriving `Eq`, `Ord` and `Show` for the most of types
+
 # Version 0.3
 
 - Support of `secp256k1-haskell-0.5`
