@@ -57,6 +57,9 @@ in
               fetchgit = self.fetchgit;
             };
             parameterized = dontCheck super'.parameterized;
+            cryptonite = callPackage ./overlay/cryptonite.nix {
+              stdenv = self.stdenv;
+            };
             swagger2 = callPackage ./overlay/swagger2.nix {
               stdenv = self.stdenv;
             };
