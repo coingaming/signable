@@ -145,9 +145,14 @@ defmodule Signable do
     prop_val = Map.get(message, name_atom)
 
     if is_nil(oneof_index) do
-      index
-      |> serialize_index()
-      |> safe_concat(serialize_one_property(prop, prop_val))
+      case serialize_one_property(prop, prop_val) do
+        <<>> -> <<>>
+        nil -> <<>>
+        serialized_prop ->
+          index
+          |> serialize_index()
+          |> safe_concat(serialized_prop)
+      end
     else
       oneof_key = Map.fetch!(oneof_map, oneof_index)
       oneof_val = Map.fetch!(message, oneof_key)
