@@ -21,7 +21,7 @@ in
     in
       {
         haskell-ide = import (
-          fetchTarball "https://github.com/tim2CF/ultimate-haskell-ide/tarball/01f50964156a60957428ce103e238b093861328e"
+          fetchTarball "https://github.com/tim2CF/ultimate-haskell-ide/tarball/a3424a3100f9be4fa88603999db988bf87d91718"
         ) {inherit vimBackground vimColorScheme;};
         rebar = pkgs20.rebar;
         rebar3 = pkgs20.rebar3;
@@ -33,52 +33,22 @@ in
         haskellPackages = (haskellPackagesLens super).extend(
           self': super': {
             universum = dontCheck super'.universum;
-            persistent-migration = dontCheck (
-              callPackage ./overlay/persistent-migration.nix {
-                stdenv = self.stdenv;
-                fetchgit = self.fetchgit;
-              });
-            hspec-wai = callPackage ./overlay/hspec-wai.nix {
-              stdenv = self.stdenv;
-            };
-            hspec-wai-json = callPackage ./overlay/hspec-wai-json.nix {};
-            scotty = callPackage ./overlay/scotty.nix {};
-            HaskellNet = callPackage ./overlay/haskell-net.nix {};
-            concur-core = callPackage ./overlay/concur-core.nix {
-              stdenv = self.stdenv;
-              fetchgit = self.fetchgit;
-            };
-            replica = callPackage ./overlay/replica.nix {
-              stdenv = self.stdenv;
-              fetchgit = self.fetchgit;
-            };
-            concur-replica = callPackage ./overlay/concur-replica.nix {
-              stdenv = self.stdenv;
-              fetchgit = self.fetchgit;
-            };
             parameterized = dontCheck super'.parameterized;
+            cryptonite = callPackage ./overlay/cryptonite.nix {
+              stdenv = self.stdenv;
+            };
             swagger2 = callPackage ./overlay/swagger2.nix {
               stdenv = self.stdenv;
             };
-            grpc-haskell-core = callPackage ./overlay/grpc-haskell-core.nix {
+            base16-bytestring = callPackage ./overlay/base16-bytestring.nix {
               stdenv = self.stdenv;
-              fetchgit = self.fetchgit;
-              grpc = self.grpc;
             };
-            grpc-haskell = dontCheck (callPackage ./overlay/grpc-haskell.nix {
+            cryptohash-md5 = dontCheck (callPackage ./overlay/cryptohash-md5.nix {
               stdenv = self.stdenv;
-              fetchgit = self.fetchgit;
             });
-            proto3-suite = dontCheck (doJailbreak
-              (callPackage ./overlay/proto3-suite.nix {
-                stdenv = self.stdenv;
-                fetchgit = self.fetchgit;
-              })
-            );
-            proto3-wire = callPackage ./overlay/proto3-wire.nix {
+            cryptohash-sha1 = dontCheck (callPackage ./overlay/cryptohash-sha1.nix {
               stdenv = self.stdenv;
-              fetchgit = self.fetchgit;
-            };
+            });
             proto-lens = callPackage ./overlay/proto-lens.nix {
               stdenv = self.stdenv;
               fetchgit = self.fetchgit;
@@ -95,10 +65,10 @@ in
               stdenv = self.stdenv;
               fetchgit = self.fetchgit;
             };
-            secp256k1-haskell = callPackage ./overlay/secp256k1-haskell.nix {
+            secp256k1-haskell = dontCheck (callPackage ./overlay/secp256k1-haskell.nix {
               stdenv = self.stdenv;
               libsecp256k1 = self.secp256k1;
-            };
+            });
             ghc-source-gen = callPackage ./overlay/ghc-source-gen.nix {
               stdenv = self.stdenv;
               fetchgit = self.fetchgit;

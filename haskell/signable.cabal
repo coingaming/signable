@@ -4,10 +4,10 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: bc26e1197c6afbfabb516d891f696c2a8453b622bb8765c5564f848b57b6b7a3
+-- hash: 756a27e9b680f636073aaea86b7155c51cc88815269577a8620f7714aa9bb7bc
 
 name:           signable
-version:        0.3
+version:        0.4
 synopsis:       Deterministic serialisation and signatures with proto-lens support
 description:    You can find documentation at <https://hackage.haskell.org/package/signable/docs/Data-Signable.html hackage>
 category:       Data, Cryptography
@@ -46,7 +46,7 @@ library
     , binary >=0.8.6 && <0.9
     , bytestring >=0.10.8 && <0.11
     , casing >=0.1.4 && <0.2
-    , cryptonite >=0.25 && <0.27
+    , cryptonite >=0.25 && <0.29
     , memory >=0.14 && <0.16
     , microlens >=0.4.10 && <0.5
     , pem >=0.2.4 && <0.3
@@ -95,7 +95,7 @@ test-suite signable-test
     , binary >=0.8.6 && <0.9
     , bytestring >=0.10.8 && <0.11
     , casing >=0.1.4 && <0.2
-    , cryptonite >=0.25 && <0.27
+    , cryptonite >=0.25 && <0.29
     , directory >=1.3 && <1.4
     , generic-arbitrary >=0.1.0 && <0.2
     , hspec >=2.7.1 && <2.8

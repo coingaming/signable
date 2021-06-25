@@ -61,27 +61,12 @@ packages:
   original:
     hackage: proto-lens-arbitrary-0.1.2.9
 - completed:
-    size: 91575
-    url: https://github.com/coingaming/proto3-suite/archive/45950a3860cbcb3f3177e9725dbdf460d6da9d45.tar.gz
-    name: proto3-suite
-    version: 0.4.0.2
-    sha256: 5e17daa85b6882935a9a500af5021dcc461d76f53c81b7d62838ee829c260f77
+    hackage: base16-bytestring-1.0.1.0@sha256:33b9d57afa334d06485033e930c6b13fc760baf88fd8f715ae2f9a4b46e19a54,2641
     pantry-tree:
-      size: 7180
-      sha256: 5cfd7cb7c20e9ff29a113b66e35042eb955a507ddb33ef909e9a7e67ab70307b
+      size: 595
+      sha256: 24661ef9b1089d468227300f8ceb89194b5cce68b9f6ed8109b01f63c07f54e3
   original:
-    url: https://github.com/coingaming/proto3-suite/archive/45950a3860cbcb3f3177e9725dbdf460d6da9d45.tar.gz
-- completed:
-    size: 47444
-    url: https://github.com/coingaming/proto3-wire/archive/5df56fe1ad26a18b1dfbb2a5b8d35b4c1ad63f53.tar.gz
-    name: proto3-wire
-    version: 1.2.0
-    sha256: 54ecc8d2b56e407eaa5d9e953234a0f1f886b28b0ac287c155ed9326df65b118
-    pantry-tree:
-      size: 1759
-      sha256: 2d3e47cf4d109a5184c8a5919f12e692fc43197b3cd011aabe8e11dacb6f9946
-  original:
-    url: https://github.com/coingaming/proto3-wire/archive/5df56fe1ad26a18b1dfbb2a5b8d35b4c1ad63f53.tar.gz
+    hackage: base16-bytestring-1.0.1.0
 snapshots:
 - completed:
     size: 524996

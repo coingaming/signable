@@ -54,7 +54,7 @@ import qualified Data.Text.Encoding as T
 import Prelude (show)
 
 data Alg = AlgSecp256k1
-  deriving (Show)
+  deriving (Eq, Ord, Show)
 
 data SignableError
   = InvalidPem
@@ -65,25 +65,31 @@ data SignableError
   | TooManyAsn1Chunks
   | InvalidPubKeyDer
   | InvalidPrvKeyRaw
-  deriving (Show)
+  deriving (Eq, Ord, Show)
 
 data ECPointFormat
   = ECPointCompressed
   | ECPointUncompressed
+  deriving (Eq, Ord, Show)
+
+newtype PubKey
+  = PubKeySecp256k1 C.PubKey
   deriving (Eq, Show)
 
-newtype PubKey = PubKeySecp256k1 C.PubKey
+newtype PrvKey
+  = PrvKeySecp256k1 C.SecKey
+  deriving (Eq)
 
-newtype PrvKey = PrvKeySecp256k1 C.SecKey
+instance Show PrvKey where
+  show = const "SECRET"
 
-newtype Sha256 = Sha256 ByteString
+newtype Sha256
+  = Sha256 ByteString
+  deriving (Eq, Ord, Show)
 
 newtype Sig
   = SigSecp256k1 C.Sig
-  deriving newtype (Eq)
-
-instance Show Sig where
-  show = const "SECRET"
+  deriving (Eq, Show)
 
 pubKey2Alg :: PubKey -> Alg
 pubKey2Alg (PubKeySecp256k1 _) = AlgSecp256k1

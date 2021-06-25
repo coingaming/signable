@@ -1,5 +1,5 @@
 name:                signable
-version:             0.3
+version:             0.4
 github:              "coingaming/signable"
 license:             BSD3
 author:              "Ilja Tkachuk <tkachuk.labs@gmail.com>"
@@ -28,7 +28,7 @@ dependencies:
 - proto-lens            >= 0.7.0 && < 0.8
 - proto-lens-runtime    >= 0.7.0 && < 0.8
 # crypto
-- cryptonite            >= 0.25 && < 0.27
+- cryptonite            >= 0.25 && < 0.29
 - secp256k1-haskell     >= 0.4 && < 0.6
 - asn1-encoding         >= 0.9.6 && < 0.10
 - asn1-types            >= 0.3 && < 0.4

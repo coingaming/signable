@@ -1,5 +1,6 @@
 resolver: lts-14.27
 system-ghc: true
+allow-different-user: true
 packages:
   - .
   - signable-haskell-protoc
@@ -12,7 +13,4 @@ extra-deps:
   - proto-lens-protoc-0.7.0.0
   - proto-lens-runtime-0.7.0.0
   - proto-lens-arbitrary-0.1.2.9
-  - github: coingaming/proto3-suite
-    commit: 45950a3860cbcb3f3177e9725dbdf460d6da9d45
-  - github: coingaming/proto3-wire
-    commit: 5df56fe1ad26a18b1dfbb2a5b8d35b4c1ad63f53
+  - base16-bytestring-1.0.1.0
