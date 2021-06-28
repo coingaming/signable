@@ -12,6 +12,8 @@ In order to deterministically serialize and sign a protobuf message specific ser
 3) If field value is unset (message/oneof) or is empty list (repeated) then leave serialized value as it is (empty bytestring), otherwise prepend it with serialized field index (as uint32 4 bytes)
 4) Concatenate resulting bytestrings
 
+Please distinguish unset value (it might be called `nil`, `null` or `Nothing` - depends on programming language you are using) and default value (for example message with unset fields). Serialized default value still might be empty bytestring, but it should be prepended with serialized field index (unlike unset value which is just empty bytestring without any index).
+
 ## Type-specific notes
 
 - Integers are serialized in big endian format
