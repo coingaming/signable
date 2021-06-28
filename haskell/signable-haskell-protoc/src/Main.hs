@@ -171,12 +171,12 @@ mkMsgImpl m t d =
 mkMsgChunk :: String -> FieldDescriptorProto -> HsExpr'
 mkMsgChunk m d
   | d ^. #label == FieldDescriptorProto'LABEL_REPEATED =
-    mkExpr rExpr
+    rExpr
   | (d ^. #type' == FieldDescriptorProto'TYPE_MESSAGE)
       || (isJust $ d ^. #maybe'oneofIndex) =
-    mkExpr mExpr
+    mExpr
   | otherwise =
-    mkExpr expr
+    expr
   where
     n0 = unReserve . camel . unpack $ d ^. #name
     tag = case safeFromIntegral $ d ^. #number :: Maybe Int32 of
@@ -184,22 +184,27 @@ mkMsgChunk m d
         var "Data.Signable.toBinary"
           @@ int (fromIntegral v :: Integer) @::@ var "Universum.Int32"
       Nothing -> error "TAG_OVERFLOW"
-    mkExpr ex =
-      op
-        ( var "Data.Signable.applyWithDef"
-            @@ (var "Data.Signable.toBinary")
-            @@ (op (var "Universum.not") compose (var "Universum.null"))
-            @@ (var "Universum.<>" @@ tag)
-            @@ (var "Universum.mempty")
-        )
-        compose
-        ex
     rExpr =
-      var "Universum.view" @@ var (fromString $ m <> "_Fields." <> n0)
+      var "Data.Signable.applyWithDef"
+        @@ (var "Universum.view" @@ var (fromString $ m <> "_Fields." <> n0))
+        @@ (op (var "Universum.not") compose (var "Universum.null"))
+        @@ (op (var "Universum.<>" @@ tag) compose (var "Data.Signable.toBinary"))
+        @@ (var "Universum.mempty")
     mExpr =
-      var "Universum.view" @@ var (fromString $ m <> "_Fields.maybe'" <> n0)
+      var "Data.Signable.applyWithDef"
+        @@ (var "Universum.view" @@ var (fromString $ m <> "_Fields.maybe'" <> n0))
+        @@ (var "Universum.isJust")
+        @@ (op (var "Universum.<>" @@ tag) compose (var "Data.Signable.toBinary"))
+        @@ (var "Universum.mempty")
     expr =
-      var "Universum.view" @@ var (fromString $ m <> "_Fields." <> n0)
+      op
+        (var "Universum.<>" @@ tag)
+        compose
+        ( op
+            (var "Data.Signable.toBinary")
+            compose
+            (var "Universum.view" @@ var (fromString $ m <> "_Fields." <> n0))
+        )
 
 mkEnumImpl :: String -> String -> HsDecl'
 mkEnumImpl m t =
