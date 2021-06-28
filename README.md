@@ -7,12 +7,12 @@ Deterministic serialization and signatures with [proto-lens](https://github.com/
 Protobuf standard doesn't guarantee deterministic serialization.
 In order to deterministically serialize and sign a protobuf message specific serialization protocol should be followed:
 
-1) Sort all message fields by index (ASC order)
-2) Serialize every field value (take a look to type-specific notes below)
-3) If field value is unset (message/oneof) or is empty list (repeated) then leave serialized value as it is (empty bytestring), otherwise prepend it with serialized field index (as uint32 4 bytes)
-4) Concatenate resulting bytestrings
+1) Sort all message fields by index (ASC order).
+2) Serialize every field value (take a look to type-specific notes below).
+3) If field value is unset (only for message/oneof) or is empty list (repeated) then leave serialized value as it is (empty bytestring), otherwise prepend it with serialized field index (as uint32 4 bytes).
+4) Concatenate resulting bytestrings.
 
-Please distinguish unset value (it might be called `nil`, `null` or `Nothing` - depends on programming language you are using) and default value (for example message with unset fields). Serialized default value still might be empty bytestring, but it should be prepended with serialized field index (unlike unset value which is just empty bytestring without any index).
+Please distinguish unset value (it might be called `nil`, `null` or `Nothing` - depends on programming language you are using) and default value (for example default message with unset fields). Serialized default value still might be empty bytestring, but it should be prepended with serialized field index (unlike unset value which is just empty bytestring without any index). Also notice that value might be unset **only** for message/oneof. Scalars (types like `uint32`, `bool` or `string`) are **always** set (even in cases where serialized value is empty bytestring) and always should be prepended with serialized field index.
 
 ## Type-specific notes
 
