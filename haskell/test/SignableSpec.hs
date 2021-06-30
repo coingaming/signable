@@ -3,6 +3,7 @@ module SignableSpec
   )
 where
 
+import qualified Data.ByteString as BS
 import Data.ProtoLens.Arbitrary
 import Data.Signable
 import Data.Signable.Import
@@ -29,3 +30,6 @@ spec = before (newRandomPrvKey AlgSecp256k1) $ do
       let x :: Payload = unArbitraryMessage x0
       let y = x & (amount . amount) +~ 1
       verify (derivePubKey k) (sign k x) y `shouldBe` False
+  it "is able to exportPubKeyDer" $ \k -> do
+    let der = exportPubKeyDer ECPointExtended $ derivePubKey k
+    BS.length der `shouldBe` 88

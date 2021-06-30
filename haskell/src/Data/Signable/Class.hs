@@ -70,6 +70,7 @@ data SignableError
 data ECPointFormat
   = ECPointCompressed
   | ECPointUncompressed
+  | ECPointExtended
   deriving (Eq, Ord, Show)
 
 newtype PubKey
@@ -114,7 +115,23 @@ importPubKeyPem AlgSecp256k1 x0 =
         Just k -> Right k
 
 exportPubKeyDer :: ECPointFormat -> PubKey -> ByteString
-exportPubKeyDer f (PubKeySecp256k1 x) = C.exportPubKey (f == ECPointCompressed) x
+exportPubKeyDer f k@(PubKeySecp256k1 x) =
+  if f == ECPointExtended
+    then
+      let raw = exportPubKeyDer ECPointUncompressed k
+          asn1 =
+            [ Start Sequence,
+              Start Sequence,
+              OID [1, 2, 840, 10045, 2, 1],
+              OID [1, 3, 132, 0, 10],
+              End Sequence,
+              BitString
+                -- 520 = 65 * 8 for uncompressed public key
+                (BitArray 520 raw),
+              End Sequence
+            ]
+       in BL.toStrict $ encodeASN1 DER asn1
+    else C.exportPubKey (f == ECPointCompressed) x
 
 derivePubKey :: PrvKey -> PubKey
 derivePubKey (PrvKeySecp256k1 x) = PubKeySecp256k1 $ C.derivePubKey x
