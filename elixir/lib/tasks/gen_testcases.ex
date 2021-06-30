@@ -1,6 +1,5 @@
 defmodule Mix.Tasks.GenTestcases do
   use Mix.Task
-  require Number.Payload
 
   @impl Mix.Task
   def run([tc_file]) do
@@ -18,188 +17,194 @@ defmodule Mix.Tasks.GenTestcases do
 
     generators =
       [
-        Number.Payload
+        Number.Payload,
+        Text.Payload,
+        Basic.Payload
       ]
-      |> Enum.map(fn proto_mod ->
-        quote do
-          gen all(
-                name <- binary(),
-                email <- email_generator
-              ) do
-            %User{name: name, email: email}
-          end
-        end
-
-        %Protobuf.MessageProps{field_props: props, oneof: oneof_list} =
-          proto_mod.__message_props__()
-
-        oneof_map =
-          oneof_list
-          |> Enum.reduce(%{}, fn {k, v}, acc -> Map.put(acc, v, k) end)
-
-        proto_struct = proto_mod.new()
-
-        prop_names =
-          proto_struct
-          |> Map.from_struct()
-          |> Map.keys()
-
-        gen_binds =
-          prop_names
-          |> Enum.map(fn prop_name ->
-            %Protobuf.FieldProps{type: type} =
-              props
-              |> Map.values()
-              |> Enum.find(fn %Protobuf.FieldProps{name_atom: name_atom} ->
-                prop_name == name_atom
-              end)
-
-            prop_gen_ast =
-              case type do
-                :int32 ->
-                  quote do
-                    StreamData.integer()
-                    |> StreamData.filter(&(&1 > -2_147_483_648 and &1 < 2_147_483_648))
-                  end
-
-                :int64 ->
-                  quote do
-                    StreamData.integer(-9_223_372_036_854_775_808..9_223_372_036_854_775_808)
-                  end
-
-                :uint32 ->
-                  quote do
-                    StreamData.integer(0..4_294_967_295)
-                  end
-
-                :uint64 ->
-                  quote do
-                    StreamData.integer(0..18_446_744_073_709_551_615)
-                  end
-              end
-
-            {:<-, [],
-             [
-               {prop_name, [], Elixir},
-               prop_gen_ast
-             ]}
-          end)
-
-        gen_struct =
-          prop_names
-          |> Enum.map(fn prop_name ->
-            {prop_name, {prop_name, [], Elixir}}
-          end)
-
-        xs =
-          proto_mod
-          |> Module.split()
-          |> Enum.map(&String.to_atom/1)
-
-        {:gen, [context: Elixir, import: ExUnitProperties],
-         [
-           {:all, [], gen_binds},
-           [
-             do:
-               {:%, [],
-                [
-                  {:__aliases__, [alias: false], xs},
-                  {:%{}, [], gen_struct}
-                ]}
-           ]
-         ]}
+      |> Enum.map(&gen_generator/1)
+      |> Enum.map(fn generator_ast ->
+        generator_ast
         |> Code.eval_quoted()
         |> elem(0)
-
-        # quote do
-        #  ExUnitProperties.gen all name <- StreamData.string(:alphanumeric),
-        #                           domain <- StreamData.member_of(domains) do
-        #    name <> "@" <> domain
-        #  end
-        # end
       end)
-
-    Enum.each(generators, fn x ->
-      Enum.take(x, 100)
-      |> IO.inspect()
-    end)
-
-    # new_testcases = Enum.flat_map(0..1000, fn ->
-    #  Enum.map(test_config["testcases"], fn tc ->
-    #    proto_mod = String.to_atom("Elixir." <> tc["proto_message_type"])
-
-    #    proto_message = gen_proto_message(proto_mod)
-
-    #    signable_serialized = Signable.serialize(proto_message)
-    #    signature = Signable.sign(signable_serialized, private_key, curve)
-
-    #    tc
-    #      |> Map.put("signable_serialized_b64", Base.encode64(signable_serialized))
-    #      |> Map.put("signable_signature_b64", Base.encode64(signature))
-    #  end)
-    # end)
-
-    # File.write!(tc_file, Poison.encode!(Map.put(test_config, "testcases", new_testcases), pretty: true))
   end
 
-  defp gen_proto_message(proto_mod) do
+  def gen_generator(proto_mod) do
     %Protobuf.MessageProps{field_props: props, oneof: oneof_list} = proto_mod.__message_props__()
 
-    oneof_map =
-      oneof_list
-      |> Enum.reduce(%{}, fn {k, v}, acc -> Map.put(acc, v, k) end)
+    oneof_map = oneof_list |> Enum.reduce(%{}, fn {k, v}, acc -> Map.put(acc, k, v) end)
 
     proto_struct = proto_mod.new()
 
-    proto_struct
-    |> Map.from_struct()
-    |> Map.keys()
-    |> Enum.reduce(proto_struct, fn prop_name, proto_struct ->
-      prop =
-        props
-        |> Map.values()
-        |> Enum.find(fn %Protobuf.FieldProps{name_atom: name_atom} ->
-          prop_name == name_atom
-        end)
+    prop_names =
+      proto_struct
+      |> Map.from_struct()
+      |> Map.keys()
 
-      prop_val =
-        if is_nil(prop) do
-          gen_prop_val(prop_name, props, oneof_map)
-        else
-          gen_prop_val(prop)
+    gen_binds =
+      prop_names
+      |> Enum.map(fn prop_name ->
+        field_prop =
+          props
+          |> Map.values()
+          |> prop_by_name(prop_name)
+
+        prop_gen_ast =
+          if is_nil(field_prop) do
+            oneof_index = oneof_map[prop_name]
+
+            props
+            |> Map.values()
+            |> Enum.filter(fn %Protobuf.FieldProps{oneof: oneof} -> oneof == oneof_index end)
+            |> gen_prop_ast()
+          else
+            %Protobuf.FieldProps{type: type, repeated?: repeated} = field_prop
+
+            if repeated do
+              quote do
+                StreamData.list_of(unquote(gen_prop_ast(type)))
+              end
+            else
+              gen_prop_ast(type)
+            end
+          end
+
+        {:<-, [],
+         [
+           {prop_name, [], Elixir},
+           prop_gen_ast
+         ]}
+      end)
+
+    gen_struct =
+      prop_names
+      |> Enum.map(fn prop_name ->
+        {prop_name, {prop_name, [], Elixir}}
+      end)
+
+    proto_mod_alias =
+      proto_mod
+      |> Module.split()
+      |> Enum.map(&String.to_atom/1)
+
+    {:gen, [context: Elixir, import: ExUnitProperties],
+     [
+       {:all, [], gen_binds},
+       [
+         do:
+           {:%, [],
+            [
+              {:__aliases__, [alias: false], proto_mod_alias},
+              {:%{}, [], gen_struct}
+            ]}
+       ]
+     ]}
+  end
+
+  def gen_prop_ast(oneof_props) when is_list(oneof_props) do
+    prop_atoms =
+      oneof_props
+      |> props_to_atoms()
+
+    oneof_prop_generators =
+      quote do
+        unquote(prop_atoms)
+        |> Enum.map(&StreamData.constant/1)
+      end
+
+    quote do
+      StreamData.bind(StreamData.one_of(unquote(oneof_prop_generators)), fn prop_name ->
+        %Protobuf.FieldProps{type: type} = unquote(__MODULE__).prop_by_name(unquote(oneof_props |> Macro.escape()), prop_name)
+
+        unquote(__MODULE__).gen_prop_ast(type)
+        |> Code.eval_quoted()
+        |> elem(0)
+        |> StreamData.bind(fn val ->
+          StreamData.constant({prop_name, val})
+        end)
+      end)
+    end
+  end
+
+  def gen_prop_ast(prop_type) do
+    case prop_type do
+      :int32 ->
+        quote do
+          StreamData.integer()
+          |> StreamData.filter(&(&1 > -2_147_483_648 and &1 < 2_147_483_648))
         end
 
-      Map.put(proto_struct, prop_name, prop_val)
+      :int64 ->
+        quote do
+          StreamData.integer()
+          |> StreamData.filter(
+            &(&1 > -9_223_372_036_854_775_808 and &1 < 9_223_372_036_854_775_808)
+          )
+        end
+
+      :uint32 ->
+        quote do
+          StreamData.integer()
+          |> StreamData.filter(&(&1 > 0 and &1 < 4_294_967_295))
+        end
+
+      :uint64 ->
+        quote do
+          StreamData.integer()
+          |> StreamData.filter(&(&1 > 0 and &1 < 18_446_744_073_709_551_615))
+        end
+
+      :string ->
+        quote do
+          StreamData.string(:alphanumeric)
+        end
+
+      :bool ->
+        quote do
+          StreamData.boolean()
+        end
+
+      :bytes ->
+        quote do
+          StreamData.byte()
+        end
+
+      nil ->
+        quote do
+          StreamData.constant(nil)
+        end
+
+      {:enum, enum_type} ->
+        %Protobuf.MessageProps{field_props: enum_props} = enum_type.__message_props__()
+
+        require IEx;IEx.pry
+
+        prop_atoms =
+          enum_props
+          |> Map.values()
+          |> props_to_atoms()
+
+        quote do
+          unquote(prop_atoms)
+          |> Enum.map(&StreamData.constant/1)
+          |> Enum.concat([StreamData.positive_integer(), StreamData.constant(nil)])
+          |> StreamData.one_of()
+        end
+
+      _proto_mod ->
+        gen_generator(prop_type)
+    end
+  end
+
+  defp props_to_atoms(props) do
+    Enum.map(props, fn %Protobuf.FieldProps{name_atom: name_atom} ->
+      name_atom
     end)
   end
 
-  defp gen_prop_val(_, _, _) do
-  end
-
-  defp gen_prop_val(%Protobuf.FieldProps{embedded?: true, type: type}) do
-    gen_proto_message(type)
-  end
-
-  defp gen_prop_val(%Protobuf.FieldProps{enum?: true, type: {:enum, type}}) do
-  end
-
-  defp gen_prop_val(%Protobuf.FieldProps{repeated?: true, type: type}) do
-    gen_val(type)
-  end
-
-  defp gen_prop_val(%Protobuf.FieldProps{type: type}) do
-    gen_val(type)
-  end
-
-  def gen_val(type) do
-    case type do
-      :int32 -> StreamData.integer()
-      :int64 -> StreamData.integer()
-      :uint32 -> StreamData.integer(0..100)
-      :uint64 -> StreamData.integer(0..100)
-      :string -> "string generator"
-      :bool -> "bool generator"
-      :bytes -> "bytes generator"
-    end
+  def prop_by_name(props, name) do
+    Enum.find(props, fn %Protobuf.FieldProps{name_atom: name_atom} ->
+      name == name_atom
+    end)
   end
 end
