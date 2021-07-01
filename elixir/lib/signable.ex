@@ -121,6 +121,10 @@ defmodule Signable do
     %Protobuf.MessageProps{field_props: props, oneof: oneof_list} =
       message_mod.__message_props__()
 
+    message =
+      message
+      |> Protobuf.Encodable.to_protobuf(message_mod)
+
     ## oneof_list is a keyword name_atom -> index, but we need a reverse to lookup
     oneof_map =
       oneof_list
