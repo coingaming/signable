@@ -65,7 +65,9 @@ defmodule Mix.Tasks.GenTestcases do
                 StreamData.list_of(unquote(gen_prop_ast(type)))
               end
             else
-              gen_prop_ast(type)
+              quote do
+                StreamData.one_of([unquote(gen_prop_ast(type)), StreamData.constant(nil)])
+              end
             end
           end
 
@@ -116,9 +118,11 @@ defmodule Mix.Tasks.GenTestcases do
       StreamData.bind(StreamData.one_of(unquote(oneof_prop_generators)), fn prop_name ->
         %Protobuf.FieldProps{type: type} = unquote(__MODULE__).prop_by_name(unquote(oneof_props |> Macro.escape()), prop_name)
 
-        unquote(__MODULE__).gen_prop_ast(type)
-        |> Code.eval_quoted()
-        |> elem(0)
+        stream_data = unquote(__MODULE__).gen_prop_ast(type)
+          |> Code.eval_quoted()
+          |> elem(0)
+
+        StreamData.one_of([stream_data, StreamData.constant(nil)])
         |> StreamData.bind(fn val ->
           StreamData.constant({prop_name, val})
         end)
@@ -176,8 +180,6 @@ defmodule Mix.Tasks.GenTestcases do
 
       {:enum, enum_type} ->
         %Protobuf.MessageProps{field_props: enum_props} = enum_type.__message_props__()
-
-        require IEx;IEx.pry
 
         prop_atoms =
           enum_props
