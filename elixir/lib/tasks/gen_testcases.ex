@@ -19,14 +19,37 @@ defmodule Mix.Tasks.GenTestcases do
       [
         Number.Payload,
         Text.Payload,
-        Basic.Payload
+        Basic.Payload,
+        Coins.Request
       ]
       |> Enum.map(&gen_generator/1)
-      |> Enum.map(fn generator_ast ->
-        generator_ast
-        |> Code.eval_quoted()
-        |> elem(0)
+      |> Enum.map(&eval_ast/1)
+
+    test_cases =
+      generators
+      |> Enum.flat_map(
+        &(&1
+          |> Enum.take(100))
+      )
+      |> Enum.map(fn tc ->
+        proto_mod = tc.__struct__
+
+        signable_serialized = Signable.serialize(tc)
+        signature = Signable.sign(signable_serialized, private_key, curve)
+
+        %{
+          proto_message_type: proto_mod,
+          # tc |> proto_mod.encode() |> Base.encode64!(),
+          proto_serialized_b64: "TEST",
+          signable_serialized_b64: Base.encode64(signable_serialized),
+          signable_signature_b64: Base.encode64(signature)
+        }
       end)
+
+    File.write!(
+      tc_file,
+      Poison.encode!(Map.put(test_config, "testcases", test_cases), pretty: true)
+    )
   end
 
   def gen_generator(proto_mod) do
@@ -116,11 +139,12 @@ defmodule Mix.Tasks.GenTestcases do
 
     quote do
       StreamData.bind(StreamData.one_of(unquote(oneof_prop_generators)), fn prop_name ->
-        %Protobuf.FieldProps{type: type} = unquote(__MODULE__).prop_by_name(unquote(oneof_props |> Macro.escape()), prop_name)
+        %Protobuf.FieldProps{type: type} =
+          unquote(__MODULE__).prop_by_name(unquote(oneof_props |> Macro.escape()), prop_name)
 
-        stream_data = unquote(__MODULE__).gen_prop_ast(type)
-          |> Code.eval_quoted()
-          |> elem(0)
+        stream_data =
+          unquote(__MODULE__).gen_prop_ast(type)
+          |> unquote(__MODULE__).eval_ast()
 
         StreamData.one_of([stream_data, StreamData.constant(nil)])
         |> StreamData.bind(fn val ->
@@ -170,7 +194,7 @@ defmodule Mix.Tasks.GenTestcases do
 
       :bytes ->
         quote do
-          StreamData.byte()
+          StreamData.binary()
         end
 
       nil ->
@@ -198,15 +222,21 @@ defmodule Mix.Tasks.GenTestcases do
     end
   end
 
-  defp props_to_atoms(props) do
-    Enum.map(props, fn %Protobuf.FieldProps{name_atom: name_atom} ->
-      name_atom
-    end)
+  def eval_ast(ast) do
+    ast
+    |> Code.eval_quoted()
+    |> elem(0)
   end
 
   def prop_by_name(props, name) do
     Enum.find(props, fn %Protobuf.FieldProps{name_atom: name_atom} ->
       name == name_atom
+    end)
+  end
+
+  defp props_to_atoms(props) do
+    Enum.map(props, fn %Protobuf.FieldProps{name_atom: name_atom} ->
+      name_atom
     end)
   end
 end
