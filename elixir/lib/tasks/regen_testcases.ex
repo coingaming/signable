@@ -31,7 +31,7 @@ defmodule Mix.Tasks.RegenTestcases do
         &(&1
           |> Enum.take(100))
       )
-      |> Enum.map(fn tc ->
+      |> Enum.with_index(fn tc, index ->
         proto_mod = tc.__struct__
 
         signable_serialized = Signable.serialize(tc)
@@ -41,7 +41,8 @@ defmodule Mix.Tasks.RegenTestcases do
           proto_message_type: proto_mod |> Macro.to_string(),
           proto_serialized_b64: tc |> proto_mod.encode() |> Base.encode64(),
           signable_serialized_b64: signable_serialized |> Base.encode64(),
-          signable_signature_b64: signature |> Base.encode64()
+          signable_signature_b64: signature |> Base.encode64(),
+          test_description: "Test #{index}"
         }
       end)
 
