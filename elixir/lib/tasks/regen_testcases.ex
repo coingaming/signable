@@ -31,7 +31,8 @@ defmodule Mix.Tasks.RegenTestcases do
         &(&1
           |> Enum.take(100))
       )
-      |> Enum.with_index(fn tc, index ->
+      |> Enum.with_index()
+      |> Enum.map(fn {tc, index} ->
         proto_mod = tc.__struct__
 
         signable_serialized = Signable.serialize(tc)
