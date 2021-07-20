@@ -2,6 +2,7 @@ let nixpkgs = import ./nixpkgs.nix;
     signable-haskell-protoc = import ./signable-haskell-protoc.nix {};
 in
 {
+  profile ? false,
   pkgs ? import nixpkgs {
     overlays = import ./overlay.nix {
     };
@@ -37,8 +38,8 @@ in
       then drv.testSystemDepends ++ testDeps
       else testDeps;
     isExecutable = false;
-    enableSharedExecutables = false;
-    enableLibraryProfiling = false;
+    enableSharedExecutables = profile;
+    enableLibraryProfiling = profile;
     isLibrary = true;
     doHaddock = false;
   })
