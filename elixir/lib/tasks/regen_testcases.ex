@@ -29,7 +29,7 @@ defmodule Mix.Tasks.RegenTestcases do
       generators
       |> Enum.flat_map(
         &(&1
-          |> Enum.take(100))
+          |> Enum.take(1000))
       )
       |> Enum.with_index()
       |> Enum.map(fn {tc, index} ->
