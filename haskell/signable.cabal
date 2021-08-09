@@ -60,6 +60,9 @@ library
 test-suite signable-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
+  autogen-modules:
+      Proto.Basic
+      Proto.Basic_Fields
   other-modules:
       Proto.Basic
       Proto.Basic_Fields
