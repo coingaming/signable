@@ -1,0 +1,26 @@
+syntax = "proto3";
+package Embedded.Schema;
+
+message Embedded {
+  Msg msgField = 1;
+  message Msg {
+    Enum enumField = 1;
+    enum Enum {
+      FOO = 0;
+      BAR = 1;
+    }
+  }
+}
+
+message Msg {
+  Enum enumField = 1;
+  enum Enum {
+    FOO = 0;
+    BAR = 1;
+  }
+}
+
+enum Enum {
+  FOO = 0;
+  BAR = 1;
+}

@@ -1,0 +1,61 @@
+syntax="proto3";
+package Coins;
+
+message Request {
+  LedgerTransferRequest ledger_transfer_request = 1;
+  // signature of serialized ledger_transfer_request
+  bytes ledger_signature = 2;
+
+  message LedgerTransferRequest {
+    UserTransferRequest user_transfer_request = 1;
+    // signature of serialized user_transfer_request
+    bytes user_signature = 2;
+    LightningInvoice invoice = 3;
+  }
+
+  message UserTransferRequest {
+    UserRequest user_request = 1;
+    oneof to {
+      uint64 merchant_id_to = 2;
+      LightningInvoice invoice = 3;
+    }
+  }
+}
+
+message LightningInvoice {
+  bytes r_hash = 1;
+  string payment_request = 2;
+  InvoiceType invoice_type = 3;
+}
+
+message UserRequest {
+  bytes pub_key_uid_from = 1;
+  UMoney amount = 2;
+  bytes request_id = 3;
+}
+
+enum InvoiceType {
+  REGULAR = 0;
+  HODL = 1;
+}
+
+message UMoney {
+  UDecimal amount = 1;
+  CurrencyCodeValue currency_code = 2;
+}
+
+message UDecimal {
+  uint64 coef = 1;
+  int32 exp   = 2;
+}
+
+message CurrencyCodeValue {
+  CurrencyCode value = 1;
+}
+
+enum CurrencyCode {
+  BTC = 0;
+  EUR = 1;
+  USD = 2;
+  ETH = 3;
+}

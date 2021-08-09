@@ -1,0 +1,18 @@
+syntax = "proto3";
+package ReservedKeyword;
+
+message Payload {
+  bytes module = 1;
+  repeated List data = 2;
+  repeated bytes type = 3;
+  List class = 4;
+  bytes instance = 5;
+  bool if = 6;
+
+  message List {
+    oneof either {
+      bytes x = 1;
+      List xs = 2;
+    }
+  }
+}
