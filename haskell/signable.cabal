@@ -33,6 +33,9 @@ library
       Data.Signable.Class
       Data.Signable.Import
       Data.Signable.Util
+  autogen-modules:
+      Proto.Basic
+      Proto.Basic_Fields
   other-modules:
       Paths_signable
   hs-source-dirs:
