@@ -1,5 +1,5 @@
 {- This file was auto-generated from google/protobuf/descriptor.proto by the proto-lens-protoc program. -}
-{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, DataKinds, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
+{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, DataKinds, BangPatterns, TypeApplications#-}
 {-# OPTIONS_GHC -Wno-unused-imports#-}
 {-# OPTIONS_GHC -Wno-duplicate-exports#-}
 {-# OPTIONS_GHC -Wno-dodgy-exports#-}
@@ -557,13 +557,6 @@ maybe'positiveIntValue ::
   Lens.Family2.LensLike' f s a
 maybe'positiveIntValue
   = Data.ProtoLens.Field.field @"maybe'positiveIntValue"
-maybe'proto3Optional ::
-  forall f s a.
-  (Prelude.Functor f,
-   Data.ProtoLens.Field.HasField s "maybe'proto3Optional" a) =>
-  Lens.Family2.LensLike' f s a
-maybe'proto3Optional
-  = Data.ProtoLens.Field.field @"maybe'proto3Optional"
 maybe'pyGenericServices ::
   forall f s a.
   (Prelude.Functor f,
@@ -781,12 +774,6 @@ positiveIntValue ::
    Data.ProtoLens.Field.HasField s "positiveIntValue" a) =>
   Lens.Family2.LensLike' f s a
 positiveIntValue = Data.ProtoLens.Field.field @"positiveIntValue"
-proto3Optional ::
-  forall f s a.
-  (Prelude.Functor f,
-   Data.ProtoLens.Field.HasField s "proto3Optional" a) =>
-  Lens.Family2.LensLike' f s a
-proto3Optional = Data.ProtoLens.Field.field @"proto3Optional"
 publicDependency ::
   forall f s a.
   (Prelude.Functor f,

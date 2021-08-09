@@ -1,5 +1,5 @@
 {- This file was auto-generated from google/protobuf/compiler/plugin.proto by the proto-lens-protoc program. -}
-{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, DataKinds, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
+{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, DataKinds, BangPatterns, TypeApplications#-}
 {-# OPTIONS_GHC -Wno-unused-imports#-}
 {-# OPTIONS_GHC -Wno-duplicate-exports#-}
 {-# OPTIONS_GHC -Wno-dodgy-exports#-}
@@ -55,12 +55,6 @@ fileToGenerate ::
    Data.ProtoLens.Field.HasField s "fileToGenerate" a) =>
   Lens.Family2.LensLike' f s a
 fileToGenerate = Data.ProtoLens.Field.field @"fileToGenerate"
-generatedCodeInfo ::
-  forall f s a.
-  (Prelude.Functor f,
-   Data.ProtoLens.Field.HasField s "generatedCodeInfo" a) =>
-  Lens.Family2.LensLike' f s a
-generatedCodeInfo = Data.ProtoLens.Field.field @"generatedCodeInfo"
 insertionPoint ::
   forall f s a.
   (Prelude.Functor f,
@@ -91,13 +85,6 @@ maybe'error ::
    Data.ProtoLens.Field.HasField s "maybe'error" a) =>
   Lens.Family2.LensLike' f s a
 maybe'error = Data.ProtoLens.Field.field @"maybe'error"
-maybe'generatedCodeInfo ::
-  forall f s a.
-  (Prelude.Functor f,
-   Data.ProtoLens.Field.HasField s "maybe'generatedCodeInfo" a) =>
-  Lens.Family2.LensLike' f s a
-maybe'generatedCodeInfo
-  = Data.ProtoLens.Field.field @"maybe'generatedCodeInfo"
 maybe'insertionPoint ::
   forall f s a.
   (Prelude.Functor f,
@@ -141,13 +128,6 @@ maybe'suffix ::
    Data.ProtoLens.Field.HasField s "maybe'suffix" a) =>
   Lens.Family2.LensLike' f s a
 maybe'suffix = Data.ProtoLens.Field.field @"maybe'suffix"
-maybe'supportedFeatures ::
-  forall f s a.
-  (Prelude.Functor f,
-   Data.ProtoLens.Field.HasField s "maybe'supportedFeatures" a) =>
-  Lens.Family2.LensLike' f s a
-maybe'supportedFeatures
-  = Data.ProtoLens.Field.field @"maybe'supportedFeatures"
 minor ::
   forall f s a.
   (Prelude.Functor f, Data.ProtoLens.Field.HasField s "minor" a) =>
@@ -180,12 +160,6 @@ suffix ::
   (Prelude.Functor f, Data.ProtoLens.Field.HasField s "suffix" a) =>
   Lens.Family2.LensLike' f s a
 suffix = Data.ProtoLens.Field.field @"suffix"
-supportedFeatures ::
-  forall f s a.
-  (Prelude.Functor f,
-   Data.ProtoLens.Field.HasField s "supportedFeatures" a) =>
-  Lens.Family2.LensLike' f s a
-supportedFeatures = Data.ProtoLens.Field.field @"supportedFeatures"
 vec'file ::
   forall f s a.
   (Prelude.Functor f,

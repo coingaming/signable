@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     /* Protobuf */
     protobuf
     haskellPackages.proto-lens-protoc
-    signable-haskell-protoc
+    /*signable-haskell-protoc*/
     protoc-gen-elixir
     /* Crypto */
     secp256k1
