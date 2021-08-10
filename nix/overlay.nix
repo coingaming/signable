@@ -49,22 +49,22 @@ in
             cryptohash-sha1 = dontCheck (callPackage ./overlay/cryptohash-sha1.nix {
               stdenv = self.stdenv;
             });
-            #proto-lens = callPackage ./overlay/proto-lens.nix {
-            #  stdenv = self.stdenv;
-            #  fetchgit = self.fetchgit;
-            #};
-            #proto-lens-protoc = callPackage ./overlay/proto-lens-protoc.nix {
-            #  stdenv = self.stdenv;
-            #  fetchgit = self.fetchgit;
-            #};
-            #proto-lens-runtime = callPackage ./overlay/proto-lens-runtime.nix {
-            #  stdenv = self.stdenv;
-            #  fetchgit = self.fetchgit;
-            #};
-            #proto-lens-arbitrary = callPackage ./overlay/proto-lens-arbitrary.nix {
-            #  stdenv = self.stdenv;
-            #  fetchgit = self.fetchgit;
-            #};
+            proto-lens = callPackage ./overlay/proto-lens.nix {
+              stdenv = self.stdenv;
+              fetchgit = self.fetchgit;
+            };
+            proto-lens-protoc = callPackage ./overlay/proto-lens-protoc.nix {
+              stdenv = self.stdenv;
+              fetchgit = self.fetchgit;
+            };
+            proto-lens-runtime = callPackage ./overlay/proto-lens-runtime.nix {
+              stdenv = self.stdenv;
+              fetchgit = self.fetchgit;
+            };
+            proto-lens-arbitrary = callPackage ./overlay/proto-lens-arbitrary.nix {
+              stdenv = self.stdenv;
+              fetchgit = self.fetchgit;
+            };
             secp256k1-haskell = dontCheck (callPackage ./overlay/secp256k1-haskell.nix {
               stdenv = self.stdenv;
               libsecp256k1 = self.secp256k1;
