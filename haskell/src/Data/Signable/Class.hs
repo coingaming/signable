@@ -1,6 +1,5 @@
 {-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE UndecidableInstances #-}
 
 module Data.Signable.Class
@@ -102,7 +101,9 @@ sig2Alg :: Sig -> Alg
 sig2Alg (SigSecp256k1 _) = AlgSecp256k1
 
 importPubKeyDer :: Alg -> ByteString -> Maybe PubKey
-importPubKeyDer AlgSecp256k1 = (PubKeySecp256k1 <$>) . C.importPubKey
+importPubKeyDer AlgSecp256k1 x
+  | null x = Nothing
+  | otherwise = PubKeySecp256k1 <$> C.importPubKey x
 
 importPubKeyPem :: Alg -> ByteString -> Either SignableError PubKey
 importPubKeyPem AlgSecp256k1 x0 =
@@ -137,7 +138,9 @@ derivePubKey :: PrvKey -> PubKey
 derivePubKey (PrvKeySecp256k1 x) = PubKeySecp256k1 $ C.derivePubKey x
 
 importPrvKeyRaw :: Alg -> ByteString -> Maybe PrvKey
-importPrvKeyRaw AlgSecp256k1 = (PrvKeySecp256k1 <$>) . C.secKey
+importPrvKeyRaw AlgSecp256k1 x
+  | null x = Nothing
+  | otherwise = PrvKeySecp256k1 <$> C.secKey x
 
 importPrvKeyPem :: Alg -> ByteString -> Either SignableError PrvKey
 importPrvKeyPem AlgSecp256k1 x0 =
@@ -163,8 +166,9 @@ newRandomPrvKey AlgSecp256k1 = do
     Just x -> return x
 
 importSigDer :: Alg -> ByteString -> Maybe Sig
-importSigDer AlgSecp256k1 =
-  (SigSecp256k1 . (\x -> fromMaybe x $ C.normalizeSig x) <$>) . C.importSig
+importSigDer AlgSecp256k1 raw
+  | null raw = Nothing
+  | otherwise = SigSecp256k1 . (\x -> fromMaybe x $ C.normalizeSig x) <$> C.importSig raw
 
 exportSigDer :: Sig -> ByteString
 exportSigDer (SigSecp256k1 x) = C.exportSig x
