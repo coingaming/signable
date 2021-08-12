@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 756a27e9b680f636073aaea86b7155c51cc88815269577a8620f7714aa9bb7bc
+-- hash: 49b2d3de9741f7347b1641c9dcbb2e6dd1e5f85f426884b15a38709d1249bbbf
 
 name:           signable
 version:        0.4
@@ -61,6 +61,7 @@ test-suite signable-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      NullPointerSpec
       Proto.Basic
       Proto.Basic_Fields
       Proto.Coins
