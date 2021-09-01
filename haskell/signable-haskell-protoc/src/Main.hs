@@ -11,8 +11,8 @@ import Data.Int (Int32)
 import Data.List (sortBy)
 import Data.Maybe (isJust)
 import Data.ProtoLens (decodeMessage, defMessage, encodeMessage)
-import Data.ProtoLens.Compiler.ModuleName (protoModuleName)
 import Data.ProtoLens.Labels ()
+import Data.ProtoLens.Compiler.ModuleName
 import qualified Data.Set as Set
 import Data.String (fromString)
 import qualified Data.Text as T

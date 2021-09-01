@@ -28,7 +28,6 @@ source-repository head
 executable signable-haskell-protoc
   main-is: Main.hs
   other-modules:
-      Data.ProtoLens.Compiler.ModuleName
       Proto.Google.Protobuf.Compiler.Plugin
       Proto.Google.Protobuf.Compiler.Plugin_Fields
       Proto.Google.Protobuf.Descriptor
@@ -42,7 +41,7 @@ executable signable-haskell-protoc
     , bytestring ==0.10.*
     , casing >=0.1 && <0.2
     , containers >=0.5 && <0.7
-    , filepath
+    , filepath ==1.4.2.1
     , ghc >=8.2 && <8.11
     , ghc-paths ==0.1.*
     , ghc-source-gen >=0.4 && <0.5
