@@ -2,4 +2,4 @@ source-repository-package
   type: git
   location: git://github.com/coingaming/secp256k1-haskell.git
 
-packages: ./signable.cabal
+packages: */*.cabal

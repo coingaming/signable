@@ -1,0 +1,38 @@
+syntax = "proto3";
+package Basic;
+
+import "google_protobuf.proto";
+
+message Payload {
+  uint64 user_id_from = 1;
+  UMoney amount = 2;
+  RequestType request_type = 3;
+  bool add_fee = 4;
+  repeated string comments = 5;
+  oneof to {
+    uint64 user_id_to = 6;
+    string merchant_id_to = 7;
+    Google.Protobuf.StringValue invoice_to = 8;
+  }
+}
+
+message UMoney {
+  uint64 amount = 1;
+  CurrencyCodeValue currency_code = 2;
+}
+
+message CurrencyCodeValue {
+  CurrencyCode value = 1;
+}
+
+enum CurrencyCode {
+  BTC = 0;
+  EUR = 1;
+  USD = 2;
+  ETH = 3;
+}
+
+enum RequestType {
+  USER = 0;
+  LEDGER = 1;
+}

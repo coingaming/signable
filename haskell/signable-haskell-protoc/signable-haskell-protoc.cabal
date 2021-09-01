@@ -45,8 +45,8 @@ executable signable-haskell-protoc
     , ghc-paths ==0.1.*
     , ghc-source-gen >=0.4 && <0.5
     , lens-family >=1.2 && <2.1
-    , proto-lens ==0.7.*
-    , proto-lens-protoc ==0.7.*
-    , proto-lens-runtime ==0.7.*
+    , proto-lens >=0.7.0
+    , proto-lens-protoc >=0.7.0
+    , proto-lens-runtime >=0.7.0
     , text ==1.2.*
   default-language: Haskell2010
