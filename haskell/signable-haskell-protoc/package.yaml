@@ -18,7 +18,6 @@ executables:
     main: Main.hs
     source-dirs: src
     dependencies:
-      - filepath == 1.4.2.1
       - base >= 4.7 && < 5
       - bytestring == 0.10.*
       - casing >= 0.1 && < 0.2
