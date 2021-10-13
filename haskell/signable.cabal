@@ -35,7 +35,7 @@ library
       Paths_signable
   hs-source-dirs:
       src
-  default-extensions: NoImplicitPrelude MultiParamTypeClasses LambdaCase OverloadedStrings ScopedTypeVariables
+  default-extensions: NoImplicitPrelude MultiParamTypeClasses LambdaCase OverloadedStrings ScopedTypeVariables StrictData
   ghc-options: -Weverything -Werror -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction
   build-depends:
       asn1-encoding >=0.9.6 && <0.10
@@ -59,6 +59,10 @@ test-suite signable-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      Data.Signable
+      Data.Signable.Class
+      Data.Signable.Import
+      Data.Signable.Util
       NullPointerSpec
       Proto.Basic
       Proto.Basic_Fields
@@ -81,8 +85,9 @@ test-suite signable-test
       TestCaseSpec
       Paths_signable
   hs-source-dirs:
+      src
       test
-  default-extensions: NoImplicitPrelude MultiParamTypeClasses LambdaCase OverloadedStrings ScopedTypeVariables
+  default-extensions: NoImplicitPrelude MultiParamTypeClasses LambdaCase OverloadedStrings ScopedTypeVariables StrictData
   ghc-options: -Weverything -Werror -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction -Wno-missing-export-lists -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       QuickCheck >=2.13.2 && <2.14
