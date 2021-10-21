@@ -49,7 +49,7 @@ spec = before (readEnv "elixir.json") $ do
       mapM_
         ( \tc -> do
             let t = tcProtoType tc
-            let x = coerce $ tcProtoBin tc
+            let x = coerce $ tcProtoBin tc :: ByteString
             s <- case importSigDer AlgSecp256k1 . coerce $
               tcSignatureBin tc of
               Just s0 -> return s0
@@ -164,22 +164,20 @@ genTestCase prv i t =
             tcDescription = show t <> "-" <> show i
           }
 
-data Env
-  = Env
-      { envPrvKey :: PrvKey,
-        envPubKey :: PubKey,
-        envTCS :: [TestCase],
-        envRaw :: Map.HashMap Text Value
-      }
+data Env = Env
+  { envPrvKey :: PrvKey,
+    envPubKey :: PubKey,
+    envTCS :: [TestCase],
+    envRaw :: Map.HashMap Text Value
+  }
 
-data TestCase
-  = TestCase
-      { tcProtoType :: ProtoType,
-        tcProtoBin :: ProtoBin,
-        tcSignableBin :: SignableBin,
-        tcSignatureBin :: SignatureBin,
-        tcDescription :: Text
-      }
+data TestCase = TestCase
+  { tcProtoType :: ProtoType,
+    tcProtoBin :: ProtoBin,
+    tcSignableBin :: SignableBin,
+    tcSignatureBin :: SignatureBin,
+    tcDescription :: Text
+  }
 
 data ProtoType
   = Basic'Payload

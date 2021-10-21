@@ -21,7 +21,7 @@ in
     in
       {
         haskell-ide = import (
-          fetchTarball "https://github.com/tim2CF/ultimate-haskell-ide/tarball/a3424a3100f9be4fa88603999db988bf87d91718"
+          fetchTarball "https://github.com/21it/ultimate-haskell-ide/tarball/a625bc12de236824c337a2df3f626b2c662434ca"
         ) {inherit vimBackground vimColorScheme;};
         rebar = pkgs20.rebar;
         rebar3 = pkgs20.rebar3;
