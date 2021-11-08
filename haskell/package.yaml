@@ -17,6 +17,7 @@ dependencies:
 # foundation
 - base                  >= 4.7 && < 5
 - universum             >= 1.5.0 && < 1.6
+- Cabal                 >= 3
 # bytes and text
 - memory                >= 0.14 && < 0.17
 - binary                >= 0.8.6 && < 0.9

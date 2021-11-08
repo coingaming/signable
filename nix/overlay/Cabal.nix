@@ -7,10 +7,8 @@
 }:
 mkDerivation {
   pname = "Cabal";
-  version = "3.2.0.0";
-  sha256 = "f2053a57c66457cfe48db906f0bdf98eb717a12c3c16a98561921f15035de66f";
-  revision = "1";
-  editedCabalFile = "0zxp3h8bvmby0h8yibnn1wpsg1fb5lk6xmb2iwg391x6m6rysaml";
+  version = "3.0.2.0";
+  sha256 = "65d3d7e953388df26c748c4ca2c57175e71a71e779fe6b1a77f6639c4336ea07";
   setupHaskellDepends = [ mtl parsec ];
   libraryHaskellDepends = [
     array base binary bytestring containers deepseq directory filepath
