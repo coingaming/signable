@@ -17,7 +17,6 @@ dependencies:
 # foundation
 - base                  >= 4.7 && < 5
 - universum             >= 1.5.0 && < 1.6
-- Cabal                 >= 3
 # bytes and text
 - memory                >= 0.14 && < 0.17
 - binary                >= 0.8.6 && < 0.9
@@ -34,6 +33,9 @@ dependencies:
 - asn1-encoding         >= 0.9.6 && < 0.10
 - asn1-types            >= 0.3 && < 0.4
 - pem                   >= 0.2.4 && < 0.3
+# overlay
+- entropy               <= 0.4.1.5
+- Cabal                 >= 3
 
 source-dirs:
 - src
