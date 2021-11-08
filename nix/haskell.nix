@@ -13,14 +13,20 @@ with pkgs;
 let callPackage = lib.callPackageWith haskellPackages;
     pkg = callPackage ./pkg.nix {inherit stdenv;};
     systemDeps = [
+      # Proto
       protobuf
+      # Crypto
+      secp256k1
+    ];
+    testDeps = [
+      # Proto
       haskellPackages.proto-lens-protoc
       signable-haskell-protoc
+      # Crypto
+      pkg-config
+      # Misc
       which
-      makeWrapper
-      cacert
     ];
-    testDeps = [];
 in
   haskell.lib.overrideCabal pkg (drv: {
     src = ./..;
