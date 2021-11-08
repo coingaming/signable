@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE UndecidableInstances #-}
@@ -53,7 +54,7 @@ import qualified Data.Text.Encoding as T
 import Prelude (show)
 
 data Alg = AlgSecp256k1
-  deriving (Eq, Ord, Show)
+  deriving (Eq, Ord, Show, Generic)
 
 data SignableError
   = InvalidPem
@@ -64,17 +65,17 @@ data SignableError
   | TooManyAsn1Chunks
   | InvalidPubKeyDer
   | InvalidPrvKeyRaw
-  deriving (Eq, Ord, Show)
+  deriving (Eq, Ord, Show, Generic)
 
 data ECPointFormat
   = ECPointCompressed
   | ECPointUncompressed
   | ECPointExtended
-  deriving (Eq, Ord, Show)
+  deriving (Eq, Ord, Show, Generic)
 
 newtype PubKey
   = PubKeySecp256k1 C.PubKey
-  deriving (Eq, Show)
+  deriving (Eq, Show, Generic)
 
 newtype PrvKey
   = PrvKeySecp256k1 C.SecKey
@@ -85,11 +86,11 @@ instance Show PrvKey where
 
 newtype Sha256
   = Sha256 ByteString
-  deriving (Eq, Ord, Show)
+  deriving (Eq, Ord, Show, Generic)
 
 newtype Sig
   = SigSecp256k1 C.Sig
-  deriving (Eq, Show)
+  deriving (Eq, Show, Generic)
 
 pubKey2Alg :: PubKey -> Alg
 pubKey2Alg (PubKeySecp256k1 _) = AlgSecp256k1
