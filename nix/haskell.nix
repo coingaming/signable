@@ -1,4 +1,4 @@
-let nixpkgs = import ./nixpkgs.nix;
+let nixpkgs = import ./nixpkgs-20-09.nix;
     signable-haskell-protoc = import ./signable-haskell-protoc.nix {};
 in
 {
@@ -15,17 +15,15 @@ let callPackage = lib.callPackageWith haskellPackages;
     systemDeps = [
       # Proto
       protobuf
-      # Crypto
-      secp256k1
-    ];
-    testDeps = [
-      # Proto
       haskellPackages.proto-lens-protoc
       signable-haskell-protoc
       # Crypto
+      secp256k1
       pkg-config
       # Misc
       which
+    ];
+    testDeps = [
     ];
 in
   haskell.lib.overrideCabal pkg (drv: {

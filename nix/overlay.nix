@@ -40,6 +40,12 @@ in
             swagger2 = callPackage ./overlay/swagger2.nix {
               stdenv = self.stdenv;
             };
+            base16 = callPackage ./overlay/base16.nix {
+              stdenv = self.stdenv;
+            };
+            #Cabal = callPackage ./overlay/Cabal.nix {
+            #  stdenv = self.stdenv;
+            #};
             base16-bytestring = callPackage ./overlay/base16-bytestring.nix {
               stdenv = self.stdenv;
             };
