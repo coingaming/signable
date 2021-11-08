@@ -6,11 +6,11 @@ packages:
   - signable-haskell-protoc
 extra-deps:
   - cryptonite-0.26@sha256:43c722f3770c31f4c5376e7aa42645b104834103312e217aa7fe79316416d6df,17352
-  - secp256k1-haskell-0.5.0
+  - secp256k1-haskell-0.6.0
   - parameterized-0.5.0.0@sha256:880717fbb958de1bac015f0a375ab6636f162a72483d987a11e305da6fac6c97,1969
   - ghc-source-gen-0.4.0.0@sha256:b6cdde6b183e70f6fbed3b0a45ad6640204b636e9a7fb898c5d7ec79719f14a1,3698
   - proto-lens-0.7.0.0@sha256:2c44a62375f7712f9381f84b1d30cee2f94384f1c98801db2f4450359a8e5036,3036
   - proto-lens-protoc-0.7.0.0
   - proto-lens-runtime-0.7.0.0
   - proto-lens-arbitrary-0.1.2.9
-  - base16-bytestring-1.0.1.0
+  - base16-0.3.0.1@sha256:66054d6c37497e66a0350944889a564f3edcd9b5655aedbc63e7b589116fd715,2422

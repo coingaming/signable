@@ -12,12 +12,12 @@ packages:
   original:
     hackage: cryptonite-0.26@sha256:43c722f3770c31f4c5376e7aa42645b104834103312e217aa7fe79316416d6df,17352
 - completed:
-    hackage: secp256k1-haskell-0.5.0@sha256:26d8897b0b81a1ca46134e3b1cc7784c975880e2334936d92681b07ae9703c26,2158
+    hackage: secp256k1-haskell-0.6.0@sha256:bf5ff29e7adef10596c75095f77f7c2d2c56d65ce79558628caec2db0e28395f,2108
     pantry-tree:
       size: 599
-      sha256: e1e0b1d98213c7874a4260b946d1024571ac659e81822d51ea1df7d00f4c14b0
+      sha256: a12315f5662b1ad920c252b70652db06cc3e501aa6cf9b4bafaf7f1e664421a7
   original:
-    hackage: secp256k1-haskell-0.5.0
+    hackage: secp256k1-haskell-0.6.0
 - completed:
     hackage: parameterized-0.5.0.0@sha256:880717fbb958de1bac015f0a375ab6636f162a72483d987a11e305da6fac6c97,1969
     pantry-tree:
@@ -61,12 +61,12 @@ packages:
   original:
     hackage: proto-lens-arbitrary-0.1.2.9
 - completed:
-    hackage: base16-bytestring-1.0.1.0@sha256:33b9d57afa334d06485033e930c6b13fc760baf88fd8f715ae2f9a4b46e19a54,2641
+    hackage: base16-0.3.0.1@sha256:66054d6c37497e66a0350944889a564f3edcd9b5655aedbc63e7b589116fd715,2422
     pantry-tree:
-      size: 595
-      sha256: 24661ef9b1089d468227300f8ceb89194b5cce68b9f6ed8109b01f63c07f54e3
+      size: 1308
+      sha256: 1c8da93c1fae042365fe368fc7ebf8894c7480d9c324e230a0aacfeef085bba8
   original:
-    hackage: base16-bytestring-1.0.1.0
+    hackage: base16-0.3.0.1@sha256:66054d6c37497e66a0350944889a564f3edcd9b5655aedbc63e7b589116fd715,2422
 snapshots:
 - completed:
     size: 524996
