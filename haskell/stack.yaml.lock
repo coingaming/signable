@@ -67,17 +67,6 @@ packages:
       sha256: 1c8da93c1fae042365fe368fc7ebf8894c7480d9c324e230a0aacfeef085bba8
   original:
     hackage: base16-0.3.0.1@sha256:66054d6c37497e66a0350944889a564f3edcd9b5655aedbc63e7b589116fd715,2422
-- completed:
-    size: 9112
-    url: https://github.com/coingaming/entropy/archive/0916ac52d1bf36cc048fd2486c6abf10b1e09cd4.tar.gz
-    name: entropy
-    version: 0.4.1.7
-    sha256: 78075aca8a3052cf8ca11381b6a0bc43ad40ece1a64c486b2741a41e5ca51c70
-    pantry-tree:
-      size: 781
-      sha256: 3dbdbfa5d8c7a057312a798c81c293bb65402fee0d389142f499ba197f89147a
-  original:
-    url: https://github.com/coingaming/entropy/archive/0916ac52d1bf36cc048fd2486c6abf10b1e09cd4.tar.gz
 snapshots:
 - completed:
     size: 524996

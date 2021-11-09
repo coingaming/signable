@@ -43,9 +43,6 @@ in
             base16 = callPackage ./overlay/base16.nix {
               stdenv = self.stdenv;
             };
-            entropy = callPackage ./overlay/entropy.nix {
-              stdenv = self.stdenv;
-            };
             Cabal = callPackage ./overlay/Cabal.nix {
               stdenv = self.stdenv;
             };
