@@ -1,4 +1,4 @@
-let nixpkgs = import ./nixpkgs-20-09.nix;
+let nixpkgs = import ./nixpkgs21.nix;
     signable-haskell-protoc = import ./signable-haskell-protoc.nix {};
 in
 {

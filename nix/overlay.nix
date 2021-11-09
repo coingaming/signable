@@ -10,7 +10,7 @@ in
 {
   vimBackground ? "light",
   vimColorScheme ? "PaperColor",
-  haskellPackagesLens ? (x: x.haskell.packages.ghc865)
+  haskellPackagesLens ? (x: x.haskell.packages.ghc865Binary)
 }:
 [
   (self: super:
@@ -56,20 +56,28 @@ in
               stdenv = self.stdenv;
             });
             proto-lens = callPackage ./overlay/proto-lens.nix {
-              stdenv = self.stdenv;
+              lib = self.lib;
               fetchgit = self.fetchgit;
+              ncurses = self.ncurses;
+              protobuf = self.protobuf;
             };
             proto-lens-protoc = callPackage ./overlay/proto-lens-protoc.nix {
-              stdenv = self.stdenv;
+              lib = self.lib;
               fetchgit = self.fetchgit;
+              ncurses = self.ncurses;
+              protobuf = self.protobuf;
             };
             proto-lens-runtime = callPackage ./overlay/proto-lens-runtime.nix {
-              stdenv = self.stdenv;
+              lib = self.lib;
               fetchgit = self.fetchgit;
+              ncurses = self.ncurses;
+              protobuf = self.protobuf;
             };
             proto-lens-arbitrary = callPackage ./overlay/proto-lens-arbitrary.nix {
-              stdenv = self.stdenv;
+              lib = self.lib;
               fetchgit = self.fetchgit;
+              ncurses = self.ncurses;
+              protobuf = self.protobuf;
             };
             secp256k1-haskell = dontCheck (callPackage ./overlay/secp256k1-haskell.nix {
               stdenv = self.stdenv;
