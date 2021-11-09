@@ -38,7 +38,6 @@ for X in "git" "cabal2nix" "docker" "coreutils"; do
 done
 lazy_install ssh-keyscan openssh
 lazy_install cachix cachix "nix-env -iAP cachix -f https://cachix.org/api/v1/install"
-cachix use all-hies
 
 git submodule update --init --recursive --depth 1
 ./nix/upgrade-pkg.sh
