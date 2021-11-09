@@ -1,5 +1,5 @@
 {- This file was auto-generated from google_protobuf.proto by the proto-lens-protoc program. -}
-{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, DataKinds, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
+{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
 {-# OPTIONS_GHC -Wno-unused-imports#-}
 {-# OPTIONS_GHC -Wno-duplicate-exports#-}
 {-# OPTIONS_GHC -Wno-dodgy-exports#-}
@@ -1163,7 +1163,7 @@ packedFileDescriptor
     \\tTimestamp\DC2\CAN\n\
     \\aseconds\CAN\SOH \SOH(\ETXR\aseconds\DC2\DC4\n\
     \\ENQnanos\CAN\STX \SOH(\ENQR\ENQnanosB|\n\
-    \\DC3com.google.protobufB\rWrappersProtoP\SOHZ*github.com/golang/protobuf/ptypes/wrappers\248\SOH\SOH\162\STX\ETXGPB\170\STX\RSGoogle.Protobuf.WellKnownTypesJ\214@\n\
+    \\DC3com.google.protobufB\rWrappersProtoP\SOHZ*github.com/golang/protobuf/ptypes/wrappers\248\SOH\SOH\162\STX\ETXGPB\170\STX\RSGoogle.Protobuf.WellKnownTypesJ\173?\n\
     \\a\DC2\ENQ(\NUL\219\SOH\SOH\n\
     \\219\DLE\n\
     \\SOH\f\DC2\ETX(\NUL\DC22\193\f Protocol Buffers - Google's data interchange format\n\
@@ -1247,8 +1247,6 @@ packedFileDescriptor
     \ \n\
     \\EOT\EOT\NUL\STX\NUL\DC2\ETX9\STX\DC3\SUB\DC3 The double value.\n\
     \\n\
-    \\r\n\
-    \\ENQ\EOT\NUL\STX\NUL\EOT\DC2\EOT9\STX7\NAK\n\
     \\f\n\
     \\ENQ\EOT\NUL\STX\NUL\ENQ\DC2\ETX9\STX\b\n\
     \\f\n\
@@ -1266,8 +1264,6 @@ packedFileDescriptor
     \\US\n\
     \\EOT\EOT\SOH\STX\NUL\DC2\ETXA\STX\DC2\SUB\DC2 The float value.\n\
     \\n\
-    \\r\n\
-    \\ENQ\EOT\SOH\STX\NUL\EOT\DC2\EOTA\STX?\DC4\n\
     \\f\n\
     \\ENQ\EOT\SOH\STX\NUL\ENQ\DC2\ETXA\STX\a\n\
     \\f\n\
@@ -1285,8 +1281,6 @@ packedFileDescriptor
     \\US\n\
     \\EOT\EOT\STX\STX\NUL\DC2\ETXI\STX\DC2\SUB\DC2 The int64 value.\n\
     \\n\
-    \\r\n\
-    \\ENQ\EOT\STX\STX\NUL\EOT\DC2\EOTI\STXG\DC4\n\
     \\f\n\
     \\ENQ\EOT\STX\STX\NUL\ENQ\DC2\ETXI\STX\a\n\
     \\f\n\
@@ -1304,8 +1298,6 @@ packedFileDescriptor
     \ \n\
     \\EOT\EOT\ETX\STX\NUL\DC2\ETXQ\STX\DC3\SUB\DC3 The uint64 value.\n\
     \\n\
-    \\r\n\
-    \\ENQ\EOT\ETX\STX\NUL\EOT\DC2\EOTQ\STXO\NAK\n\
     \\f\n\
     \\ENQ\EOT\ETX\STX\NUL\ENQ\DC2\ETXQ\STX\b\n\
     \\f\n\
@@ -1323,8 +1315,6 @@ packedFileDescriptor
     \\US\n\
     \\EOT\EOT\EOT\STX\NUL\DC2\ETXY\STX\DC2\SUB\DC2 The int32 value.\n\
     \\n\
-    \\r\n\
-    \\ENQ\EOT\EOT\STX\NUL\EOT\DC2\EOTY\STXW\DC4\n\
     \\f\n\
     \\ENQ\EOT\EOT\STX\NUL\ENQ\DC2\ETXY\STX\a\n\
     \\f\n\
@@ -1342,8 +1332,6 @@ packedFileDescriptor
     \ \n\
     \\EOT\EOT\ENQ\STX\NUL\DC2\ETXa\STX\DC3\SUB\DC3 The uint32 value.\n\
     \\n\
-    \\r\n\
-    \\ENQ\EOT\ENQ\STX\NUL\EOT\DC2\EOTa\STX_\NAK\n\
     \\f\n\
     \\ENQ\EOT\ENQ\STX\NUL\ENQ\DC2\ETXa\STX\b\n\
     \\f\n\
@@ -1361,8 +1349,6 @@ packedFileDescriptor
     \\RS\n\
     \\EOT\EOT\ACK\STX\NUL\DC2\ETXi\STX\DC1\SUB\DC1 The bool value.\n\
     \\n\
-    \\r\n\
-    \\ENQ\EOT\ACK\STX\NUL\EOT\DC2\EOTi\STXg\DC3\n\
     \\f\n\
     \\ENQ\EOT\ACK\STX\NUL\ENQ\DC2\ETXi\STX\ACK\n\
     \\f\n\
@@ -1380,8 +1366,6 @@ packedFileDescriptor
     \ \n\
     \\EOT\EOT\a\STX\NUL\DC2\ETXq\STX\DC3\SUB\DC3 The string value.\n\
     \\n\
-    \\r\n\
-    \\ENQ\EOT\a\STX\NUL\EOT\DC2\EOTq\STXo\NAK\n\
     \\f\n\
     \\ENQ\EOT\a\STX\NUL\ENQ\DC2\ETXq\STX\b\n\
     \\f\n\
@@ -1399,8 +1383,6 @@ packedFileDescriptor
     \\US\n\
     \\EOT\EOT\b\STX\NUL\DC2\ETXy\STX\DC2\SUB\DC2 The bytes value.\n\
     \\n\
-    \\r\n\
-    \\ENQ\EOT\b\STX\NUL\EOT\DC2\EOTy\STXw\DC4\n\
     \\f\n\
     \\ENQ\EOT\b\STX\NUL\ENQ\DC2\ETXy\STX\a\n\
     \\f\n\
@@ -1500,8 +1482,6 @@ packedFileDescriptor
     \ 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to\n\
     \ 9999-12-31T23:59:59Z inclusive.\n\
     \\n\
-    \\SI\n\
-    \\ENQ\EOT\t\STX\NUL\EOT\DC2\ACK\212\SOH\STX\208\SOH\DC3\n\
     \\r\n\
     \\ENQ\EOT\t\STX\NUL\ENQ\DC2\EOT\212\SOH\STX\a\n\
     \\r\n\
@@ -1514,8 +1494,6 @@ packedFileDescriptor
     \ that count forward in time. Must be from 0 to 999,999,999\n\
     \ inclusive.\n\
     \\n\
-    \\SI\n\
-    \\ENQ\EOT\t\STX\SOH\EOT\DC2\ACK\218\SOH\STX\212\SOH\DC4\n\
     \\r\n\
     \\ENQ\EOT\t\STX\SOH\ENQ\DC2\EOT\218\SOH\STX\a\n\
     \\r\n\

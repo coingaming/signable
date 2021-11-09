@@ -1,5 +1,5 @@
 {- This file was auto-generated from basic.proto by the proto-lens-protoc program. -}
-{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, DataKinds, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
+{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
 {-# OPTIONS_GHC -Wno-unused-imports#-}
 {-# OPTIONS_GHC -Wno-duplicate-exports#-}
 {-# OPTIONS_GHC -Wno-dodgy-exports#-}
@@ -1016,7 +1016,7 @@ packedFileDescriptor
     \\vRequestType\DC2\b\n\
     \\EOTUSER\DLE\NUL\DC2\n\
     \\n\
-    \\ACKLEDGER\DLE\SOHJ\133\t\n\
+    \\ACKLEDGER\DLE\SOHJ\156\b\n\
     \\ACK\DC2\EOT\NUL\NUL%\SOH\n\
     \\b\n\
     \\SOH\f\DC2\ETX\NUL\NUL\DC2\n\
@@ -1032,8 +1032,6 @@ packedFileDescriptor
     \\ETX\EOT\NUL\SOH\DC2\ETX\ENQ\b\SI\n\
     \\v\n\
     \\EOT\EOT\NUL\STX\NUL\DC2\ETX\ACK\STX\SUB\n\
-    \\r\n\
-    \\ENQ\EOT\NUL\STX\NUL\EOT\DC2\EOT\ACK\STX\ENQ\DC1\n\
     \\f\n\
     \\ENQ\EOT\NUL\STX\NUL\ENQ\DC2\ETX\ACK\STX\b\n\
     \\f\n\
@@ -1042,8 +1040,6 @@ packedFileDescriptor
     \\ENQ\EOT\NUL\STX\NUL\ETX\DC2\ETX\ACK\CAN\EM\n\
     \\v\n\
     \\EOT\EOT\NUL\STX\SOH\DC2\ETX\a\STX\DC4\n\
-    \\r\n\
-    \\ENQ\EOT\NUL\STX\SOH\EOT\DC2\EOT\a\STX\ACK\SUB\n\
     \\f\n\
     \\ENQ\EOT\NUL\STX\SOH\ACK\DC2\ETX\a\STX\b\n\
     \\f\n\
@@ -1052,8 +1048,6 @@ packedFileDescriptor
     \\ENQ\EOT\NUL\STX\SOH\ETX\DC2\ETX\a\DC2\DC3\n\
     \\v\n\
     \\EOT\EOT\NUL\STX\STX\DC2\ETX\b\STX\US\n\
-    \\r\n\
-    \\ENQ\EOT\NUL\STX\STX\EOT\DC2\EOT\b\STX\a\DC4\n\
     \\f\n\
     \\ENQ\EOT\NUL\STX\STX\ACK\DC2\ETX\b\STX\r\n\
     \\f\n\
@@ -1062,8 +1056,6 @@ packedFileDescriptor
     \\ENQ\EOT\NUL\STX\STX\ETX\DC2\ETX\b\GS\RS\n\
     \\v\n\
     \\EOT\EOT\NUL\STX\ETX\DC2\ETX\t\STX\DC3\n\
-    \\r\n\
-    \\ENQ\EOT\NUL\STX\ETX\EOT\DC2\EOT\t\STX\b\US\n\
     \\f\n\
     \\ENQ\EOT\NUL\STX\ETX\ENQ\DC2\ETX\t\STX\ACK\n\
     \\f\n\
@@ -1125,8 +1117,6 @@ packedFileDescriptor
     \\ETX\EOT\SOH\SOH\DC2\ETX\DC2\b\SO\n\
     \\v\n\
     \\EOT\EOT\SOH\STX\NUL\DC2\ETX\DC3\STX\DC4\n\
-    \\r\n\
-    \\ENQ\EOT\SOH\STX\NUL\EOT\DC2\EOT\DC3\STX\DC2\DLE\n\
     \\f\n\
     \\ENQ\EOT\SOH\STX\NUL\ENQ\DC2\ETX\DC3\STX\b\n\
     \\f\n\
@@ -1135,8 +1125,6 @@ packedFileDescriptor
     \\ENQ\EOT\SOH\STX\NUL\ETX\DC2\ETX\DC3\DC2\DC3\n\
     \\v\n\
     \\EOT\EOT\SOH\STX\SOH\DC2\ETX\DC4\STX&\n\
-    \\r\n\
-    \\ENQ\EOT\SOH\STX\SOH\EOT\DC2\EOT\DC4\STX\DC3\DC4\n\
     \\f\n\
     \\ENQ\EOT\SOH\STX\SOH\ACK\DC2\ETX\DC4\STX\DC3\n\
     \\f\n\
@@ -1151,8 +1139,6 @@ packedFileDescriptor
     \\ETX\EOT\STX\SOH\DC2\ETX\ETB\b\EM\n\
     \\v\n\
     \\EOT\EOT\STX\STX\NUL\DC2\ETX\CAN\STX\EM\n\
-    \\r\n\
-    \\ENQ\EOT\STX\STX\NUL\EOT\DC2\EOT\CAN\STX\ETB\ESC\n\
     \\f\n\
     \\ENQ\EOT\STX\STX\NUL\ACK\DC2\ETX\CAN\STX\SO\n\
     \\f\n\

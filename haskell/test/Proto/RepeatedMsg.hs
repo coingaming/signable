@@ -1,5 +1,5 @@
 {- This file was auto-generated from repeated_msg.proto by the proto-lens-protoc program. -}
-{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, DataKinds, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
+{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
 {-# OPTIONS_GHC -Wno-unused-imports#-}
 {-# OPTIONS_GHC -Wno-duplicate-exports#-}
 {-# OPTIONS_GHC -Wno-dodgy-exports#-}
@@ -273,7 +273,7 @@ packedFileDescriptor
     \\aPayload\DC2*\n\
     \\ETXmsg\CAN\SOH \ETX(\v2\CAN.RepeatedMsg.Payload.MsgR\ETXmsg\SUB\DC3\n\
     \\ETXMsg\DC2\f\n\
-    \\SOHx\CAN\SOH \SOH(\rR\SOHxJ\229\SOH\n\
+    \\SOHx\CAN\SOH \SOH(\rR\SOHxJ\212\SOH\n\
     \\ACK\DC2\EOT\NUL\NUL\b\SOH\n\
     \\b\n\
     \\SOH\f\DC2\ETX\NUL\NUL\DC2\n\
@@ -303,8 +303,6 @@ packedFileDescriptor
     \\r\n\
     \\r\n\
     \\ACK\EOT\NUL\ETX\NUL\STX\NUL\DC2\ETX\ACK\EOT\DC1\n\
-    \\SI\n\
-    \\a\EOT\NUL\ETX\NUL\STX\NUL\EOT\DC2\EOT\ACK\EOT\ENQ\SI\n\
     \\SO\n\
     \\a\EOT\NUL\ETX\NUL\STX\NUL\ENQ\DC2\ETX\ACK\EOT\n\
     \\n\

@@ -1,5 +1,5 @@
 {- This file was auto-generated from number.proto by the proto-lens-protoc program. -}
-{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, DataKinds, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
+{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
 {-# OPTIONS_GHC -Wno-unused-imports#-}
 {-# OPTIONS_GHC -Wno-duplicate-exports#-}
 {-# OPTIONS_GHC -Wno-dodgy-exports#-}
@@ -253,7 +253,7 @@ packedFileDescriptor
     \\ETXone\CAN\SOH \SOH(\rR\ETXone\DC2\DLE\n\
     \\ETXtwo\CAN\STX \SOH(\ENQR\ETXtwo\DC2\DC4\n\
     \\ENQthree\CAN\ETX \SOH(\EOTR\ENQthree\DC2\DC2\n\
-    \\EOTfour\CAN\EOT \SOH(\ETXR\EOTfourJ\204\STX\n\
+    \\EOTfour\CAN\EOT \SOH(\ETXR\EOTfourJ\144\STX\n\
     \\ACK\DC2\EOT\NUL\NUL\b\SOH\n\
     \\b\n\
     \\SOH\f\DC2\ETX\NUL\NUL\DC2\n\
@@ -267,8 +267,6 @@ packedFileDescriptor
     \\ETX\EOT\NUL\SOH\DC2\ETX\ETX\b\SI\n\
     \\v\n\
     \\EOT\EOT\NUL\STX\NUL\DC2\ETX\EOT\STX\DC1\n\
-    \\r\n\
-    \\ENQ\EOT\NUL\STX\NUL\EOT\DC2\EOT\EOT\STX\ETX\DC1\n\
     \\f\n\
     \\ENQ\EOT\NUL\STX\NUL\ENQ\DC2\ETX\EOT\STX\b\n\
     \\f\n\
@@ -277,8 +275,6 @@ packedFileDescriptor
     \\ENQ\EOT\NUL\STX\NUL\ETX\DC2\ETX\EOT\SI\DLE\n\
     \\v\n\
     \\EOT\EOT\NUL\STX\SOH\DC2\ETX\ENQ\STX\DLE\n\
-    \\r\n\
-    \\ENQ\EOT\NUL\STX\SOH\EOT\DC2\EOT\ENQ\STX\EOT\DC1\n\
     \\f\n\
     \\ENQ\EOT\NUL\STX\SOH\ENQ\DC2\ETX\ENQ\STX\a\n\
     \\f\n\
@@ -287,8 +283,6 @@ packedFileDescriptor
     \\ENQ\EOT\NUL\STX\SOH\ETX\DC2\ETX\ENQ\SO\SI\n\
     \\v\n\
     \\EOT\EOT\NUL\STX\STX\DC2\ETX\ACK\STX\DC3\n\
-    \\r\n\
-    \\ENQ\EOT\NUL\STX\STX\EOT\DC2\EOT\ACK\STX\ENQ\DLE\n\
     \\f\n\
     \\ENQ\EOT\NUL\STX\STX\ENQ\DC2\ETX\ACK\STX\b\n\
     \\f\n\
@@ -297,8 +291,6 @@ packedFileDescriptor
     \\ENQ\EOT\NUL\STX\STX\ETX\DC2\ETX\ACK\DC1\DC2\n\
     \\v\n\
     \\EOT\EOT\NUL\STX\ETX\DC2\ETX\a\STX\DC1\n\
-    \\r\n\
-    \\ENQ\EOT\NUL\STX\ETX\EOT\DC2\EOT\a\STX\ACK\DC3\n\
     \\f\n\
     \\ENQ\EOT\NUL\STX\ETX\ENQ\DC2\ETX\a\STX\a\n\
     \\f\n\

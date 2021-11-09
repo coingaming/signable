@@ -1,5 +1,5 @@
 {- This file was auto-generated from embedded_schema.proto by the proto-lens-protoc program. -}
-{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, DataKinds, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
+{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
 {-# OPTIONS_GHC -Wno-unused-imports#-}
 {-# OPTIONS_GHC -Wno-duplicate-exports#-}
 {-# OPTIONS_GHC -Wno-dodgy-exports#-}
@@ -583,7 +583,7 @@ packedFileDescriptor
     \\ETXBAR\DLE\SOH*\CAN\n\
     \\EOTEnum\DC2\a\n\
     \\ETXFOO\DLE\NUL\DC2\a\n\
-    \\ETXBAR\DLE\SOHJ\178\ENQ\n\
+    \\ETXBAR\DLE\SOHJ\131\ENQ\n\
     \\ACK\DC2\EOT\NUL\NUL\EM\SOH\n\
     \\b\n\
     \\SOH\f\DC2\ETX\NUL\NUL\DC2\n\
@@ -597,8 +597,6 @@ packedFileDescriptor
     \\ETX\EOT\NUL\SOH\DC2\ETX\ETX\b\DLE\n\
     \\v\n\
     \\EOT\EOT\NUL\STX\NUL\DC2\ETX\EOT\STX\DC3\n\
-    \\r\n\
-    \\ENQ\EOT\NUL\STX\NUL\EOT\DC2\EOT\EOT\STX\ETX\DC2\n\
     \\f\n\
     \\ENQ\EOT\NUL\STX\NUL\ACK\DC2\ETX\EOT\STX\ENQ\n\
     \\f\n\
@@ -612,8 +610,6 @@ packedFileDescriptor
     \\r\n\
     \\r\n\
     \\ACK\EOT\NUL\ETX\NUL\STX\NUL\DC2\ETX\ACK\EOT\ETB\n\
-    \\SI\n\
-    \\a\EOT\NUL\ETX\NUL\STX\NUL\EOT\DC2\EOT\ACK\EOT\ENQ\SI\n\
     \\SO\n\
     \\a\EOT\NUL\ETX\NUL\STX\NUL\ACK\DC2\ETX\ACK\EOT\b\n\
     \\SO\n\
@@ -645,8 +641,6 @@ packedFileDescriptor
     \\ETX\EOT\SOH\SOH\DC2\ETX\SO\b\v\n\
     \\v\n\
     \\EOT\EOT\SOH\STX\NUL\DC2\ETX\SI\STX\NAK\n\
-    \\r\n\
-    \\ENQ\EOT\SOH\STX\NUL\EOT\DC2\EOT\SI\STX\SO\r\n\
     \\f\n\
     \\ENQ\EOT\SOH\STX\NUL\ACK\DC2\ETX\SI\STX\ACK\n\
     \\f\n\
