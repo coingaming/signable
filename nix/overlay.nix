@@ -32,7 +32,6 @@ in
         protoc-gen-elixir = import ./overlay/protoc-gen-elixir.nix {};
         haskellPackages = (haskellPackagesLens super).extend(
           self': super': {
-            universum = dontCheck super'.universum;
             parameterized = dontCheck super'.parameterized;
             cryptonite = callPackage ./overlay/cryptonite.nix {
               stdenv = self.stdenv;
