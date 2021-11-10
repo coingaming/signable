@@ -1,5 +1,5 @@
 {- This file was auto-generated from coins.proto by the proto-lens-protoc program. -}
-{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, DataKinds, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
+{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
 {-# OPTIONS_GHC -Wno-unused-imports#-}
 {-# OPTIONS_GHC -Wno-duplicate-exports#-}
 {-# OPTIONS_GHC -Wno-dodgy-exports#-}
@@ -1764,7 +1764,7 @@ packedFileDescriptor
     \\ETXBTC\DLE\NUL\DC2\a\n\
     \\ETXEUR\DLE\SOH\DC2\a\n\
     \\ETXUSD\DLE\STX\DC2\a\n\
-    \\ETXETH\DLE\ETXJ\218\SI\n\
+    \\ETXETH\DLE\ETXJ\211\r\n\
     \\ACK\DC2\EOT\NUL\NUL<\SOH\n\
     \\b\n\
     \\SOH\f\DC2\ETX\NUL\NUL\DLE\n\
@@ -1778,8 +1778,6 @@ packedFileDescriptor
     \\ETX\EOT\NUL\SOH\DC2\ETX\ETX\b\SI\n\
     \\v\n\
     \\EOT\EOT\NUL\STX\NUL\DC2\ETX\EOT\STX4\n\
-    \\r\n\
-    \\ENQ\EOT\NUL\STX\NUL\EOT\DC2\EOT\EOT\STX\ETX\DC1\n\
     \\f\n\
     \\ENQ\EOT\NUL\STX\NUL\ACK\DC2\ETX\EOT\STX\ETB\n\
     \\f\n\
@@ -1789,8 +1787,6 @@ packedFileDescriptor
     \>\n\
     \\EOT\EOT\NUL\STX\SOH\DC2\ETX\ACK\STX\GS\SUB1 signature of serialized ledger_transfer_request\n\
     \\n\
-    \\r\n\
-    \\ENQ\EOT\NUL\STX\SOH\EOT\DC2\EOT\ACK\STX\EOT4\n\
     \\f\n\
     \\ENQ\EOT\NUL\STX\SOH\ENQ\DC2\ETX\ACK\STX\a\n\
     \\f\n\
@@ -1804,8 +1800,6 @@ packedFileDescriptor
     \\US\n\
     \\r\n\
     \\ACK\EOT\NUL\ETX\NUL\STX\NUL\DC2\ETX\t\EOT2\n\
-    \\SI\n\
-    \\a\EOT\NUL\ETX\NUL\STX\NUL\EOT\DC2\EOT\t\EOT\b!\n\
     \\SO\n\
     \\a\EOT\NUL\ETX\NUL\STX\NUL\ACK\DC2\ETX\t\EOT\ETB\n\
     \\SO\n\
@@ -1815,8 +1809,6 @@ packedFileDescriptor
     \>\n\
     \\ACK\EOT\NUL\ETX\NUL\STX\SOH\DC2\ETX\v\EOT\GS\SUB/ signature of serialized user_transfer_request\n\
     \\n\
-    \\SI\n\
-    \\a\EOT\NUL\ETX\NUL\STX\SOH\EOT\DC2\EOT\v\EOT\t2\n\
     \\SO\n\
     \\a\EOT\NUL\ETX\NUL\STX\SOH\ENQ\DC2\ETX\v\EOT\t\n\
     \\SO\n\
@@ -1826,8 +1818,6 @@ packedFileDescriptor
     \\a\EOT\NUL\ETX\NUL\STX\SOH\ETX\DC2\ETX\v\ESC\FS\n\
     \\r\n\
     \\ACK\EOT\NUL\ETX\NUL\STX\STX\DC2\ETX\f\EOT!\n\
-    \\SI\n\
-    \\a\EOT\NUL\ETX\NUL\STX\STX\EOT\DC2\EOT\f\EOT\v\GS\n\
     \\SO\n\
     \\a\EOT\NUL\ETX\NUL\STX\STX\ACK\DC2\ETX\f\EOT\DC4\n\
     \\SO\n\
@@ -1841,8 +1831,6 @@ packedFileDescriptor
     \\GS\n\
     \\r\n\
     \\ACK\EOT\NUL\ETX\SOH\STX\NUL\DC2\ETX\DLE\EOT!\n\
-    \\SI\n\
-    \\a\EOT\NUL\ETX\SOH\STX\NUL\EOT\DC2\EOT\DLE\EOT\SI\US\n\
     \\SO\n\
     \\a\EOT\NUL\ETX\SOH\STX\NUL\ACK\DC2\ETX\DLE\EOT\SI\n\
     \\SO\n\
@@ -1878,8 +1866,6 @@ packedFileDescriptor
     \\ETX\EOT\SOH\SOH\DC2\ETX\CAN\b\CAN\n\
     \\v\n\
     \\EOT\EOT\SOH\STX\NUL\DC2\ETX\EM\STX\DC3\n\
-    \\r\n\
-    \\ENQ\EOT\SOH\STX\NUL\EOT\DC2\EOT\EM\STX\CAN\SUB\n\
     \\f\n\
     \\ENQ\EOT\SOH\STX\NUL\ENQ\DC2\ETX\EM\STX\a\n\
     \\f\n\
@@ -1888,8 +1874,6 @@ packedFileDescriptor
     \\ENQ\EOT\SOH\STX\NUL\ETX\DC2\ETX\EM\DC1\DC2\n\
     \\v\n\
     \\EOT\EOT\SOH\STX\SOH\DC2\ETX\SUB\STX\GS\n\
-    \\r\n\
-    \\ENQ\EOT\SOH\STX\SOH\EOT\DC2\EOT\SUB\STX\EM\DC3\n\
     \\f\n\
     \\ENQ\EOT\SOH\STX\SOH\ENQ\DC2\ETX\SUB\STX\b\n\
     \\f\n\
@@ -1898,8 +1882,6 @@ packedFileDescriptor
     \\ENQ\EOT\SOH\STX\SOH\ETX\DC2\ETX\SUB\ESC\FS\n\
     \\v\n\
     \\EOT\EOT\SOH\STX\STX\DC2\ETX\ESC\STX\US\n\
-    \\r\n\
-    \\ENQ\EOT\SOH\STX\STX\EOT\DC2\EOT\ESC\STX\SUB\GS\n\
     \\f\n\
     \\ENQ\EOT\SOH\STX\STX\ACK\DC2\ETX\ESC\STX\r\n\
     \\f\n\
@@ -1914,8 +1896,6 @@ packedFileDescriptor
     \\ETX\EOT\STX\SOH\DC2\ETX\RS\b\DC3\n\
     \\v\n\
     \\EOT\EOT\STX\STX\NUL\DC2\ETX\US\STX\GS\n\
-    \\r\n\
-    \\ENQ\EOT\STX\STX\NUL\EOT\DC2\EOT\US\STX\RS\NAK\n\
     \\f\n\
     \\ENQ\EOT\STX\STX\NUL\ENQ\DC2\ETX\US\STX\a\n\
     \\f\n\
@@ -1924,8 +1904,6 @@ packedFileDescriptor
     \\ENQ\EOT\STX\STX\NUL\ETX\DC2\ETX\US\ESC\FS\n\
     \\v\n\
     \\EOT\EOT\STX\STX\SOH\DC2\ETX \STX\DC4\n\
-    \\r\n\
-    \\ENQ\EOT\STX\STX\SOH\EOT\DC2\EOT \STX\US\GS\n\
     \\f\n\
     \\ENQ\EOT\STX\STX\SOH\ACK\DC2\ETX \STX\b\n\
     \\f\n\
@@ -1934,8 +1912,6 @@ packedFileDescriptor
     \\ENQ\EOT\STX\STX\SOH\ETX\DC2\ETX \DC2\DC3\n\
     \\v\n\
     \\EOT\EOT\STX\STX\STX\DC2\ETX!\STX\ETB\n\
-    \\r\n\
-    \\ENQ\EOT\STX\STX\STX\EOT\DC2\EOT!\STX \DC4\n\
     \\f\n\
     \\ENQ\EOT\STX\STX\STX\ENQ\DC2\ETX!\STX\a\n\
     \\f\n\
@@ -1969,8 +1945,6 @@ packedFileDescriptor
     \\ETX\EOT\ETX\SOH\DC2\ETX)\b\SO\n\
     \\v\n\
     \\EOT\EOT\ETX\STX\NUL\DC2\ETX*\STX\SYN\n\
-    \\r\n\
-    \\ENQ\EOT\ETX\STX\NUL\EOT\DC2\EOT*\STX)\DLE\n\
     \\f\n\
     \\ENQ\EOT\ETX\STX\NUL\ACK\DC2\ETX*\STX\n\
     \\n\
@@ -1980,8 +1954,6 @@ packedFileDescriptor
     \\ENQ\EOT\ETX\STX\NUL\ETX\DC2\ETX*\DC4\NAK\n\
     \\v\n\
     \\EOT\EOT\ETX\STX\SOH\DC2\ETX+\STX&\n\
-    \\r\n\
-    \\ENQ\EOT\ETX\STX\SOH\EOT\DC2\EOT+\STX*\SYN\n\
     \\f\n\
     \\ENQ\EOT\ETX\STX\SOH\ACK\DC2\ETX+\STX\DC3\n\
     \\f\n\
@@ -1996,8 +1968,6 @@ packedFileDescriptor
     \\ETX\EOT\EOT\SOH\DC2\ETX.\b\DLE\n\
     \\v\n\
     \\EOT\EOT\EOT\STX\NUL\DC2\ETX/\STX\DC2\n\
-    \\r\n\
-    \\ENQ\EOT\EOT\STX\NUL\EOT\DC2\EOT/\STX.\DC2\n\
     \\f\n\
     \\ENQ\EOT\EOT\STX\NUL\ENQ\DC2\ETX/\STX\b\n\
     \\f\n\
@@ -2006,8 +1976,6 @@ packedFileDescriptor
     \\ENQ\EOT\EOT\STX\NUL\ETX\DC2\ETX/\DLE\DC1\n\
     \\v\n\
     \\EOT\EOT\EOT\STX\SOH\DC2\ETX0\STX\DC2\n\
-    \\r\n\
-    \\ENQ\EOT\EOT\STX\SOH\EOT\DC2\EOT0\STX/\DC2\n\
     \\f\n\
     \\ENQ\EOT\EOT\STX\SOH\ENQ\DC2\ETX0\STX\a\n\
     \\f\n\
@@ -2022,8 +1990,6 @@ packedFileDescriptor
     \\ETX\EOT\ENQ\SOH\DC2\ETX3\b\EM\n\
     \\v\n\
     \\EOT\EOT\ENQ\STX\NUL\DC2\ETX4\STX\EM\n\
-    \\r\n\
-    \\ENQ\EOT\ENQ\STX\NUL\EOT\DC2\EOT4\STX3\ESC\n\
     \\f\n\
     \\ENQ\EOT\ENQ\STX\NUL\ACK\DC2\ETX4\STX\SO\n\
     \\f\n\

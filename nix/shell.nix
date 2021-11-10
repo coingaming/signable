@@ -1,4 +1,5 @@
-let nixpkgs = import ./nixpkgs.nix;
+let nixpkgs = import ./nixpkgs21.nix;
+    pkgs20 = import (import ./nixpkgs20.nix) {};
     signable-haskell-protoc = import ./signable-haskell-protoc.nix {};
 in
 {
@@ -32,7 +33,7 @@ stdenv.mkDerivation {
     pkg-config
     openssh
     /* Nix */
-    cabal2nix
+    pkgs20.cabal2nix
     nix-prefetch-scripts
     /* Other */
     git

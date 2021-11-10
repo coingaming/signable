@@ -1,4 +1,4 @@
-let nixpkgs = import ./nixpkgs.nix;
+let nixpkgs = import ./nixpkgs21.nix;
 in
 {
   pkgs ? import nixpkgs {
@@ -9,7 +9,7 @@ in
 with pkgs;
 let callPackage = lib.callPackageWith haskellPackages;
     pkg = callPackage ./pkg-signable-haskell-protoc.nix {inherit stdenv;};
-    systemDeps = [ protobuf cacert ];
+    systemDeps = [ protobuf ncurses ];
     testDeps = [ ];
 in
   haskell.lib.overrideCabal pkg (drv: {

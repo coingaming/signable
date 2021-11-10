@@ -16,7 +16,7 @@ extra-source-files:
 dependencies:
 # foundation
 - base                  >= 4.7 && < 5
-- universum             >= 1.5.0 && < 1.6
+- universum             >= 1.5.0 && < 1.8
 # bytes and text
 - memory                >= 0.14 && < 0.17
 - binary                >= 0.8.6 && < 0.9
@@ -29,7 +29,7 @@ dependencies:
 - proto-lens-runtime    >= 0.7.0
 # crypto
 - cryptonite            >= 0.25 && < 0.30
-- secp256k1-haskell     >= 0.4 && < 0.7
+- secp256k1-haskell     >= 0.6 && < 0.7
 - asn1-encoding         >= 0.9.6 && < 0.10
 - asn1-types            >= 0.3 && < 0.4
 - pem                   >= 0.2.4 && < 0.3

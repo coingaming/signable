@@ -1,5 +1,5 @@
 {- This file was auto-generated from reserved_keyword.proto by the proto-lens-protoc program. -}
-{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, DataKinds, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
+{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
 {-# OPTIONS_GHC -Wno-unused-imports#-}
 {-# OPTIONS_GHC -Wno-duplicate-exports#-}
 {-# OPTIONS_GHC -Wno-dodgy-exports#-}
@@ -651,7 +651,7 @@ packedFileDescriptor
     \\EOTList\DC2\SO\n\
     \\SOHx\CAN\SOH \SOH(\fH\NULR\SOHx\DC2/\n\
     \\STXxs\CAN\STX \SOH(\v2\GS.ReservedKeyword.Payload.ListH\NULR\STXxsB\b\n\
-    \\ACKeitherJ\144\ENQ\n\
+    \\ACKeitherJ\212\EOT\n\
     \\ACK\DC2\EOT\NUL\NUL\DC1\SOH\n\
     \\b\n\
     \\SOH\f\DC2\ETX\NUL\NUL\DC2\n\
@@ -665,8 +665,6 @@ packedFileDescriptor
     \\ETX\EOT\NUL\SOH\DC2\ETX\ETX\b\SI\n\
     \\v\n\
     \\EOT\EOT\NUL\STX\NUL\DC2\ETX\EOT\STX\DC3\n\
-    \\r\n\
-    \\ENQ\EOT\NUL\STX\NUL\EOT\DC2\EOT\EOT\STX\ETX\DC1\n\
     \\f\n\
     \\ENQ\EOT\NUL\STX\NUL\ENQ\DC2\ETX\EOT\STX\a\n\
     \\f\n\
@@ -697,8 +695,6 @@ packedFileDescriptor
     \\ENQ\EOT\NUL\STX\STX\ETX\DC2\ETX\ACK\CAN\EM\n\
     \\v\n\
     \\EOT\EOT\NUL\STX\ETX\DC2\ETX\a\STX\DC1\n\
-    \\r\n\
-    \\ENQ\EOT\NUL\STX\ETX\EOT\DC2\EOT\a\STX\ACK\SUB\n\
     \\f\n\
     \\ENQ\EOT\NUL\STX\ETX\ACK\DC2\ETX\a\STX\ACK\n\
     \\f\n\
@@ -707,8 +703,6 @@ packedFileDescriptor
     \\ENQ\EOT\NUL\STX\ETX\ETX\DC2\ETX\a\SI\DLE\n\
     \\v\n\
     \\EOT\EOT\NUL\STX\EOT\DC2\ETX\b\STX\NAK\n\
-    \\r\n\
-    \\ENQ\EOT\NUL\STX\EOT\EOT\DC2\EOT\b\STX\a\DC1\n\
     \\f\n\
     \\ENQ\EOT\NUL\STX\EOT\ENQ\DC2\ETX\b\STX\a\n\
     \\f\n\
@@ -717,8 +711,6 @@ packedFileDescriptor
     \\ENQ\EOT\NUL\STX\EOT\ETX\DC2\ETX\b\DC3\DC4\n\
     \\v\n\
     \\EOT\EOT\NUL\STX\ENQ\DC2\ETX\t\STX\SO\n\
-    \\r\n\
-    \\ENQ\EOT\NUL\STX\ENQ\EOT\DC2\EOT\t\STX\b\NAK\n\
     \\f\n\
     \\ENQ\EOT\NUL\STX\ENQ\ENQ\DC2\ETX\t\STX\ACK\n\
     \\f\n\

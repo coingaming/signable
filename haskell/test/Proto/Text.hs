@@ -1,5 +1,5 @@
 {- This file was auto-generated from text.proto by the proto-lens-protoc program. -}
-{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, DataKinds, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
+{-# LANGUAGE ScopedTypeVariables, DataKinds, TypeFamilies, UndecidableInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, FlexibleContexts, FlexibleInstances, PatternSynonyms, MagicHash, NoImplicitPrelude, BangPatterns, TypeApplications, OverloadedStrings, DerivingStrategies#-}
 {-# OPTIONS_GHC -Wno-unused-imports#-}
 {-# OPTIONS_GHC -Wno-duplicate-exports#-}
 {-# OPTIONS_GHC -Wno-dodgy-exports#-}
@@ -151,7 +151,7 @@ packedFileDescriptor
     \\n\
     \text.proto\DC2\EOTText\"\GS\n\
     \\aPayload\DC2\DC2\n\
-    \\EOTtext\CAN\SOH \SOH(\tR\EOTtextJz\n\
+    \\EOTtext\CAN\SOH \SOH(\tR\EOTtextJk\n\
     \\ACK\DC2\EOT\NUL\NUL\ENQ\SOH\n\
     \\b\n\
     \\SOH\f\DC2\ETX\NUL\NUL\DC2\n\
@@ -165,8 +165,6 @@ packedFileDescriptor
     \\ETX\EOT\NUL\SOH\DC2\ETX\ETX\b\SI\n\
     \\v\n\
     \\EOT\EOT\NUL\STX\NUL\DC2\ETX\EOT\STX\DC2\n\
-    \\r\n\
-    \\ENQ\EOT\NUL\STX\NUL\EOT\DC2\EOT\EOT\STX\ETX\DC1\n\
     \\f\n\
     \\ENQ\EOT\NUL\STX\NUL\ENQ\DC2\ETX\EOT\STX\b\n\
     \\f\n\
