@@ -2,10 +2,17 @@
 
 set -e
 
-./nix/bootstrap.sh
+PLATFORM=`uname -m`
+if [ "$PLATFORM" = "aarch64" ]; then
+  PLATFORM="arm64"
+fi
 
-export NIXPKGS_ALLOW_BROKEN=1
-
-nix-build ./nix/signable-haskell-protoc.nix -v --show-trace
-nix-build ./nix/haskell.nix -v --show-trace
-nix-build ./nix/elixir.nix -v --show-trace
+nix-build ./nix/signable-haskell-protoc.nix \
+  -v --show-trace \
+  --argstr platform $PLATFORM
+nix-build ./nix/haskell.nix \
+  -v --show-trace \
+  --argstr platform $PLATFORM
+nix-build ./nix/elixir.nix \
+  -v --show-trace \
+  --argstr platform $PLATFORM

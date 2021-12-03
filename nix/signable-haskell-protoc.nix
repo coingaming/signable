@@ -3,8 +3,10 @@ in
 {
   pkgs ? import nixpkgs {
     overlays = import ./overlay.nix {
+      inherit platform;
     };
   },
+  platform ? "x86_64"
 }:
 with pkgs;
 let callPackage = lib.callPackageWith haskellPackages;

@@ -5,8 +5,10 @@ in
   profile ? false,
   pkgs ? import nixpkgs {
     overlays = import ./overlay.nix {
+      inherit platform;
     };
   },
+  platform ? "x86_64"
 }:
 with pkgs;
 

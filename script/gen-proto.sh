@@ -62,15 +62,15 @@ else
     for arg in "$@"
     do
         case $arg in
-            -h|--haskell)
+            -h|--haskell|haskell)
             gen_haskell
             shift
             ;;
-            -e|--elixir)
+            -e|--elixir|elixir)
             gen_elixir
             shift
             ;;
-        -a|--all)
+            -a|--all|all)
             gen_all
             break
             ;;

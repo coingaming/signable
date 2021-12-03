@@ -10,7 +10,8 @@ in
 {
   vimBackground ? "light",
   vimColorScheme ? "PaperColor",
-  haskellPackagesLens ? (x: x.haskell.packages.ghc865Binary)
+  haskellPackagesLens ? (x: x.haskell.packages.ghc865Binary),
+  platform ? "x86_64"
 }:
 [
   (self: super:
@@ -25,7 +26,15 @@ in
         ) {inherit vimBackground vimColorScheme;};
         rebar = pkgs20.rebar;
         rebar3 = pkgs20.rebar3;
-        erlang = pkgs20.erlang;
+        erlang =
+          if platform == "arm64"
+          then
+            pkgs20.erlang.overrideAttrs (erl: rec {
+              configureFlags =
+                erl.configureFlags ++ [ "--disable-jit" ];
+            })
+          else
+            pkgs20.erlang;
         elixir = pkgs20.elixir;
         hex = hex;
         mix = mix;

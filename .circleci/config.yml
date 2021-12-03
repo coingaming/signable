@@ -1,53 +1,72 @@
 version: 2.1
 
+executors:
+  x86_64:
+    machine:
+      resource_class: large
+      image: ubuntu-2004:202111-01
+  arm64:
+    machine:
+      resource_class: arm.large
+      image: ubuntu-2004:202111-01
+
 configure: &configure
-  docker:
-  - image: nixos/nix:2.3.12
-  resource_class: xlarge
-
-release: &release
-  run:
-    name: Create release
-    command: ./nix/release.sh
-    no_output_timeout: 60m
-
-filters: &filters
-  filters:
-    branches: {}
+  parameters:
+    platform:
+      type: enum
+      enum: ["x86_64", "arm64"]
+      default: "x86_64"
 
 commands:
   restore_nix_cache:
+    <<: *configure
     steps:
       - restore_cache:
           keys:
-            - v0-nix
+            - v0-nix-<< parameters.platform >>-<< pipeline.git.revision >>
+            - v0-nix-<< parameters.platform >>-<< pipeline.git.base_revision >>
+            - v0-nix-<< parameters.platform >>-
   save_nix_cache:
+    <<: *configure
     steps:
       - save_cache:
-          key: v0-nix
+          key: v0-nix-<< parameters.platform >>-<< pipeline.git.revision >>
           paths:
-            - /nix
+            - ~/project/nix_ci_cache
+      - save_cache:
+          key: v0-nix-<< parameters.platform >>-
+          paths:
+            - ~/project/nix_ci_cache
 
 jobs:
   release:
     <<: *configure
+    executor: << parameters.platform >>
     steps:
     - checkout
-    - setup_remote_docker
-    - restore_nix_cache
-    - *release
-    - save_nix_cache
-  release-publish:
-    <<: *configure
-    steps:
-    - checkout
-    - setup_remote_docker
-    - restore_nix_cache
-    - *release
-    - save_nix_cache
-    #
-    # TODO : hackage publish???
-    #
+    - restore_nix_cache:
+        platform: << parameters.platform >>
+    - run:
+        name: Create << parameters.platform >> release
+        no_output_timeout: 60m
+        command: ./nix/shell.sh minimal "--run ./nix/release.sh"
+    - run:
+        name: Save << parameters.platform >> cache
+        no_output_timeout: 60m
+        command: |
+          USER="${USER:-developer}"
+          docker run -it --rm \
+            -v "$(pwd):/app" \
+            -v "nix-$USER:/nix" \
+            -v "nix-home-$USER:/home/$USER" \
+            -w "/app" "heathmont/nix:alpine-<< parameters.platform >>-2.3.15" \
+            sh -c "nix copy --to file:///app/nix_ci_cache --all"
+    - save_nix_cache:
+        platform: << parameters.platform >>
+
+filters: &filters
+  filters:
+    branches: {}
 
 workflows:
   version: 2
@@ -60,8 +79,18 @@ workflows:
       - release:
           <<: *filters
           context: global
-  push:
-    jobs:
-      - release-publish:
+          platform: "x86_64"
+      - release:
           <<: *filters
           context: global
+          platform: "arm64"
+  push:
+    jobs:
+      - release:
+          <<: *filters
+          context: global
+          platform: "x86_64"
+      - release:
+          <<: *filters
+          context: global
+          platform: "arm64"
