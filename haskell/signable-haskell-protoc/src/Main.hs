@@ -1,3 +1,4 @@
+{-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE OverloadedStrings #-}
@@ -11,17 +12,16 @@ import Data.Int (Int32)
 import Data.List (sortBy)
 import Data.Maybe (isJust)
 import Data.ProtoLens (decodeMessage, defMessage, encodeMessage)
-import Data.ProtoLens.Labels ()
 import Data.ProtoLens.Compiler.ModuleName
+import Data.ProtoLens.Labels ()
 import qualified Data.Set as Set
 import Data.String (fromString)
-import qualified Data.Text as T
 import Data.Text (Text, intercalate, pack, unpack)
+import qualified Data.Text as T
 import DynFlags (DynFlags, getDynFlags)
 import GHC (runGhc)
 import GHC.Paths (libdir)
 import GHC.SourceGen
-import GHC.SourceGen.Pretty (showPpr)
 import GhcMonad (liftIO)
 import Lens.Family2
 import Proto.Google.Protobuf.Compiler.Plugin
@@ -41,17 +41,16 @@ import System.Exit (ExitCode (..), exitWith)
 import qualified System.IO as IO
 import Text.Casing (camel)
 
-data ProtoMod
-  = ProtoMod
-      { modName :: String,
-        modTypes :: [ProtoType]
-      }
-  deriving (Show)
+data ProtoMod = ProtoMod
+  { modName :: String,
+    modTypes :: [ProtoType]
+  }
+  deriving stock (Show)
 
 data ProtoType
   = ProtoMsg String DescriptorProto
   | ProtoEnum String
-  deriving (Show)
+  deriving stock (Show)
 
 main :: IO ()
 main = do
@@ -61,8 +60,10 @@ main = do
     Left e -> IO.hPutStrLn IO.stderr e >> exitWith (ExitFailure 1)
     Right x -> runGhc (Just libdir) $ do
       dflags <- getDynFlags
-      liftIO $ B.putStr $ encodeMessage $
-        makeResponse dflags progName x
+      liftIO $
+        B.putStr $
+          encodeMessage $
+            makeResponse dflags progName x
 
 makeResponse :: DynFlags -> String -> CodeGeneratorRequest -> CodeGeneratorResponse
 makeResponse dflags prog req =
@@ -124,8 +125,8 @@ parseEnum ns x = ProtoEnum $ ns <> unpack (x ^. #name)
 
 parseMsg :: String -> DescriptorProto -> [ProtoType]
 parseMsg ns0 x =
-  ProtoMsg n x
-    : (parseEnum ns <$> x ^. #enumType)
+  ProtoMsg n x :
+  (parseEnum ns <$> x ^. #enumType)
     <> ((x ^. #nestedType) >>= parseMsg ns)
   where
     n = ns0 <> unpack (x ^. #name)
@@ -273,7 +274,7 @@ reservedKeywords =
       "where"
     ]
       ++ [ "mdo", -- Nonstandard extensions
-           -- RecursiveDo
+      -- RecursiveDo
            "rec", -- Arrows, RecursiveDo
            "pattern", -- PatternSynonyms
            "proc" -- Arrows

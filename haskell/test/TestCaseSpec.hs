@@ -184,7 +184,7 @@ data ProtoType
   | Text'Payload
   | Number'Payload
   | Coins'Request
-  deriving (Show, Read, Enum, Bounded)
+  deriving stock (Show, Read, Enum, Bounded)
 
 newtype ProtoBin = ProtoBin ByteString
 

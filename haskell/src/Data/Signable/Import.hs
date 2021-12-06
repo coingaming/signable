@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-unused-imports #-}
+
 module Data.Signable.Import (module X) where
 
 import Crypto.Hash as X (Digest, SHA256 (..), hashWith, hashlazy)
@@ -7,7 +9,7 @@ import Data.Coerce as X (coerce)
 import Data.List as X (partition)
 import Data.Maybe as X (catMaybes)
 import Data.Monoid as X (All (..), mconcat)
-import Data.Ratio as X ((%), denominator, numerator)
+import Data.Ratio as X (denominator, numerator, (%))
 import Data.Signable.Util as X (safeFromIntegral)
 import Data.Text as X (pack)
 import Data.Word as X (Word64)

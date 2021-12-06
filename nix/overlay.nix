@@ -10,7 +10,7 @@ in
 {
   vimBackground ? "light",
   vimColorScheme ? "PaperColor",
-  haskellPackagesLens ? (x: x.haskell.packages.ghc865Binary),
+  haskellPackagesLens ? (x: x.haskell.packages.ghc8104),
   platform ? "x86_64"
 }:
 [
@@ -84,8 +84,6 @@ in
             proto-lens-arbitrary = callPackage ./overlay/proto-lens-arbitrary.nix {
               lib = self.lib;
               fetchgit = self.fetchgit;
-              ncurses = self.ncurses;
-              protobuf = self.protobuf;
             };
             secp256k1-haskell = dontCheck (callPackage ./overlay/secp256k1-haskell.nix {
               stdenv = self.stdenv;
@@ -93,7 +91,6 @@ in
             });
             ghc-source-gen = callPackage ./overlay/ghc-source-gen.nix {
               stdenv = self.stdenv;
-              fetchgit = self.fetchgit;
             };
             asn1-encoding = callPackage ./overlay/asn1-encoding.nix {
               stdenv = self.stdenv;
