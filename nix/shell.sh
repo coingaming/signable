@@ -16,6 +16,8 @@ fi
 NIX_CONF="http2 = false
 sandbox = false
 filter-syscalls = false
+cores = 2
+max-jobs = 16
 trusted-users = root $USER
 substituters = file:///app/nix_ci_cache https://cache.nixos.org https://hydra.iohk.io https://all-hies.cachix.org
 trusted-substituters = file:///app/nix_ci_cache
