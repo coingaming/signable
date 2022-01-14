@@ -1,4 +1,4 @@
-let nixpkgs = import ./../nixpkgs.nix;
+let nixpkgs = import ./../nixpkgs21.nix;
 in
 {
   pkgs ? import nixpkgs {}
@@ -33,6 +33,7 @@ mix {
   nativeBuildInputs = [ makeWrapper ];
   preBuild = ''
     echo "preBuild ==> env"
+    export HEX_OFFLINE=false
     export MIX_ENV=prod
     export MIX_HOME=`pwd`
     export HEX_HOME=`pwd`
