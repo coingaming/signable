@@ -15,7 +15,7 @@ defmodule Signable do
 
     ## Examples
 
-      iex> {public, private} = :crypto.generate_key(:ecdh, :secp256r1)
+      iex> {_public, private} = :crypto.generate_key(:ecdh, :secp256r1)
       iex> Signable.sign("secret message", private, :secp256r1)
   """
   @spec sign(payload :: binary(), private_key :: binary(), curve :: atom()) :: binary()

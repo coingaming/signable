@@ -48,6 +48,52 @@ jobs:
     #
     # TODO : hackage publish???
     #
+  release-elixir:
+    docker:
+      - image: heathmont/elixir-ci:1.13.1-otp-24-alpine
+    environment:
+      MIX_ENV: test
+    resource_class: xlarge
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-test-{{ checksum "mix.lock" }}-{{ .Revision }}
+            - v1-test-{{ checksum "mix.lock" }}-
+            - v1-test-
+      - run:
+          name:       Hex auth
+          command:    mix hex.organization auth coingaming --key $HEX_API_KEY
+      - run:
+          name:       Generate test proto
+          command:    script/gen-proto.sh --elixir
+      - run:
+          name:       Fetch dependencies
+          command:    cd elixir && mix deps.get
+      - run:
+          name:       Compile dependencies
+          command:    cd elixir && mix deps.compile
+      - run:
+          name:       Compile protocols
+          command:    cd elixir && mix compile --warnings-as-errors
+      # - run:
+      #     name:       Style checks
+      #     command:    cd elixir && mix credo --strict
+      - run:
+          name:       Test
+          command:    cd elixir && mix test
+      # - run:
+      #     name:       Dialyzer type checks
+      #     command:    cd elixir && mix dialyzer --halt-exit-status
+      #     no_output_timeout: 15m
+      - save_cache:
+          key: v1-test-{{ checksum "mix.lock" }}-{{ .Revision }}
+          paths:
+            - elixir/deps
+            - ~/.mix
+      - run:
+          name:       Semantic Release
+          command:    cd elixir && npx semantic-release --extends @heathmont/semantic-release-elixir-hex
 
 workflows:
   version: 2
@@ -63,5 +109,8 @@ workflows:
   push:
     jobs:
       - release-publish:
+          <<: *filters
+          context: global
+      - release-elixir:
           <<: *filters
           context: global
