@@ -66,7 +66,7 @@ defmodule Signable.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:protobuf, github: "coingaming/protobuf-elixir", branch: "beta", override: true},
+      {:protobuf, "~> 0.6", organization: "coingaming"},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.11", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: [:dev, :test], runtime: false},
@@ -74,7 +74,7 @@ defmodule Signable.MixProject do
       {:propcheck, "~> 1.1", only: [:test, :dev]},
       {:poison, "~> 3.1", only: [:dev, :test]},
       {:stream_data, "~> 0.5", only: [:dev, :test]},
-      {:hm_crypto, github: "coingaming/hm-crypto"}
+      {:hm_crypto, "~> 0.3", organization: "coingaming"}
     ]
   end
 end
