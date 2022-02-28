@@ -1,11 +1,15 @@
 defmodule Signable.MixProject do
   use Mix.Project
+  
+  @version (case File.read("VERSION") do
+    {:ok, version} -> String.trim(version)
+    {:error, _} -> "0.0.0-development"
+  end)
 
   def project do
-    version = version()
     [
       app: :signable,
-      version: version,
+      version: @version,
       elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -27,11 +31,14 @@ defmodule Signable.MixProject do
         credo: :test,
         dialyzer: :test
       ],
-      package: package(version),
+      package: package(),
       # docs
       name: "Signable",
-      source_url: "https://github.com/coingaming/signable/tree/v#{version}/elixir",
-      homepage_url: "https://github.com/coingaming/signable/tree/v#{version}/elixir"
+      source_url: "https://github.com/coingaming/signable",
+      homepage_url: "https://github.com/coingaming/signable/tree/v#{@version}/elixir",
+      docs: [
+        source_url_pattern: "https://github.com/coingaming/signable/blob/v#{@version}/elixir/%{path}#L%{line}"
+      ]
     ]
   end
 
@@ -42,20 +49,13 @@ defmodule Signable.MixProject do
     ]
   end
 
-  defp version do
-    case File.read("VERSION") do
-      {:ok, version} -> String.trim(version)
-      {:error, _} -> "0.0.0-development"
-    end
-  end
-
-  defp package(version) do
+  defp package do
     [
       organization: "coingaming",
       licenses: ["UNLICENSED"],
       files: ["lib", "mix.exs", "README.md", "VERSION"],
       links: %{
-        "GitHub" => "https://github.com/coingaming/signable/tree/v#{version}/elixir"
+        "GitHub" => "https://github.com/coingaming/signable/tree/v#{@version}/elixir"
       }
     ]
   end
