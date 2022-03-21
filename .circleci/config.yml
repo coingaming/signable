@@ -75,7 +75,7 @@ jobs:
           command:    cd elixir && mix deps.compile
       - run:
           name:       Compile protocols
-          command:    cd elixir && mix compile --warnings-as-errors
+          command:    cd elixir && mix compile
       # - run:
       #     name:       Style checks
       #     command:    cd elixir && mix credo --strict
