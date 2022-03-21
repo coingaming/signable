@@ -60,13 +60,14 @@ defmodule Signable.MixProject do
     ]
   end
 
-  defp elixirc_paths(:test), do: ["lib", "test/proto"]
+  defp elixirc_paths(:test), do: ["lib", "test/proto", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:protobuf, "~> 0.6", organization: "coingaming"},
+      {:protobuf, "~> 0.9", organization: "coingaming"},
+      {:protobuf_transformable, "~> 1.0", organization: "coingaming"},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.11", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: [:dev, :test], runtime: false},

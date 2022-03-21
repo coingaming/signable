@@ -121,9 +121,7 @@ defmodule Signable do
     %Protobuf.MessageProps{field_props: props, oneof: oneof_list} =
       message_mod.__message_props__()
 
-    message =
-      message
-      |> Protobuf.Encodable.to_protobuf(message_mod)
+    message = Protobuf.Encodable.encode(message, message_mod)
 
     ## oneof_list is a keyword name_atom -> index, but we need a reverse to lookup
     oneof_map =
@@ -225,7 +223,7 @@ defmodule Signable do
   @spec serialize_scalar(type :: atom(), value :: integer() | String.t() | boolean() | nil) ::
           binary()
   defp serialize_scalar(type, nil) do
-    serialize_scalar(type, Protobuf.Builder.type_default(type))
+    serialize_scalar(type, Protobuf.DSL.field_default(:proto3, %{type: type}))
   end
 
   defp serialize_scalar(type, value) when type == :uint32 or type == :int32 do
