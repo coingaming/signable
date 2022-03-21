@@ -58,9 +58,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-test-{{ checksum "elixir/mix.lock" }}-{{ .Revision }}
-            - v1-test-{{ checksum "elixir/mix.lock" }}-
-            - v1-test-
+            - v1-release-{{ checksum "elixir/mix.lock" }}-{{ .Revision }}
+            - v1-release-{{ checksum "elixir/mix.lock" }}-
+            - v1-release-
       - run:
           name:       Hex auth
           command:    mix hex.organization auth coingaming --key $HEX_API_KEY
@@ -87,7 +87,7 @@ jobs:
       #     command:    cd elixir && mix dialyzer --halt-exit-status
       #     no_output_timeout: 15m
       - save_cache:
-          key: v1-test-{{ checksum "elixir/mix.lock" }}-{{ .Revision }}
+          key: v1-release-{{ checksum "elixir/mix.lock" }}-{{ .Revision }}
           paths:
             - elixir/deps
             - ~/.mix
