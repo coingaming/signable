@@ -50,5 +50,5 @@ executable signable-haskell-protoc
     , proto-lens-runtime >=0.7.0
     , text ==1.2.*
   if impl(ghc >= 8.10.7)
-    ghc-options: -Wno-unused-packages -Wno-missing-safe-haskell-mode -Wno-prepositive-qualified-module -fenable-th-splice-warnings -fprint-potential-instances
+    ghc-options: -Wno-unused-packages -Wno-unused-imports -Wno-missing-safe-haskell-mode -Wno-prepositive-qualified-module -fenable-th-splice-warnings -fprint-potential-instances
   default-language: Haskell2010

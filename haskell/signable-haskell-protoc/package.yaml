@@ -59,6 +59,7 @@ executables:
         # TODO : remove -Wno-unused-packages flag somehow!!!
         #
         - -Wno-unused-packages
+        - -Wno-unused-imports
         - -Wno-missing-safe-haskell-mode
         - -Wno-prepositive-qualified-module
         - -fenable-th-splice-warnings

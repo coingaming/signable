@@ -60,9 +60,11 @@ when:
   - condition: impl(ghc >= 8.10.7)
     ghc-options:
     #
-    # TODO : remove -Wno-unused-packages flag somehow!!!
+    # TODO : remove -Wno-unused-packages
+    # and -Wno-unused-imports flag somehow!!!
     #
     - -Wno-unused-packages
+    - -Wno-unused-imports
     - -Wno-missing-safe-haskell-mode
     - -Wno-prepositive-qualified-module
     - -fenable-th-splice-warnings
