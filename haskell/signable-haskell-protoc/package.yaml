@@ -52,3 +52,14 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    when:
+      - condition: impl(ghc >= 8.10.7)
+        ghc-options:
+        #
+        # TODO : remove -Wno-unused-packages flag somehow!!!
+        #
+        - -Wno-unused-packages
+        - -Wno-missing-safe-haskell-mode
+        - -Wno-prepositive-qualified-module
+        - -fenable-th-splice-warnings
+        - -fprint-potential-instances
