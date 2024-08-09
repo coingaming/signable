@@ -66,7 +66,7 @@ defmodule Signable.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:protobuf, "~> 0.9", organization: "coingaming"},
+      {:protobuf, "~> 0.9"},
       {:protobuf_transformable, "~> 1.0", organization: "coingaming"},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.11", only: [:dev, :test], runtime: false},
