@@ -6,3 +6,4 @@ result
 haskell/test/Support/test-case/haskell-new.json
 nix_ci_cache/
 nix_store_prv_key
+elixir/.lexical
