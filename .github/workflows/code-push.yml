@@ -1,0 +1,65 @@
+name: Compile and check
+on: push
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  #  checks:
+  #    name: Code checks
+  #    uses: coingaming/.github/.github/workflows/code-checks.yml@main
+  #    secrets: inherit
+  #    with:
+  #      mix-env: dev
+  #      cache_paths: "test/protobuf_test_app/lib/generated"
+  #      elixir-version: "1.17.2"
+  #      otp-version: "27.0"
+  #
+  build:
+    name: Build for tests
+    uses: coingaming/.github/.github/workflows/build.yml@main
+    secrets: inherit
+    with:
+      mix-env: test
+      cache_paths: "elixir/test/proto"
+      elixir-version: "1.17.2"
+      otp-version: "27.0"
+      elixir-code-path: "elixir"
+  
+  #  dialyzer:
+  #    name: Dialyzer
+  #    needs: build_test
+  #    uses: coingaming/.github/.github/workflows/dialyzer.yml@main
+  #    secrets: inherit
+  #    with:
+  #      mix-env: test
+  #      cache_paths: "test/protobuf_test_app/lib/generated"
+  #      elixir-version: "1.17.2"
+  #      otp-version: "27.0"
+  #
+      
+  tests:
+    name: Tests
+    needs: build
+    uses: coingaming/.github/.github/workflows/tests.yml@main
+    secrets: inherit
+    with:
+      mix-env: test
+      cache_paths: "elixir/test/proto"
+      elixir-version: "1.17.2"
+      otp-version: "27.0"
+      elixir-code-path: "elixir"
+
+  release:
+    name: Release to HEX with SemanticRelease
+    #needs: [checks, dialyzer, tests]
+    needs: [tests]
+    uses: coingaming/.github/.github/workflows/release-hex.yml@main
+    secrets: inherit
+    with:
+      mix-env: test
+      cache_paths: "elixir/test/proto"
+      elixir-version: "1.17.2"
+      otp-version: "27.0"
+      elixir-code-path: "elixir"

@@ -1,116 +1,116 @@
-version: 2.1
-
-configure: &configure
-  docker:
-  - image: nixos/nix:2.3.12
-  resource_class: xlarge
-
-release: &release
-  run:
-    name: Create release
-    command: ./nix/release.sh
-    no_output_timeout: 60m
-
-filters: &filters
-  filters:
-    branches: {}
-
-commands:
-  restore_nix_cache:
-    steps:
-      - restore_cache:
-          keys:
-            - v0-nix
-  save_nix_cache:
-    steps:
-      - save_cache:
-          key: v0-nix
-          paths:
-            - /nix
-
-jobs:
-  release:
-    <<: *configure
-    steps:
-    - checkout
-    - setup_remote_docker
-    - restore_nix_cache
-    - *release
-    - save_nix_cache
-  release-publish:
-    <<: *configure
-    steps:
-    - checkout
-    - setup_remote_docker
-    - restore_nix_cache
-    - *release
-    - save_nix_cache
-    #
-    # TODO : hackage publish???
-    #
-  release-elixir:
-    docker:
-      - image: heathmont/elixir-ci:1.13.1-otp-24-alpine
-    environment:
-      MIX_ENV: test
-    resource_class: xlarge
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-release-{{ checksum "elixir/mix.lock" }}-{{ .Revision }}
-            - v1-release-{{ checksum "elixir/mix.lock" }}-
-            - v1-release-
-      - run:
-          name:       Hex auth
-          command:    mix hex.organization auth coingaming --key $HEX_API_KEY
-      - run:
-          name:       Generate test proto
-          command:    script/gen-proto.sh --elixir
-      - run:
-          name:       Fetch dependencies
-          command:    cd elixir && mix deps.get
-      - run:
-          name:       Compile dependencies
-          command:    cd elixir && mix deps.compile
-      - run:
-          name:       Compile protocols
-          command:    cd elixir && mix compile
-      # - run:
-      #     name:       Style checks
-      #     command:    cd elixir && mix credo --strict
-      - run:
-          name:       Test
-          command:    cd elixir && mix test
-      # - run:
-      #     name:       Dialyzer type checks
-      #     command:    cd elixir && mix dialyzer --halt-exit-status
-      #     no_output_timeout: 15m
-      - save_cache:
-          key: v1-release-{{ checksum "elixir/mix.lock" }}-{{ .Revision }}
-          paths:
-            - elixir/deps
-            - ~/.mix
-      - run:
-          name:       Semantic Release
-          command:    cd elixir && npx semantic-release --extends @heathmont/semantic-release-elixir-hex
-
-workflows:
-  version: 2
-  nightly:
-    triggers:
-      - schedule:
-          <<: *filters
-          cron: "0 5 * * *"  # 05:00 UTC
-    jobs:
-      - release:
-          <<: *filters
-          context: global
-  push:
-    jobs:
-      - release-publish:
-          <<: *filters
-          context: global
-      - release-elixir:
-          <<: *filters
-          context: global
+#version: 2.1
+#
+#configure: &configure
+#  docker:
+#  - image: nixos/nix:2.3.12
+#  resource_class: xlarge
+#
+#release: &release
+#  run:
+#    name: Create release
+#    command: ./nix/release.sh
+#    no_output_timeout: 60m
+#
+#filters: &filters
+#  filters:
+#    branches: {}
+#
+#commands:
+#  restore_nix_cache:
+#    steps:
+#      - restore_cache:
+#          keys:
+#            - v0-nix
+#  save_nix_cache:
+#    steps:
+#      - save_cache:
+#          key: v0-nix
+#          paths:
+#            - /nix
+#
+#jobs:
+#  release:
+#    <<: *configure
+#    steps:
+#    - checkout
+#    - setup_remote_docker
+#    - restore_nix_cache
+#    - *release
+#    - save_nix_cache
+#  release-publish:
+#    <<: *configure
+#    steps:
+#    - checkout
+#    - setup_remote_docker
+#    - restore_nix_cache
+#    - *release
+#    - save_nix_cache
+#    #
+#    # TODO : hackage publish???
+#    #
+#  release-elixir:
+#    docker:
+#      - image: heathmont/elixir-ci:1.13.1-otp-24-alpine
+#    environment:
+#      MIX_ENV: test
+#    resource_class: xlarge
+#    steps:
+#      - checkout
+#      - restore_cache:
+#          keys:
+#            - v1-release-{{ checksum "elixir/mix.lock" }}-{{ .Revision }}
+#            - v1-release-{{ checksum "elixir/mix.lock" }}-
+#            - v1-release-
+#      - run:
+#          name:       Hex auth
+#          command:    mix hex.organization auth coingaming --key $HEX_API_KEY
+#      - run:
+#          name:       Generate test proto
+#          command:    script/gen-proto.sh --elixir
+#      - run:
+#          name:       Fetch dependencies
+#          command:    cd elixir && mix deps.get
+#      - run:
+#          name:       Compile dependencies
+#          command:    cd elixir && mix deps.compile
+#      - run:
+#          name:       Compile protocols
+#          command:    cd elixir && mix compile
+#      # - run:
+#      #     name:       Style checks
+#      #     command:    cd elixir && mix credo --strict
+#      - run:
+#          name:       Test
+#          command:    cd elixir && mix test
+#      # - run:
+#      #     name:       Dialyzer type checks
+#      #     command:    cd elixir && mix dialyzer --halt-exit-status
+#      #     no_output_timeout: 15m
+#      - save_cache:
+#          key: v1-release-{{ checksum "elixir/mix.lock" }}-{{ .Revision }}
+#          paths:
+#            - elixir/deps
+#            - ~/.mix
+#      - run:
+#          name:       Semantic Release
+#          command:    cd elixir && npx semantic-release --extends @heathmont/semantic-release-elixir-hex
+#
+#workflows:
+#  version: 2
+#  nightly:
+#    triggers:
+#      - schedule:
+#          <<: *filters
+#          cron: "0 5 * * *"  # 05:00 UTC
+#    jobs:
+#      - release:
+#          <<: *filters
+#          context: global
+#  push:
+#    jobs:
+#      - release-publish:
+#          <<: *filters
+#          context: global
+#      - release-elixir:
+#          <<: *filters
+#          context: global
