@@ -4,6 +4,20 @@
 ### Bug Fixes
 
 * container rollback ([79f4da4](https://github.com/coingaming/signable/commit/79f4da4e77189297a25bf27bbf0528194fd8f029))
+* to trigger CI release ([5fbd81b](https://github.com/coingaming/signable/commit/5fbd81b30494cae4213fa6622235a8d111338878))
+
+
+### Features
+
+* CircleCI -> GH Actions ([9b37fd4](https://github.com/coingaming/signable/commit/9b37fd4b5936d25604decbf3e6c1d5b85c822f83))
+* updated Elixir, OTP and deps ([7105057](https://github.com/coingaming/signable/commit/71050572ca98fd9004cf4e3c64ebcbbcf808be06))
+
+# [1.2.0](https://github.com/coingaming/signable/compare/v1.1.0...v1.2.0) (2024-08-12)
+
+
+### Bug Fixes
+
+* container rollback ([79f4da4](https://github.com/coingaming/signable/commit/79f4da4e77189297a25bf27bbf0528194fd8f029))
 
 
 ### Features
