@@ -53,7 +53,7 @@ jobs:
 
   release:
     name: Release to HEX with SemanticRelease
-    #needs: [checks, dialyzer, tests]
+    # needs: [checks, dialyzer, tests]
     needs: [tests]
     uses: coingaming/.github/.github/workflows/release-hex.yml@main
     secrets: inherit
