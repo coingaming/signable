@@ -51,6 +51,9 @@ jobs:
   release-elixir:
     docker:
       - image: heathmont/elixir-ci:1.17.2-otp-27-alpine
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     environment:
       MIX_ENV: test
     resource_class: xlarge
